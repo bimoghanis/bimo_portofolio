@@ -24,7 +24,7 @@ const Navbar = () => {
         
         
         <div className="flex-1 flex justify-center md:justify-start space-x-8 text-lg font-semibold">
-          {["Home", "About Me", "Experience", "Projects"].map((item, index) => (
+          {["About", "Experience", "Projects"].map((item, index) => (
             <a 
               key={index} 
               href={`#${item.toLowerCase().replace(" ", "")}`}
