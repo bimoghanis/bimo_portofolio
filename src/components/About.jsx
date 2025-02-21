@@ -83,11 +83,10 @@ const About = () => {
           </div>
 
           {/* Experience Stats */}
-          <div className="mt-12 flex justify-between text-center w-full max-w-3xl">
+          <div className="mt-12 flex justify-center space-x-10 text-center w-full max-w-3xl">
             {[
               { number: "3+", label: "Years Experience" },
-              { number: "50+", label: "Projects Completed" },
-              { number: "10+", label: "Happy Clients" },
+              { number: "10+", label: "Projects Completed" }
             ].map((stat, index) => (
               <div key={index} className="bg-white/10 p-6 rounded-lg shadow-lg transition-all duration-300 
               hover:scale-110 hover:shadow-xl">
