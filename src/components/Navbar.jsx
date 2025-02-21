@@ -22,7 +22,7 @@ const Navbar = () => {
 
       <div className="container mx-auto py-4 flex justify-between items-center px-8 md:px-16 lg:px-24">
         
-        {/* Menu */}
+        
         <div className="flex-1 flex justify-center md:justify-start space-x-8 text-lg font-semibold">
           {["Home", "About Me", "Experience", "Projects"].map((item, index) => (
             <a 
@@ -37,7 +37,7 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Ikon LinkedIn & GitHub */}
+        
         <div className="hidden md:flex space-x-4">
           {[{ href: "https://www.linkedin.com/in/bimo-ghanis-surya-putra-wibowo-967667217", src: iconLinkedin, alt: "LinkedIn" },
             { href: "https://github.com/bimoghanis", src: icongithub, alt: "GitHub" }].map((icon, index) => (

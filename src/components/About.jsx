@@ -5,7 +5,7 @@ const About = () => {
     <div className="bg-gradient-to-b from-[#16012E] to-[#0A0211] text-white py-20" id="about">
       <div className="container mx-auto px-8 md:px-16 lg:px-24">
         
-        {/* Section Title */}
+        
         <h2 className="text-5xl font-extrabold text-center mb-16 text-transparent bg-clip-text 
         bg-gradient-to-r from-[#A020F0] to-[#FF00FF] animate-gradient drop-shadow-lg">
           About Me
@@ -13,7 +13,7 @@ const About = () => {
         
         <div className="flex flex-col items-center space-y-12">
           
-          {/* Background Description */}
+        
           <div className="max-w-3xl bg-white/10 p-8 rounded-2xl shadow-lg backdrop-blur-xl border border-white/20 
           transition-all duration-300 hover:scale-105 hover:shadow-2xl">
             <p className="text-lg leading-relaxed text-justify">
@@ -25,7 +25,7 @@ const About = () => {
             </p>
           </div>
 
-          {/* Skills List */}
+          
           <div className="w-full max-w-3xl">
             <h3 className="text-3xl font-bold text-transparent bg-clip-text 
             bg-gradient-to-r from-[#A020F0] to-[#FF00FF] mb-6">
@@ -82,7 +82,7 @@ const About = () => {
             </div>
           </div>
 
-          {/* Experience Stats */}
+          
           <div className="mt-12 flex justify-center space-x-10 text-center w-full max-w-3xl">
             {[
               { number: "3+", label: "Years Experience" },

@@ -16,7 +16,6 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Kontak & Media Sosial */}
           <div className="flex flex-col items-center md:items-end space-y-3 mt-6 md:mt-0">
             <p className="text-gray-400">📍 Bandung, Jawa Barat</p>
             <p className="text-gray-400">📧 bimoghanis@gmail.com</p>
@@ -24,10 +23,10 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Garis Pemisah */}
+        
         <div className="border-t border-gray-700 opacity-50 my-6"></div>
 
-        {/* Hak Cipta */}
+        
         <div className="text-center">
           <p className="text-gray-400 text-sm">
             &copy; {new Date().getFullYear()} Bimo's Portfolio. All rights reserved.

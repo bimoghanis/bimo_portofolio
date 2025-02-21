@@ -9,7 +9,7 @@ const Hero = () => {
     <div className="min-h-screen py-32 px-8 md:px-16 lg:px-32 flex items-center bg-gradient-to-br from-black via-[#4B0082] to-[#1E1E50]">
       <div className="container mx-auto flex flex-col md:flex-row items-center md:space-x-16">
         
-        {/* Gambar lebih besar dan hover lebih smooth */}
+        
         <div className="md:w-1/3 flex justify-center md:justify-end mb-8 md:mb-0">
           <div className="w-72 h-96 border-4 border-[#A020F0] rounded-full overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105 hover:shadow-[#A020F0]/50">
             <img 
@@ -20,7 +20,7 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Teks dan tombol di sebelah kanan */}
+       
         <div className="md:w-2/3 text-center md:text-left">
           <h1 className="text-5xl font-extrabold leading-tight text-transparent bg-clip-text bg-gradient-to-r from-[#A020F0] to-[#FF00FF] drop-shadow-lg">
             I'm Bimo Ghanis Surya Putra Wibowo
@@ -32,9 +32,9 @@ const Hero = () => {
             "I’m a Front-End Web Developer and Data Engineer with hands-on experience in ETL and Big Data. I love building beautiful and responsive web applications, but I also thrive in optimizing data pipelines to handle massive datasets. Whether it’s designing user-friendly interfaces or managing data transformations, I enjoy creating impactful digital solutions."
           </p>
           
-          {/* Tombol Contact Me & Resume */}
+         
           <div className="mt-10 flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0">
-            {/* Contact Me - Buka WhatsApp */}
+           
             <a
               href="https://wa.me/6287781379800"
               target="_blank"
@@ -46,7 +46,7 @@ const Hero = () => {
               Contact With Me
             </a>
 
-            {/* Resume - Download CV PDF */}
+            
             <a
               href={cvPath}
               download="Bimo_Ghanis_CV.pdf"
