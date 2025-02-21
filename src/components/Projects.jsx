@@ -1,6 +1,7 @@
 import "react";
 import Logotunc from "../assets/tunc.png";
 import Webpemilihankel from "../assets/webpemilihankelompok.png";
+import Leg5appandro from "../assets/leg5andro.png";
 
 const projects = [
   {
@@ -37,11 +38,18 @@ const projects = [
     demo: "#",
   },
   {
-    title: "E-Library Management System",
-    description:
-      "A web-based library management platform with book search, borrowing, and collection management features.",
-    image: "",
-    github: "https://github.com/bimoghanis/e-library",
+    title: "Leg5",
+    description: (
+      <>
+        <p className="text-sm text-gray-300 italic">January - March 2023</p>
+        <p className="mt-2">
+          A mobile application built with Kotlin and integrated with Firebase as its database.
+          This app serves as a street food forum, connecting users with various local food vendors.
+        </p>
+      </>
+    ),
+    image: Leg5appandro,
+    github: "https://github.com/bimoghanis/leg5appmobile.git",
     demo: "#",
   },
 ];
