@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Dibimbingdata from "../assets/dibimbing.png";
+import Dicodingpython from "../assets/dicodingpython.png";
 
 const certificates = [
   {
@@ -10,11 +11,11 @@ const certificates = [
     link: "https://drive.google.com/file/d/1oWxOL_vAWmWACn9QrEzkttbtgeJkevot/view?usp=sharing",
   },
   {
-    title: "Data Science with Python",
-    organizer: "Coursera - IBM",
-    date: "March 2023",
-    image: "/images/certificate2.jpg",
-    link: "https://coursera.org/certificate/example",
+    title: "Memulai Pemrograman dengan Python",
+    organizer: "Dicoding",
+    date: "December 2024",
+    image: Dicodingpython,
+    link: "https://drive.google.com/file/d/1wi6T4eQYjs_ytRkRAHszugdBpYe-bWQe/view?usp=sharing",
   },
   {
     title: "Cloud Computing Fundamentals",
