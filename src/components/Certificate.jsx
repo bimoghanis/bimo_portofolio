@@ -1,6 +1,9 @@
 import { useState } from "react";
 import Dibimbingdata from "../assets/dibimbing.png";
 import Dicodingpython from "../assets/dicodingpython.png";
+import Dicodingsql from "../assets/dicodingsql.png";
+import Dicodingdatascience from "../assets/dicodingdatascience.png";
+import Dicodingdasarai from "../assets/dicodingdasarai.png";
 
 const certificates = [
   {
@@ -18,10 +21,31 @@ const certificates = [
     link: "https://drive.google.com/file/d/1wi6T4eQYjs_ytRkRAHszugdBpYe-bWQe/view?usp=sharing",
   },
   {
-    title: "Cloud Computing Fundamentals",
-    organizer: "Google Cloud",
-    date: "June 2023",
-    image: "/images/certificate3.jpg",
+    title: "Belajar Dasar Structured Query Language (SQL)",
+    organizer: "Dicoding",
+    date: "December 2024",
+    image: Dicodingsql,
+    link: "https://drive.google.com/file/d/1FS_JZumkT2EOVoAvv7tJgmVSYQi9yaP9/view?usp=sharing",
+  },
+  {
+    title: "Belajar Dasar Data Science",
+    organizer: "Dicoding",
+    date: "December 2024",
+    image: Dicodingdatascience,
+    link: "https://drive.google.com/file/d/1W5OOdoVEAKYZ4G8usTV5yoNl9Vw45e4U/view?usp=sharing",
+  },
+  {
+    title: "Belajar Dasar AI",
+    organizer: "Dicoding",
+    date: "December 2024",
+    image: Dicodingdasarai,
+    link: "https://drive.google.com/file/d/1RhIqry-cPFrDqchr5_GUBisjuhntm1HJ/view?usp=sharing",
+  },
+  {
+    title: "More Certificates Coming Soon!",
+    organizer: "Stay Tuned",
+    date: "",
+    image: null,
     link: "#",
   },
 ];
@@ -44,7 +68,7 @@ const Certificate = () => {
               key={index}
               className="relative bg-gray-900 rounded-2xl overflow-hidden shadow-lg transition transform hover:scale-105 hover:shadow-purple-500 duration-300 border border-gray-800 hover:border-purple-500">
               {/* Certificate Image */}
-              {cert.image && (
+              {cert.image ? (
                 <div
                   className="w-full h-52 flex items-center justify-center bg-gray-800 cursor-pointer"
                   onClick={() => setSelectedImage(cert.image)}>
@@ -54,17 +78,19 @@ const Certificate = () => {
                     className="w-full h-full object-cover rounded-t-2xl transition-opacity duration-300 hover:opacity-80"
                   />
                 </div>
+              ) : (
+                <div className="w-full h-52 flex items-center justify-center bg-gray-800 text-gray-400 text-lg font-semibold">
+                  {cert.title === "More Certificates Coming Soon!" ? "Coming Soon..." : "Upload Certificate"}
+                </div>
               )}
               {/* Certificate Content */}
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-white">
-                  {cert.title}
-                </h3>
+              <div className="p-6 text-center">
+                <h3 className="text-xl font-semibold text-white">{cert.title}</h3>
                 <p className="text-sm text-gray-400 mt-1">{cert.organizer}</p>
                 <p className="text-sm text-purple-400 italic">{cert.date}</p>
                 {/* Certificate Link */}
-                <div className="mt-4">
-                  {cert.link !== "#" ? (
+                {cert.link !== "#" && (
+                  <div className="mt-4">
                     <a
                       href={cert.link}
                       target="_blank"
@@ -72,12 +98,8 @@ const Certificate = () => {
                       className="text-purple-400 hover:text-purple-500 font-medium transition duration-300">
                       View Certificate
                     </a>
-                  ) : (
-                    <span className="text-gray-500 italic">
-                      No Link Available
-                    </span>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           ))}

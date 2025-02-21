@@ -52,6 +52,19 @@ const projects = [
     github: "https://github.com/bimoghanis/leg5appmobile.git",
     demo: "#",
   },
+  {
+    title: "Still Not Fully Uploaded My Projects And More Projects Coming Soon!",
+    description: (
+      <>
+        <p className="text-lg text-gray-300 text-center mt-4">
+          Stay tuned for more exciting projects! 🚀
+        </p>
+      </>
+    ),
+    image: null,
+    github: null,
+    demo: null,
+  },
 ];
 
 const Projects = () => {
@@ -63,15 +76,15 @@ const Projects = () => {
           My Projects
         </h2>
 
-        {/* Grid Project */}
+    
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
           {projects.map((project, index) => (
             <div
               key={index}
               className="relative bg-gray-900 rounded-2xl overflow-hidden shadow-lg transition transform hover:scale-105 hover:shadow-purple-500 duration-300 border border-gray-800 hover:border-purple-500"
             >
-              {/* Gambar Project */}
-              {project.image && (
+            
+              {project.image ? (
                 <div className="w-full h-56 flex items-center justify-center bg-gray-800">
                   <img
                     src={project.image}
@@ -79,16 +92,20 @@ const Projects = () => {
                     className="w-full h-full object-cover rounded-t-2xl transition-opacity duration-300 hover:opacity-80"
                   />
                 </div>
+              ) : (
+                <div className="w-full h-56 flex items-center justify-center bg-gray-800 text-gray-400 text-lg font-semibold">
+                  Coming Soon...
+                </div>
               )}
-              {/* Konten Project */}
-              <div className="p-6">
+              
+              <div className="p-6 text-center">
                 <h3 className="text-xl font-semibold text-white">{project.title}</h3>
                 <div className="text-gray-400 mt-2 text-sm leading-relaxed">
                   {project.description}
                 </div>
                 {/* Link GitHub & Demo */}
-                <div className="mt-4 flex space-x-4">
-                  {project.github && (
+                {project.github && project.demo && (
+                  <div className="mt-4 flex space-x-4 justify-center">
                     <a
                       href={project.github}
                       target="_blank"
@@ -97,18 +114,18 @@ const Projects = () => {
                     >
                       GitHub
                     </a>
-                  )}
-                  {project.demo !== "#" && (
-                    <a
-                      href={project.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-400 hover:text-blue-500 font-medium transition duration-300"
-                    >
-                      Live Demo
-                    </a>
-                  )}
-                </div>
+                    {project.demo !== "#" && (
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-400 hover:text-blue-500 font-medium transition duration-300"
+                      >
+                        Live Demo
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           ))}
