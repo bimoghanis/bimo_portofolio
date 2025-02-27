@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
+import { FiMenu, FiX } from 'react-icons/fi'; // Ikon menu dan close
 import iconLinkedin from '../assets/iconlinkedin.png';
 import icongithub from '../assets/icongithub.png';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -20,10 +19,18 @@ const Navbar = () => {
         ? 'bg-white/20 backdrop-blur-lg text-black' 
         : 'bg-gradient-to-r from-[#1a0128] to-[#0a0211] text-white'}`}>
 
-      <div className="container mx-auto py-4 flex justify-between items-center px-8 md:px-16 lg:px-24">
+      <div className="container mx-auto py-4 flex justify-between items-center px-6 md:px-16 lg:px-24">
         
-        
-        <div className="flex-1 flex justify-center md:justify-start space-x-8 text-lg font-semibold">
+        {/* Menu Icon untuk Mobile */}
+        <button 
+          className="md:hidden text-3xl transition-all duration-300"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <FiX /> : <FiMenu />}
+        </button>
+
+        {/* Links di desktop */}
+        <div className="hidden md:flex flex-1 justify-center space-x-8 text-lg font-semibold">
           {["About", "Experience", "Projects"].map((item, index) => (
             <a 
               key={index} 
@@ -37,7 +44,7 @@ const Navbar = () => {
           ))}
         </div>
 
-        
+        {/* Social Media Icons */}
         <div className="hidden md:flex space-x-4">
           {[{ href: "https://www.linkedin.com/in/bimo-ghanis-surya-putra-wibowo-967667217", src: iconLinkedin, alt: "LinkedIn" },
             { href: "https://github.com/bimoghanis", src: icongithub, alt: "GitHub" }].map((icon, index) => (
@@ -51,8 +58,26 @@ const Navbar = () => {
               </a>
           ))}
         </div>
-
       </div>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden absolute top-full left-0 w-full bg-[#1a0128] text-white py-4 shadow-lg">
+          <div className="flex flex-col items-center space-y-6 text-lg font-semibold">
+            {["About", "Experience", "Projects"].map((item, index) => (
+              <a 
+                key={index} 
+                href={`#${item.toLowerCase().replace(" ", "")}`} 
+                className="hover:text-[#A020F0] transition-all duration-300"
+                onClick={() => setMenuOpen(false)}
+              >
+                {item}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+      
     </nav>
   );
 }
