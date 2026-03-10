@@ -3,7 +3,7 @@ import Fotodiri from "../assets/fotodiri2.jpg"; // Pastikan ektensinya sesuai de
 
 const Hero = () => {
   const cvPath =
-    "https://drive.google.com/file/d/1hHkGUe27BDd_JSoMB0Kts6zwtWSM3irR/view?usp=sharing";
+    "https://drive.google.com/file/d/1EnHlzYVj56m8yxe0_H3X0zy5YzqItBZQ/view?usp=sharing";
 
   return (
     // Mengubah padding horizontal (px) agar konten lebih ke tengah pada layar besar
