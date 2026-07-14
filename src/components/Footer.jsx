@@ -108,7 +108,7 @@ const Footer = () => {
               </span>
               <div className="min-w-0">
                 <p className="text-sm text-[var(--text-muted)]">Location</p>
-                <p className="truncate font-semibold">Bandung, West Java</p>
+                <p className="truncate font-semibold">Depok, West Java</p>
               </div>
             </div>
           </div>
