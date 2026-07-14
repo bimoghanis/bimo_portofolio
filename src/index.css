@@ -1,1 +1,107 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+
+  /* Background */
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-card-soft: rgba(255, 255, 255, 0.82);
+  --bg-soft: #f1f5f9;
+  --bg-muted: #e2e8f0;
+  --bg-input: #ffffff;
+  --bg-overlay: rgba(15, 23, 42, 0.55);
+
+  /* Navbar */
+  --nav-bg: rgba(255, 255, 255, 0.9);
+  --nav-bg-soft: rgba(255, 255, 255, 0.55);
+  --nav-mobile-bg: rgba(255, 255, 255, 0.96);
+
+  /* Text */
+  --text-main: #0f172a;
+  --text-soft: #334155;
+  --text-muted: #64748b;
+  --text-inverted: #ffffff;
+
+  /* Border */
+  --border-main: #e2e8f0;
+  --border-soft: rgba(203, 213, 225, 0.8);
+
+  /* Accent */
+  --accent-main: #2563eb;
+  --accent-secondary: #06b6d4;
+  --accent-soft: rgba(37, 99, 235, 0.1);
+  --accent-glow: rgba(37, 99, 235, 0.18);
+
+  /* State */
+  --success-main: #059669;
+  --danger-main: #ef4444;
+
+  /* Shadow */
+  --shadow-main: rgba(148, 163, 184, 0.35);
+  --shadow-accent: rgba(37, 99, 235, 0.2);
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* Background */
+  --bg-main: #020817;
+  --bg-card: rgba(15, 23, 42, 0.62);
+  --bg-card-soft: rgba(15, 23, 42, 0.42);
+  --bg-soft: rgba(30, 41, 59, 0.82);
+  --bg-muted: rgba(51, 65, 85, 0.85);
+  --bg-input: rgba(15, 23, 42, 0.82);
+  --bg-overlay: rgba(2, 8, 23, 0.9);
+
+  /* Navbar */
+  --nav-bg: rgba(2, 8, 23, 0.9);
+  --nav-bg-soft: rgba(2, 8, 23, 0.42);
+  --nav-mobile-bg: rgba(2, 8, 23, 0.96);
+
+  /* Text */
+  --text-main: #ffffff;
+  --text-soft: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-inverted: #020817;
+
+  /* Border */
+  --border-main: rgba(51, 65, 85, 0.72);
+  --border-soft: rgba(51, 65, 85, 0.55);
+
+  /* Accent */
+  --accent-main: #38bdf8;
+  --accent-secondary: #3b82f6;
+  --accent-soft: rgba(56, 189, 248, 0.1);
+  --accent-glow: rgba(56, 189, 248, 0.14);
+
+  /* State */
+  --success-main: #34d399;
+  --danger-main: #f87171;
+
+  /* Shadow */
+  --shadow-main: rgba(15, 23, 42, 0.35);
+  --shadow-accent: rgba(30, 64, 175, 0.28);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-main);
+  color: var(--text-main);
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+::selection {
+  background: var(--accent-main);
+  color: var(--text-inverted);
+}
+
+* {
+  box-sizing: border-box;
+}

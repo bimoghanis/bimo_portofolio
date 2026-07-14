@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import Dibimbingdata from "../assets/dibimbing.png";
 import Dicodingpython from "../assets/dicodingpython.png";
 import Dicodingsql from "../assets/dicodingsql.png";
@@ -10,46 +11,270 @@ import Hsk13Image from "../assets/hsk13.png";
 import Hsk14Image from "../assets/hsk14.png";
 import MyskillImage from "../assets/basicdata.png";
 
+/* IBM SkillsBuild Certificate Assets */
+import IbmClassifyingGraniteImage from "../assets/certificates/ibm_classifying_data_using_granite.png";
+import IbmClassifyingGranitePdf from "../assets/certificates/ibm_classifying_data_using_granite.pdf";
+
+import IbmEarnAcceptShareImage from "../assets/certificates/ibm_earn_accept_share.png";
+import IbmEarnAcceptSharePdf from "../assets/certificates/ibm_earn_accept_share.pdf";
+
+import IbmUnleashingAiAgentsImage from "../assets/certificates/ibm_unleashing_ai_agents.png";
+import IbmUnleashingAiAgentsPdf from "../assets/certificates/ibm_unleashing_ai_agents.pdf";
+
+import IbmIntelligentAiAgentImage from "../assets/certificates/ibm_intelligent_by_design_ai_agent.png";
+import IbmIntelligentAiAgentPdf from "../assets/certificates/ibm_intelligent_by_design_ai_agent.pdf";
+
+import IbmIntroLlmImage from "../assets/certificates/ibm_intro_large_language_models.png";
+import IbmIntroLlmPdf from "../assets/certificates/ibm_intro_large_language_models.pdf";
+
+import IbmAiLiteracyImage from "../assets/certificates/ibm_ai_literacy.png";
+import IbmAiLiteracyPdf from "../assets/certificates/ibm_ai_literacy.pdf";
+
+import IbmExploringAiImage from "../assets/certificates/ibm_exploring_ai.png";
+import IbmExploringAiPdf from "../assets/certificates/ibm_exploring_ai.pdf";
+
+import IbmInteractingAiImage from "../assets/certificates/ibm_interacting_with_ai.png";
+import IbmInteractingAiPdf from "../assets/certificates/ibm_interacting_with_ai.pdf";
+
+import IbmDataScienceLandscapeImage from "../assets/certificates/ibm_data_science_landscape.png";
+import IbmDataScienceLandscapePdf from "../assets/certificates/ibm_data_science_landscape.pdf";
+
+import IbmGettingStartedDataImage from "../assets/certificates/ibm_getting_started_with_data.png";
+import IbmGettingStartedDataPdf from "../assets/certificates/ibm_getting_started_with_data.pdf";
+
+import IbmIntroDataConceptsImage from "../assets/certificates/ibm_intro_data_concepts.png";
+import IbmIntroDataConceptsPdf from "../assets/certificates/ibm_intro_data_concepts.pdf";
+
+import IbmIntroTableauImage from "../assets/certificates/ibm_intro_tableau_desktop.png";
+import IbmIntroTableauPdf from "../assets/certificates/ibm_intro_tableau_desktop.pdf";
+
+import IbmGettingStartedAiImage from "../assets/certificates/ibm_getting_started_ai.png";
+import IbmGettingStartedAiPdf from "../assets/certificates/ibm_getting_started_ai.pdf";
+
+import IbmIntroAiImage from "../assets/certificates/ibm_intro_ai.png";
+import IbmIntroAiPdf from "../assets/certificates/ibm_intro_ai.pdf";
+
+import IbmLlmBasicsImage from "../assets/certificates/ibm_llm_basics.png";
+import IbmLlmBasicsPdf from "../assets/certificates/ibm_llm_basics.pdf";
+
+import IbmMasteringPromptingImage from "../assets/certificates/ibm_mastering_prompting.png";
+import IbmMasteringPromptingPdf from "../assets/certificates/ibm_mastering_prompting.pdf";
+
+/* Coursera IBM Certificate Assets */
+import CourseraDataAnalysisPythonImage from "../assets/certificates/coursera_data_analysis_with_python.png";
+import CourseraDataVizCognosImage from "../assets/certificates/coursera_data_visualization_dashboards_excel_cognos.png";
+import CourseraDatabasesSqlPythonImage from "../assets/certificates/coursera_databases_sql_data_science_python.png";
+import CourseraExcelBasicsImage from "../assets/certificates/coursera_excel_basics_data_analysis.png";
+import CourseraIntroDataAnalyticsImage from "../assets/certificates/coursera_introduction_data_analytics.png";
+import CourseraPythonDataScienceImage from "../assets/certificates/coursera_python_data_science_ai_development.png";
+import CourseraPythonProjectImage from "../assets/certificates/coursera_python_project_data_science.png";
+
+const courseraCertificates = [
+  {
+    title: "Data Analysis with Python",
+    organizer: "IBM / Coursera",
+    date: "25 Jun 2026",
+    category: "Data Analysis",
+    image: CourseraDataAnalysisPythonImage,
+    link: "https://coursera.org/verify/T6CZQF5DYG4C",
+  },
+  {
+    title: "Databases and SQL for Data Science with Python",
+    organizer: "IBM / Coursera",
+    date: "24 Jun 2026",
+    category: "Database",
+    image: CourseraDatabasesSqlPythonImage,
+    link: "https://coursera.org/verify/VO5NQNYK64V3",
+  },
+  {
+    title: "Python Project for Data Science",
+    organizer: "IBM / Coursera",
+    date: "24 Jun 2026",
+    category: "Data Science",
+    image: CourseraPythonProjectImage,
+    link: "https://coursera.org/verify/RJLG5LGYXJ83",
+  },
+  {
+    title: "Python for Data Science, AI & Development",
+    organizer: "IBM / Coursera",
+    date: "10 Jun 2026",
+    category: "Python",
+    image: CourseraPythonDataScienceImage,
+    link: "https://coursera.org/verify/IHC1RU2DVUF1",
+  },
+  {
+    title: "Data Visualization and Dashboards with Excel and Cognos",
+    organizer: "IBM / Coursera",
+    date: "10 Jun 2026",
+    category: "Data Visualization",
+    image: CourseraDataVizCognosImage,
+    link: "https://coursera.org/verify/RSZFIQEWBPLE",
+  },
+  {
+    title: "Excel Basics for Data Analysis",
+    organizer: "IBM / Coursera",
+    date: "08 Jun 2026",
+    category: "Excel",
+    image: CourseraExcelBasicsImage,
+    link: "https://coursera.org/verify/ZRRUWV7WRC8R",
+  },
+  {
+    title: "Introduction to Data Analytics",
+    organizer: "IBM / Coursera",
+    date: "08 Jun 2026",
+    category: "Data Analytics",
+    image: CourseraIntroDataAnalyticsImage,
+    link: "https://coursera.org/verify/8OC5KQGT108U",
+  },
+];
+
+const ibmCertificates = [
+  {
+    title: "Intelligent by Design: Build an AI Agent",
+    organizer: "IBM SkillsBuild",
+    date: "16 Jun 2026",
+    category: "AI Agents",
+    image: IbmIntelligentAiAgentImage,
+    link: IbmIntelligentAiAgentPdf,
+  },
+  {
+    title: "Introduction to Large Language Models",
+    organizer: "IBM SkillsBuild",
+    date: "15 Jun 2026",
+    category: "LLM",
+    image: IbmIntroLlmImage,
+    link: IbmIntroLlmPdf,
+  },
+  {
+    title: "Unleashing the Power of AI Agents",
+    organizer: "IBM SkillsBuild",
+    date: "03 Jun 2026",
+    category: "AI Agents",
+    image: IbmUnleashingAiAgentsImage,
+    link: IbmUnleashingAiAgentsPdf,
+  },
+  {
+    title: "Classifying Data Using IBM Granite",
+    organizer: "IBM SkillsBuild",
+    date: "02 Jun 2026",
+    category: "AI / Data",
+    image: IbmClassifyingGraniteImage,
+    link: IbmClassifyingGranitePdf,
+  },
+  {
+    title: "Large Language Model Basics",
+    organizer: "IBM SkillsBuild",
+    date: "01 Jun 2026",
+    category: "LLM",
+    image: IbmLlmBasicsImage,
+    link: IbmLlmBasicsPdf,
+  },
+  {
+    title: "Mastering the Art of Prompting",
+    organizer: "IBM SkillsBuild",
+    date: "01 Jun 2026",
+    category: "Prompt Engineering",
+    image: IbmMasteringPromptingImage,
+    link: IbmMasteringPromptingPdf,
+  },
+  {
+    title: "AI Literacy",
+    organizer: "IBM SkillsBuild",
+    date: "01 Jun 2026",
+    category: "Artificial Intelligence",
+    image: IbmAiLiteracyImage,
+    link: IbmAiLiteracyPdf,
+  },
+  {
+    title: "Exploring Artificial Intelligence",
+    organizer: "IBM SkillsBuild",
+    date: "01 Jun 2026",
+    category: "Artificial Intelligence",
+    image: IbmExploringAiImage,
+    link: IbmExploringAiPdf,
+  },
+  {
+    title: "Interacting with AI",
+    organizer: "IBM SkillsBuild",
+    date: "01 Jun 2026",
+    category: "Artificial Intelligence",
+    image: IbmInteractingAiImage,
+    link: IbmInteractingAiPdf,
+  },
+  {
+    title: "Getting Started with Artificial Intelligence",
+    organizer: "IBM SkillsBuild",
+    date: "01 Jun 2026",
+    category: "Artificial Intelligence",
+    image: IbmGettingStartedAiImage,
+    link: IbmGettingStartedAiPdf,
+  },
+  {
+    title: "Introduction to Artificial Intelligence",
+    organizer: "IBM SkillsBuild",
+    date: "01 Jun 2026",
+    category: "Artificial Intelligence",
+    image: IbmIntroAiImage,
+    link: IbmIntroAiPdf,
+  },
+  {
+    title: "Data Science Landscape",
+    organizer: "IBM SkillsBuild",
+    date: "01 Jun 2026",
+    category: "Data Science",
+    image: IbmDataScienceLandscapeImage,
+    link: IbmDataScienceLandscapePdf,
+  },
+  {
+    title: "Getting Started with Data",
+    organizer: "IBM SkillsBuild",
+    date: "01 Jun 2026",
+    category: "Data",
+    image: IbmGettingStartedDataImage,
+    link: IbmGettingStartedDataPdf,
+  },
+  {
+    title: "Introduction to Data Concepts",
+    organizer: "IBM SkillsBuild",
+    date: "01 Jun 2026",
+    category: "Data",
+    image: IbmIntroDataConceptsImage,
+    link: IbmIntroDataConceptsPdf,
+  },
+  {
+    title: "Introduction to Tableau Desktop",
+    organizer: "IBM SkillsBuild",
+    date: "01 Jun 2026",
+    category: "Data Visualization",
+    image: IbmIntroTableauImage,
+    link: IbmIntroTableauPdf,
+  },
+  {
+    title: "Earn it! Accept it! Share it! | IBM SkillsBuild",
+    organizer: "IBM SkillsBuild",
+    date: "01 Jun 2026",
+    category: "IBM SkillsBuild",
+    image: IbmEarnAcceptShareImage,
+    link: IbmEarnAcceptSharePdf,
+  },
+];
+
 const certificates = [
+  ...courseraCertificates,
+
   {
     title: "Data Science & Data Analysis Specialization",
     organizer: "MySkill",
-    date: "July 2025", // Silakan sesuaikan dengan bulan & tahun di sertifikatmu
-    image: MyskillImage, // Screenshot sertifikat "BASIC DATA" yang paling kiri atas
-    link: "https://drive.google.com/drive/folders/1M65gfTOgRRHrrj6FeNNlnJ2cNa9kesD2?usp=sharing", // Link menuju folder yang berisi 11+ PDF tadi
-  },
-  {
-    title: "Chinese Proficiency 1.4 (HSK 2)",
-    organizer: "One Third Consulting & Abroad (OTCA)",
     date: "July 2025",
-    image: Hsk14Image,
-    link: "https://drive.google.com/file/d/16b_6gtUvXZYa0sGcVCbvhhOoL3UnDqRQ/view?usp=sharing",
-  },
-  {
-    title: "Chinese Proficiency 1.3 (HSK 1)",
-    organizer: "One Third Consulting & Abroad (OTCA)",
-    date: "March 2025",
-    image: Hsk13Image,
-    link: "https://drive.google.com/file/d/14UOHKcxRq2TZgL7l_inlM0KH04m5tLcO/view?usp=sharing",
-  },
-  {
-    title: "Chinese Proficiency 1.2 (HSK 1)",
-    organizer: "One Third Consulting & Abroad (OTCA)",
-    date: "March 2025",
-    image: Hsk12Image,
-    link: "https://drive.google.com/file/d/1Ytz3rKK94pLq-tYr2xTrNUY-uxqkdW1H/view?usp=sharing",
-  },
-  {
-    title: "Chinese Proficiency 1.1 (HSK 1)",
-    organizer: "One Third Consulting & Abroad (OTCA)",
-    date: "January 2025",
-    image: Hsk11Image,
-    link: "https://drive.google.com/file/d/13aOwqAj8wZspkjTuhtswZUh0Uqck8l8A/view?usp=drive_link",
+    category: "Data Analytics",
+    image: MyskillImage,
+    link: "https://drive.google.com/drive/folders/1M65gfTOgRRHrrj6FeNNlnJ2cNa9kesD2?usp=sharing",
   },
   {
     title: "Data Series Fair 17.0 - Data Engineering",
     organizer: "Dibimbing",
     date: "February 2025",
+    category: "Data Engineering",
     image: Dibimbingdata,
     link: "https://drive.google.com/file/d/1oWxOL_vAWmWACn9QrEzkttbtgeJkevot/view?usp=sharing",
   },
@@ -57,13 +282,15 @@ const certificates = [
     title: "Memulai Pemrograman dengan Python",
     organizer: "Dicoding",
     date: "December 2024",
+    category: "Programming",
     image: Dicodingpython,
     link: "https://drive.google.com/file/d/1wi6T4eQYjs_ytRkRAHszugdBpYe-bWQe/view?usp=sharing",
   },
   {
-    title: "Belajar Dasar Structured Query Language (SQL)",
+    title: "Belajar Dasar Structured Query Language SQL",
     organizer: "Dicoding",
     date: "December 2024",
+    category: "Database",
     image: Dicodingsql,
     link: "https://drive.google.com/file/d/1FS_JZumkT2EOVoAvv7tJgmVSYQi9yaP9/view?usp=sharing",
   },
@@ -71,6 +298,7 @@ const certificates = [
     title: "Belajar Dasar Data Science",
     organizer: "Dicoding",
     date: "December 2024",
+    category: "Data Science",
     image: Dicodingdatascience,
     link: "https://drive.google.com/file/d/1W5OOdoVEAKYZ4G8usTV5yoNl9Vw45e4U/view?usp=sharing",
   },
@@ -78,84 +306,273 @@ const certificates = [
     title: "Belajar Dasar AI",
     organizer: "Dicoding",
     date: "December 2024",
+    category: "Artificial Intelligence",
     image: Dicodingdasarai,
     link: "https://drive.google.com/file/d/1RhIqry-cPFrDqchr5_GUBisjuhntm1HJ/view?usp=sharing",
   },
+
+  ...ibmCertificates,
+
+  {
+    title: "Chinese Proficiency 1.4 HSK 2",
+    organizer: "One Third Consulting & Abroad OTCA",
+    date: "July 2025",
+    category: "Language",
+    image: Hsk14Image,
+    link: "https://drive.google.com/file/d/16b_6gtUvXZYa0sGcVCbvhhOoL3UnDqRQ/view?usp=sharing",
+  },
+  {
+    title: "Chinese Proficiency 1.3 HSK 1",
+    organizer: "One Third Consulting & Abroad OTCA",
+    date: "March 2025",
+    category: "Language",
+    image: Hsk13Image,
+    link: "https://drive.google.com/file/d/14UOHKcxRq2TZgL7l_inlM0KH04m5tLcO/view?usp=sharing",
+  },
+  {
+    title: "Chinese Proficiency 1.2 HSK 1",
+    organizer: "One Third Consulting & Abroad OTCA",
+    date: "March 2025",
+    category: "Language",
+    image: Hsk12Image,
+    link: "https://drive.google.com/file/d/1Ytz3rKK94pLq-tYr2xTrNUY-uxqkdW1H/view?usp=sharing",
+  },
+  {
+    title: "Chinese Proficiency 1.1 HSK 1",
+    organizer: "One Third Consulting & Abroad OTCA",
+    date: "January 2025",
+    category: "Language",
+    image: Hsk11Image,
+    link: "https://drive.google.com/file/d/13aOwqAj8wZspkjTuhtswZUh0Uqck8l8A/view?usp=drive_link",
+  },
 ];
 
+/* Sort Helper */
+const monthMap = {
+  January: 0,
+  February: 1,
+  March: 2,
+  April: 3,
+  May: 4,
+  June: 5,
+  July: 6,
+  August: 7,
+  September: 8,
+  October: 9,
+  November: 10,
+  December: 11,
+  Jan: 0,
+  Feb: 1,
+  Mar: 2,
+  Apr: 3,
+  Jun: 5,
+  Jul: 6,
+  Aug: 7,
+  Sep: 8,
+  Oct: 9,
+  Nov: 10,
+  Dec: 11,
+};
+
+const getCertificateTime = (dateText) => {
+  const cleanDate = dateText.trim();
+
+  const fullDateMatch = cleanDate.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/);
+  if (fullDateMatch) {
+    const [, day, month, year] = fullDateMatch;
+    return new Date(
+      Number(year),
+      monthMap[month] ?? 0,
+      Number(day),
+    ).getTime();
+  }
+
+  const monthYearMatch = cleanDate.match(/^([A-Za-z]+)\s+(\d{4})$/);
+  if (monthYearMatch) {
+    const [, month, year] = monthYearMatch;
+    return new Date(Number(year), monthMap[month] ?? 0, 1).getTime();
+  }
+
+  return 0;
+};
+
 const Certificate = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedCert, setSelectedCert] = useState(null);
+  const [showAll, setShowAll] = useState(false);
+
+  const sortedCertificates = [...certificates].sort(
+    (a, b) => getCertificateTime(b.date) - getCertificateTime(a.date),
+  );
+
+  const visibleCertificates = showAll
+    ? sortedCertificates
+    : sortedCertificates.slice(0, 6);
 
   return (
-    <section id="certificates" className="py-20 bg-slate-900 text-slate-200">
-      <div className="container mx-auto px-6 md:px-12 lg:px-20">
-        <h2 className="text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500 mb-12">
-          Licenses & Certifications
-        </h2>
+    <section
+      id="certificates"
+      className="relative overflow-hidden bg-[var(--bg-main)] py-20 text-[var(--text-main)] transition-colors duration-300"
+    >
+      {/* Background glow */}
+      <div className="absolute left-0 top-24 h-80 w-80 rounded-full bg-[var(--accent-glow)] blur-3xl" />
+      <div className="absolute right-0 bottom-24 h-80 w-80 rounded-full bg-[var(--accent-glow)] blur-3xl" />
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {certificates.map((cert, index) => (
-            <div
-              key={index}
-              className="bg-slate-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-slate-700 hover:border-teal-500 flex flex-col group">
-              <div
-                className="w-full h-48 bg-slate-700 cursor-pointer overflow-hidden relative"
-                onClick={() => setSelectedImage(cert.image)}>
+      <div className="container relative z-10 mx-auto px-6 md:px-12 lg:px-24">
+        {/* Header */}
+        <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="mb-3 text-sm font-bold uppercase tracking-[0.25em] text-[var(--accent-main)]">
+              Certificates
+            </p>
+
+            <h2 className="text-3xl font-extrabold leading-tight text-[var(--text-main)] md:text-5xl">
+              Licenses & Certifications
+            </h2>
+
+            <p className="mt-4 max-w-2xl text-[var(--text-muted)]">
+              A collection of certifications that support my focus in data,
+              programming, artificial intelligence, and professional growth.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-[var(--border-main)] bg-[var(--bg-card)] px-5 py-4 text-center transition-colors duration-300 [box-shadow:0_20px_25px_-5px_var(--shadow-main)]">
+            <p className="bg-[linear-gradient(135deg,var(--accent-main),var(--accent-secondary))] bg-clip-text text-3xl font-extrabold text-transparent">
+              {sortedCertificates.length}+
+            </p>
+            <p className="text-sm font-medium text-[var(--text-muted)]">
+              Total Certificates
+            </p>
+          </div>
+        </div>
+
+        {/* Certificate Grid */}
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {visibleCertificates.map((cert, index) => (
+            <article
+              key={`${cert.title}-${index}`}
+              className="group overflow-hidden rounded-3xl border border-[var(--border-main)] bg-[var(--bg-card)] backdrop-blur-md transition-all duration-300 [box-shadow:0_25px_50px_-12px_var(--shadow-main)] hover:-translate-y-2 hover:border-[var(--accent-main)] hover:[box-shadow:0_25px_50px_-12px_var(--shadow-accent)]"
+            >
+              {/* Image */}
+              <button
+                type="button"
+                onClick={() => setSelectedCert(cert)}
+                className="relative block h-44 w-full overflow-hidden bg-[var(--bg-soft)] text-left"
+              >
                 <img
                   src={cert.image}
                   alt={cert.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-                  <span className="bg-slate-900/80 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
-                    Click to view
+
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/10 to-transparent" />
+
+                <span className="absolute left-4 top-4 rounded-full border border-[var(--accent-main)] bg-[var(--accent-soft)] px-3 py-1 text-xs font-bold text-white backdrop-blur-md">
+                  {cert.category}
+                </span>
+
+                <div className="absolute inset-0 flex items-center justify-center bg-slate-950/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <span className="rounded-full border border-white/20 bg-slate-950/80 px-4 py-2 text-sm font-semibold text-white backdrop-blur-md">
+                    Click to Preview
                   </span>
                 </div>
-              </div>
+              </button>
 
-              <div className="p-6 flex flex-col flex-grow text-center md:text-left">
-                <h3 className="text-lg font-bold text-slate-100 leading-snug mb-1">
+              {/* Content */}
+              <div className="p-6">
+                <h3 className="line-clamp-2 text-lg font-bold leading-snug text-[var(--text-main)] transition-colors duration-300 group-hover:text-[var(--accent-main)]">
                   {cert.title}
                 </h3>
-                <p className="text-sm text-slate-400">{cert.organizer}</p>
-                <p className="text-sm text-teal-400 font-medium mt-1 mb-4">
+
+                <p className="mt-3 text-sm font-medium text-[var(--accent-main)]">
+                  {cert.organizer}
+                </p>
+
+                <p className="mt-1 text-sm text-[var(--text-muted)]">
                   {cert.date}
                 </p>
 
-                <div className="mt-auto pt-4 border-t border-slate-700/50 text-center">
+                <div className="mt-6 flex gap-3 border-t border-[var(--border-main)] pt-5">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCert(cert)}
+                    className="flex-1 rounded-xl border border-[var(--border-main)] bg-[var(--bg-card)] px-4 py-2.5 text-center text-sm font-bold text-[var(--text-soft)] transition-all duration-300 hover:border-[var(--accent-main)] hover:text-[var(--accent-main)]"
+                  >
+                    Preview
+                  </button>
+
                   <a
                     href={cert.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-400 hover:text-teal-400 text-sm font-semibold transition duration-300 inline-flex items-center">
-                    Verify Credential <span className="ml-1">↗</span>
+                    className="flex-1 rounded-xl bg-[var(--accent-main)] px-4 py-2.5 text-center text-sm font-bold text-white transition-all duration-300 hover:opacity-90"
+                  >
+                    Verify ↗
                   </a>
                 </div>
               </div>
-            </div>
+            </article>
           ))}
+        </div>
+
+        {/* Show More Button */}
+        <div className="mt-10 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setShowAll(!showAll)}
+            className="rounded-xl border border-[var(--border-main)] bg-[var(--bg-card)] px-6 py-3 font-bold text-[var(--text-soft)] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[var(--accent-main)] hover:text-[var(--accent-main)]"
+          >
+            {showAll ? "Show Less Certificates" : "View All Certificates"}
+          </button>
         </div>
       </div>
 
       {/* Modal View Image */}
-      {selectedImage && (
+      {selectedCert && (
         <div
-          className="fixed inset-0 bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4 z-[60] opacity-100 transition-opacity"
-          onClick={() => setSelectedImage(null)}>
-          <div className="relative max-w-4xl w-full rounded-xl shadow-2xl transform scale-100 transition-transform">
-            <img
-              src={selectedImage}
-              alt="Certificate Full View"
-              className="w-full rounded-xl border border-slate-700 shadow-2xl"
-            />
-            <button
-              className="absolute -top-4 -right-4 bg-slate-800 text-slate-200 border border-slate-600 hover:border-teal-400 hover:text-teal-400 w-10 h-10 rounded-full flex items-center justify-center text-xl transition-all duration-300 shadow-lg"
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedImage(null);
-              }}>
-              ✕
-            </button>
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-[var(--bg-overlay)] p-4 backdrop-blur-sm"
+          onClick={() => setSelectedCert(null)}
+        >
+          <div
+            className="relative max-h-[90vh] w-full max-w-5xl overflow-hidden rounded-3xl border border-[var(--border-main)] bg-[var(--bg-card)] [box-shadow:0_25px_50px_-12px_var(--shadow-main)]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between gap-4 border-b border-[var(--border-main)] px-5 py-4">
+              <div>
+                <h3 className="font-bold text-[var(--text-main)]">
+                  {selectedCert.title}
+                </h3>
+                <p className="text-sm text-[var(--text-muted)]">
+                  {selectedCert.organizer} • {selectedCert.date}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-main)] bg-[var(--bg-soft)] text-[var(--text-soft)] transition-all duration-300 hover:border-[var(--accent-main)] hover:text-[var(--accent-main)]"
+                onClick={() => setSelectedCert(null)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="max-h-[75vh] overflow-auto bg-[var(--bg-soft)] p-4">
+              <img
+                src={selectedCert.image}
+                alt={selectedCert.title}
+                className="mx-auto w-full max-w-4xl rounded-2xl border border-[var(--border-main)] object-contain"
+              />
+            </div>
+
+            <div className="border-t border-[var(--border-main)] px-5 py-4 text-right">
+              <a
+                href={selectedCert.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex rounded-xl bg-[var(--accent-main)] px-5 py-2.5 text-sm font-bold text-white transition-all duration-300 hover:opacity-90"
+              >
+                Open Certificate ↗
+              </a>
+            </div>
           </div>
         </div>
       )}

@@ -4,25 +4,27 @@ const experiences = [
   {
     title: "Freelance Data Management",
     company: "Direktorat PuTI Telkom University",
-    duration: "July 2024 - September 2024",
+    duration: "Jul 2024 - Sep 2024",
     location: "Bandung, West Java",
+    icon: "▥",
+    accent: "blue",
     description: [
-      "Handled the data migration of Telkom University Surabaya branch campus, Telkom University Purwokerto and Telkom University Bandung Campus in Telkom University National Campus (TUNC) project.",
-      "Analysed the database structure of Telkom University branch campuses.",
-      "Create data flow from the branch campus database.",
-      "Operate tools for data migration such as DBeaver, and Pentaho.",
+      "Handled data migration for Telkom University Surabaya, Purwokerto, and Bandung campuses in the Telkom University National Campus (TUNC) project.",
+      "Analyzed database structures from multiple branch campuses to support data integration and migration planning.",
+      "Created data flow documentation and operated migration tools such as DBeaver and Pentaho PDI.",
     ],
   },
   {
     title: "Data Management Division Internship",
     company: "Direktorat PuTI Telkom University",
-    duration: "July 2023 - July 2024",
+    duration: "Jul 2023 - Jul 2024",
     location: "Bandung, West Java",
+    icon: "</>",
+    accent: "purple",
     description: [
-      "Handled the data migration of Telkom University Surabaya campus in Telkom University National Campus (TUNC) project.",
-      "Analysed the database structure of Telkom University branch campuses.",
-      "Creating data flow from the branch campus database.",
-      "Operate tools for data migration such as DBeaver, and Pentaho.",
+      "Supported data migration activities for Telkom University Surabaya campus as part of the TUNC integration project.",
+      "Analyzed branch campus database structures and prepared data flow mapping for migration requirements.",
+      "Used DBeaver and Pentaho PDI to support database operations, data extraction, transformation, and migration processes.",
     ],
   },
   {
@@ -30,63 +32,129 @@ const experiences = [
     company: "Faculty of Applied Sciences, Telkom University",
     duration: "2022 - 2024",
     location: "Bandung, West Java",
+    icon: "♟",
+    accent: "emerald",
     description: [
-      "Assist lecturers in compiling and presenting relevant materials to support learning.",
-      "Manage exams, assignments, and projects relevant to the course, and provide assessment and feedback to students.",
-      "Assist for website programming, database system, network structure installation, and object-based programming courses.",
+      "Assisted lecturers in preparing and delivering learning materials for programming, database, networking, and object-oriented programming courses.",
+      "Managed exams, assignments, and student projects while providing assessment, feedback, and technical guidance.",
+      "Guided students during practicum sessions and helped them understand both theoretical and hands-on programming concepts.",
     ],
   },
 ];
 
+const accentStyles = {
+  blue: {
+    iconBox:
+      "border-[var(--accent-main)] bg-[var(--accent-soft)] text-[var(--accent-main)]",
+    tag: "border-[var(--accent-main)]/20 bg-[var(--accent-soft)] text-[var(--accent-main)]",
+    bullet: "bg-[var(--accent-main)]",
+    hover:
+      "hover:border-[var(--accent-main)] hover:shadow-[var(--shadow-accent)]",
+  },
+  purple: {
+    iconBox:
+      "border-purple-500/30 bg-purple-500/10 text-purple-500 dark:text-purple-400",
+    tag: "border-purple-500/20 bg-purple-500/10 text-purple-600 dark:text-purple-300",
+    bullet: "bg-purple-500 dark:bg-purple-400",
+    hover: "hover:border-purple-400/50 hover:shadow-purple-500/20",
+  },
+  emerald: {
+    iconBox:
+      "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+    tag: "border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+    bullet: "bg-emerald-500 dark:bg-emerald-400",
+    hover: "hover:border-emerald-400/50 hover:shadow-emerald-500/20",
+  },
+};
+
 const Experience = () => {
   return (
-    <div className="bg-slate-900 text-slate-200 py-20" id="experience">
-      <div className="container mx-auto px-8 md:px-16 lg:px-24">
-        <h2
-          className="text-4xl font-extrabold text-center mb-16 text-transparent bg-clip-text 
-        bg-gradient-to-r from-teal-400 to-blue-500 drop-shadow-md">
-          Professional Experience
-        </h2>
+    <section
+      id="experience"
+      className="relative overflow-hidden bg-[var(--bg-main)] py-20 text-[var(--text-main)] transition-colors duration-300"
+    >
+      {/* Background glow */}
+      <div className="absolute left-0 top-24 h-80 w-80 rounded-full bg-[var(--accent-glow)] blur-3xl" />
+      <div className="absolute right-0 bottom-24 h-80 w-80 rounded-full bg-[var(--accent-glow)] blur-3xl" />
 
-        <div className="space-y-6 max-w-4xl mx-auto relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-teal-500 before:via-blue-500 before:to-slate-900">
-          {experiences.map((exp, index) => (
-            <div
-              key={index}
-              className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-              {/* Timeline dot */}
-              <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-slate-900 bg-slate-700 group-hover:bg-teal-400 group-hover:border-teal-900 text-slate-500 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 transition-colors duration-300 z-10"></div>
+      <div className="container relative z-10 mx-auto px-6 md:px-12 lg:px-24">
+        {/* Section Header */}
+        <div className="mb-10">
+          <p className="mb-3 text-sm font-bold uppercase tracking-[0.25em] text-[var(--accent-main)]">
+            Experience
+          </p>
 
-              {/* Card */}
-              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-slate-800/50 p-6 rounded-xl shadow-lg border border-slate-700/50 hover:border-teal-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl flex flex-col">
-                <div className="flex flex-col xl:flex-row xl:items-center justify-between mb-2 gap-2">
-                  <h3 className="text-xl font-bold text-slate-100">
-                    {exp.title}
-                  </h3>
-                  <span className="text-teal-400 text-sm font-medium bg-teal-400/10 px-3 py-1 rounded-full w-fit whitespace-nowrap">
+          <h2 className="text-3xl font-extrabold leading-tight text-[var(--text-main)] md:text-5xl">
+            Professional Experience
+          </h2>
+
+          <p className="mt-4 max-w-2xl text-[var(--text-muted)]">
+            A summary of my hands-on experience in data management, data
+            migration, and academic practicum support.
+          </p>
+        </div>
+
+        {/* Experience Cards */}
+        <div className="grid gap-6 lg:grid-cols-3">
+          {experiences.map((exp, index) => {
+            const style = accentStyles[exp.accent];
+
+            return (
+              <article
+                key={index}
+                className={`group flex h-full flex-col rounded-3xl border border-[var(--border-main)] bg-[var(--bg-card)] p-7 shadow-2xl shadow-[var(--shadow-main)] backdrop-blur-md transition-all duration-300 hover:-translate-y-2 ${style.hover}`}
+              >
+                {/* Top */}
+                <div className="mb-6 flex items-start justify-between gap-4">
+                  <div
+                    className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border text-xl font-bold ${style.iconBox}`}
+                  >
+                    {exp.icon}
+                  </div>
+
+                  <span
+                    className={`rounded-full border px-3 py-1 text-xs font-semibold ${style.tag}`}
+                  >
                     {exp.duration}
                   </span>
                 </div>
 
-                <p className="text-blue-400 font-medium mb-1">{exp.company}</p>
+                {/* Main Info */}
+                <div>
+                  <h3 className="text-xl font-bold text-[var(--text-main)] transition-colors duration-300 group-hover:text-[var(--accent-main)]">
+                    {exp.title}
+                  </h3>
 
-                <p className="text-slate-400 text-sm flex items-center mb-4">
-                  <span className="mr-2">📍</span> {exp.location}
-                </p>
+                  <p className="mt-2 font-medium text-[var(--accent-main)]">
+                    {exp.company}
+                  </p>
 
-                {/* Bagian Deskripsi / Bullet Points */}
-                <ul className="list-disc list-outside ml-4 space-y-2 text-slate-300 text-sm leading-relaxed border-t border-slate-700/50 pt-4 mt-auto">
+                  <p className="mt-2 flex items-center gap-2 text-sm text-[var(--text-muted)]">
+                    <span>📍</span>
+                    {exp.location}
+                  </p>
+                </div>
+
+                {/* Divider */}
+                <div className="my-6 h-px w-full bg-[var(--border-main)]" />
+
+                {/* Description */}
+                <ul className="space-y-3 text-sm leading-relaxed text-[var(--text-soft)]">
                   {exp.description.map((item, idx) => (
-                    <li key={idx} className="pl-1 marker:text-teal-500">
-                      {item}
+                    <li key={idx} className="flex gap-3">
+                      <span
+                        className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${style.bullet}`}
+                      />
+                      <span>{item}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
-            </div>
-          ))}
+              </article>
+            );
+          })}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
