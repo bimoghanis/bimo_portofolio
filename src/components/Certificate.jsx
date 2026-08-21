@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useScrollReveal from "../hooks/useScrollReveal";
 
 import Dibimbingdata from "../assets/dibimbing.png";
 import Dicodingpython from "../assets/dicodingpython.png";
@@ -399,6 +400,7 @@ const getCertificateTime = (dateText) => {
 const Certificate = () => {
   const [selectedCert, setSelectedCert] = useState(null);
   const [showAll, setShowAll] = useState(false);
+  const revealRef = useScrollReveal();
 
   const sortedCertificates = [...certificates].sort(
     (a, b) => getCertificateTime(b.date) - getCertificateTime(a.date),
@@ -411,35 +413,30 @@ const Certificate = () => {
   return (
     <section
       id="certificates"
-      className="relative overflow-hidden bg-[var(--bg-main)] py-20 text-[var(--text-main)] transition-colors duration-300"
+      className="wave-divider relative overflow-hidden bg-[var(--bg-main)] py-20 text-[var(--text-main)] transition-colors duration-200"
     >
-      {/* Background glow */}
-      <div className="absolute left-0 top-24 h-80 w-80 rounded-full bg-[var(--accent-glow)] blur-3xl" />
-      <div className="absolute right-0 bottom-24 h-80 w-80 rounded-full bg-[var(--accent-glow)] blur-3xl" />
-
-      <div className="container relative z-10 mx-auto px-6 md:px-12 lg:px-24">
+      <div ref={revealRef} className="container relative z-10 mx-auto px-6 pt-10 md:px-12 lg:px-24">
         {/* Header */}
-        <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="reveal mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="mb-3 text-sm font-bold uppercase tracking-[0.25em] text-[var(--accent-main)]">
+            <p className="clay-pill mb-3 inline-block bg-[var(--accent-soft)] px-4 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--accent-main)]">
               Certificates
             </p>
 
             <h2 className="text-3xl font-extrabold leading-tight text-[var(--text-main)] md:text-5xl">
-              Licenses & Certifications
+              Licenses & <span className="text-[var(--accent-main)]">Certifications</span>
             </h2>
 
-            <p className="mt-4 max-w-2xl text-[var(--text-muted)]">
-              A collection of certifications that support my focus in data,
-              programming, artificial intelligence, and professional growth.
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--text-muted)]">
+              A collection of industry certifications that validate my skills across data science, database architectures, and artificial intelligence.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[var(--border-main)] bg-[var(--bg-card)] px-5 py-4 text-center transition-colors duration-300 [box-shadow:0_20px_25px_-5px_var(--shadow-main)]">
-            <p className="bg-[linear-gradient(135deg,var(--accent-main),var(--accent-secondary))] bg-clip-text text-3xl font-extrabold text-transparent">
+          <div className="clay-card-static px-6 py-4 text-center">
+            <p className="text-3xl font-extrabold text-[var(--accent-main)]">
               {sortedCertificates.length}+
             </p>
-            <p className="text-sm font-medium text-[var(--text-muted)]">
+            <p className="text-xs font-semibold text-[var(--text-muted)]">
               Total Certificates
             </p>
           </div>
@@ -450,28 +447,33 @@ const Certificate = () => {
           {visibleCertificates.map((cert, index) => (
             <article
               key={`${cert.title}-${index}`}
-              className="group overflow-hidden rounded-3xl border border-[var(--border-main)] bg-[var(--bg-card)] backdrop-blur-md transition-all duration-300 [box-shadow:0_25px_50px_-12px_var(--shadow-main)] hover:-translate-y-2 hover:border-[var(--accent-main)] hover:[box-shadow:0_25px_50px_-12px_var(--shadow-accent)]"
+              className="reveal clay-card group overflow-hidden"
+              data-delay={(index % 6) * 70}
             >
               {/* Image */}
               <button
                 type="button"
                 onClick={() => setSelectedCert(cert)}
                 className="relative block h-44 w-full overflow-hidden bg-[var(--bg-soft)] text-left"
+                style={{ borderRadius: "26px 26px 0 0" }}
               >
                 <img
                   src={cert.image}
                   alt={cert.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/10 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-main)]/50 via-transparent to-transparent" />
 
-                <span className="absolute left-4 top-4 rounded-full border border-[var(--accent-main)] bg-[var(--accent-soft)] px-3 py-1 text-xs font-bold text-white backdrop-blur-md">
+                <span
+                  className="clay-pill absolute left-4 top-4 bg-[var(--accent-soft)] px-3 py-1 text-[11px] font-bold text-[var(--accent-main)]"
+                  style={{ backdropFilter: "blur(6px)" }}
+                >
                   {cert.category}
                 </span>
 
-                <div className="absolute inset-0 flex items-center justify-center bg-slate-950/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  <span className="rounded-full border border-white/20 bg-slate-950/80 px-4 py-2 text-sm font-semibold text-white backdrop-blur-md">
+                <div className="absolute inset-0 flex items-center justify-center bg-[var(--bg-main)]/35 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                  <span className="clay-pill bg-[var(--bg-card)] px-3.5 py-1.5 text-xs font-bold text-[var(--text-main)] shadow-md">
                     Click to Preview
                   </span>
                 </div>
@@ -479,23 +481,23 @@ const Certificate = () => {
 
               {/* Content */}
               <div className="p-6">
-                <h3 className="line-clamp-2 text-lg font-bold leading-snug text-[var(--text-main)] transition-colors duration-300 group-hover:text-[var(--accent-main)]">
+                <h3 className="line-clamp-2 text-base font-bold leading-snug text-[var(--text-main)] transition-colors duration-200 group-hover:text-[var(--accent-main)]">
                   {cert.title}
                 </h3>
 
-                <p className="mt-3 text-sm font-medium text-[var(--accent-main)]">
+                <p className="mt-2 text-xs font-bold text-[var(--accent-main)]">
                   {cert.organizer}
                 </p>
 
-                <p className="mt-1 text-sm text-[var(--text-muted)]">
+                <p className="mt-0.5 text-xs text-[var(--text-muted)]">
                   {cert.date}
                 </p>
 
-                <div className="mt-6 flex gap-3 border-t border-[var(--border-main)] pt-5">
+                <div className="mt-5 flex gap-2.5 border-t border-[var(--border-soft)] pt-4">
                   <button
                     type="button"
                     onClick={() => setSelectedCert(cert)}
-                    className="flex-1 rounded-xl border border-[var(--border-main)] bg-[var(--bg-card)] px-4 py-2.5 text-center text-sm font-bold text-[var(--text-soft)] transition-all duration-300 hover:border-[var(--accent-main)] hover:text-[var(--accent-main)]"
+                    className="clay-button flex-1 bg-[var(--bg-card)] px-4 py-2 text-center text-xs font-bold text-[var(--text-soft)] transition-colors duration-200 hover:text-[var(--accent-main)]"
                   >
                     Preview
                   </button>
@@ -504,7 +506,8 @@ const Certificate = () => {
                     href={cert.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 rounded-xl bg-[var(--accent-main)] px-4 py-2.5 text-center text-sm font-bold text-white transition-all duration-300 hover:opacity-90"
+                    className="clay-button-primary flex-1 px-4 py-2 text-center text-xs font-bold"
+                    style={{ borderRadius: "14px" }}
                   >
                     Verify ↗
                   </a>
@@ -515,11 +518,11 @@ const Certificate = () => {
         </div>
 
         {/* Show More Button */}
-        <div className="mt-10 flex justify-center">
+        <div className="reveal mt-10 flex justify-center" data-delay="150">
           <button
             type="button"
             onClick={() => setShowAll(!showAll)}
-            className="rounded-xl border border-[var(--border-main)] bg-[var(--bg-card)] px-6 py-3 font-bold text-[var(--text-soft)] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[var(--accent-main)] hover:text-[var(--accent-main)]"
+            className="clay-button bg-[var(--bg-card)] px-6 py-3 text-xs font-bold text-[var(--text-soft)] transition-colors duration-200 hover:text-[var(--accent-main)]"
           >
             {showAll ? "Show Less Certificates" : "View All Certificates"}
           </button>
@@ -529,46 +532,49 @@ const Certificate = () => {
       {/* Modal View Image */}
       {selectedCert && (
         <div
-          className="fixed inset-0 z-[80] flex items-center justify-center bg-[var(--bg-overlay)] p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-[var(--bg-overlay)] p-4"
+          style={{ backdropFilter: "blur(6px)" }}
           onClick={() => setSelectedCert(null)}
         >
           <div
-            className="relative max-h-[90vh] w-full max-w-5xl overflow-hidden rounded-3xl border border-[var(--border-main)] bg-[var(--bg-card)] [box-shadow:0_25px_50px_-12px_var(--shadow-main)]"
+            className="clay-card-static relative max-h-[90vh] w-full max-w-4xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between gap-4 border-b border-[var(--border-main)] px-5 py-4">
+            <div className="flex items-center justify-between gap-4 border-b border-[var(--border-soft)] px-5 py-3.5">
               <div>
-                <h3 className="font-bold text-[var(--text-main)]">
+                <h3 className="text-sm font-bold text-[var(--text-main)]">
                   {selectedCert.title}
                 </h3>
-                <p className="text-sm text-[var(--text-muted)]">
+                <p className="text-xs text-[var(--text-muted)]">
                   {selectedCert.organizer} • {selectedCert.date}
                 </p>
               </div>
 
               <button
                 type="button"
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-main)] bg-[var(--bg-soft)] text-[var(--text-soft)] transition-all duration-300 hover:border-[var(--accent-main)] hover:text-[var(--accent-main)]"
+                className="clay-button flex h-9 w-9 shrink-0 items-center justify-center bg-[var(--bg-soft)] text-xs text-[var(--text-soft)] transition-colors duration-200 hover:text-[var(--accent-main)]"
+                style={{ borderRadius: "50%" }}
                 onClick={() => setSelectedCert(null)}
               >
                 ✕
               </button>
             </div>
 
-            <div className="max-h-[75vh] overflow-auto bg-[var(--bg-soft)] p-4">
+            <div className="clay-inset mx-4 my-4 max-h-[62vh] overflow-auto bg-[var(--bg-soft)] p-3">
               <img
                 src={selectedCert.image}
                 alt={selectedCert.title}
-                className="mx-auto w-full max-w-4xl rounded-2xl border border-[var(--border-main)] object-contain"
+                className="mx-auto w-full max-w-3xl rounded-xl object-contain"
               />
             </div>
 
-            <div className="border-t border-[var(--border-main)] px-5 py-4 text-right">
+            <div className="border-t border-[var(--border-soft)] px-5 py-3.5 text-right">
               <a
                 href={selectedCert.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex rounded-xl bg-[var(--accent-main)] px-5 py-2.5 text-sm font-bold text-white transition-all duration-300 hover:opacity-90"
+                className="clay-button-primary inline-flex px-4 py-2 text-xs font-bold"
+                style={{ borderRadius: "14px" }}
               >
                 Open Certificate ↗
               </a>

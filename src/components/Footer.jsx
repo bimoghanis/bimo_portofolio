@@ -6,12 +6,13 @@ import {
   FiGithub,
   FiLinkedin,
 } from "react-icons/fi";
+import useScrollReveal from "../hooks/useScrollReveal";
 
 const Footer = () => {
   const emailAddress = "bimoghanis@gmail.com";
   const whatsappNumber = "6287781379800";
 
-  const emailSubject = "Collaboration / Internship Opportunity";
+  const emailSubject = "Opportunity / Collaboration Inquiry";
   const emailBody =
     "Hi Bimo, I would like to connect with you regarding an opportunity.";
 
@@ -23,41 +24,38 @@ const Footer = () => {
     "Hi Bimo, I would like to connect with you regarding an opportunity.",
   )}`;
 
+  const revealRef = useScrollReveal();
+
   return (
     <footer
       id="contact"
-      className="relative overflow-hidden bg-[var(--bg-main)] pt-20 text-[var(--text-soft)] transition-colors duration-300"
+      className="wave-divider relative overflow-hidden bg-[var(--bg-main)] pt-20 text-[var(--text-soft)] transition-colors duration-200"
     >
-      {/* Background glow */}
-      <div className="absolute left-0 top-20 h-80 w-80 rounded-full bg-[var(--accent-glow)] blur-3xl" />
-      <div className="absolute right-0 bottom-10 h-80 w-80 rounded-full bg-[var(--accent-glow)] blur-3xl" />
-
-      <div className="container relative z-10 mx-auto px-6 md:px-12 lg:px-24">
+      <div ref={revealRef} className="container relative z-10 mx-auto px-6 pt-10 md:px-12 lg:px-24">
         {/* Contact Card */}
-        <div className="rounded-3xl border border-[var(--border-main)] bg-[var(--bg-card)] p-8 text-center backdrop-blur-md transition-colors duration-300 [box-shadow:0_25px_50px_-12px_var(--shadow-main)] lg:p-12">
-          <p className="mb-3 text-sm font-bold uppercase tracking-[0.25em] text-[var(--accent-main)]">
+        <div className="reveal clay-card-static p-8 text-center lg:p-12" data-delay="80">
+          <p className="clay-pill mb-3 inline-block bg-[var(--accent-soft)] px-4 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--accent-main)]">
             Let&apos;s Connect
           </p>
 
           <h2 className="mx-auto max-w-4xl text-3xl font-extrabold leading-tight text-[var(--text-main)] md:text-5xl">
             Interested in working together?
             <br />
-            Let&apos;s build something great.
+            Let&apos;s <span className="text-[var(--accent-main)]">build something impactful.</span>
           </h2>
 
-          <p className="mx-auto mt-5 max-w-2xl leading-relaxed text-[var(--text-muted)]">
-            I&apos;m open to internship opportunities, collaborations, and
-            projects related to web development, data analytics, machine
-            learning, and data engineering.
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-[var(--text-muted)]">
+            I am actively open to full-time engineering roles, contracts, and collaborative projects in software development, data engineering, and applied machine learning.
           </p>
 
           {/* Main Contact Buttons */}
-          <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row">
+          <div className="mt-8 flex flex-col justify-center gap-3.5 sm:flex-row">
             <a
               href={mailtoLink}
-              className="inline-flex items-center justify-center gap-3 rounded-xl bg-[var(--accent-main)] px-6 py-3 font-bold text-white shadow-lg shadow-[var(--shadow-accent)] transition-all duration-300 hover:-translate-y-1 hover:opacity-90"
+              className="clay-button-primary inline-flex items-center justify-center gap-2.5 px-6 py-3 font-bold text-sm"
+              style={{ borderRadius: "16px" }}
             >
-              <FiMail />
+              <FiMail className="text-base" />
               Email Me
             </a>
 
@@ -65,25 +63,25 @@ const Footer = () => {
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-3 rounded-xl border border-[var(--success-main)] bg-[var(--bg-card)] px-6 py-3 font-bold text-[var(--success-main)] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-[var(--success-main)] hover:text-white"
+              className="clay-button inline-flex items-center justify-center gap-2.5 bg-[var(--bg-card)] px-6 py-3 font-bold text-sm text-[var(--success-main)] transition-colors duration-200 hover:text-[var(--accent-main)]"
             >
-              <FiPhone />
+              <FiPhone className="text-base" />
               Chat on WhatsApp
             </a>
           </div>
 
-          {/* Contact Info */}
-          <div className="mx-auto mt-10 grid max-w-4xl gap-4 md:grid-cols-3">
+          {/* Contact Info Cards */}
+          <div className="mx-auto mt-9 grid max-w-4xl gap-3.5 md:grid-cols-3">
             <a
               href={mailtoLink}
-              className="flex items-center gap-4 rounded-2xl border border-[var(--border-main)] bg-[var(--bg-soft)] p-4 text-left text-[var(--text-soft)] transition-all duration-300 hover:border-[var(--accent-main)] hover:text-[var(--accent-main)]"
+              className="clay-inset flex items-center gap-3.5 bg-[var(--bg-soft)] p-4 text-left text-[var(--text-soft)] transition-colors duration-200 hover:text-[var(--accent-main)]"
             >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--accent-soft)] text-[var(--accent-main)]">
+              <span className="clay-icon-box flex h-10 w-10 shrink-0 items-center justify-center bg-[var(--accent-soft)] text-[var(--accent-main)]">
                 <FiMail />
               </span>
               <div className="min-w-0">
-                <p className="text-sm text-[var(--text-muted)]">Email</p>
-                <p className="truncate font-semibold">{emailAddress}</p>
+                <p className="text-xs text-[var(--text-muted)]">Email</p>
+                <p className="truncate text-xs font-bold">{emailAddress}</p>
               </div>
             </a>
 
@@ -91,36 +89,36 @@ const Footer = () => {
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-4 rounded-2xl border border-[var(--border-main)] bg-[var(--bg-soft)] p-4 text-left text-[var(--text-soft)] transition-all duration-300 hover:border-[var(--success-main)] hover:text-[var(--success-main)]"
+              className="clay-inset flex items-center gap-3.5 bg-[var(--bg-soft)] p-4 text-left text-[var(--text-soft)] transition-colors duration-200 hover:text-[var(--success-main)]"
             >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--accent-soft)] text-[var(--success-main)]">
+              <span className="clay-icon-box flex h-10 w-10 shrink-0 items-center justify-center bg-[var(--accent-soft)] text-[var(--success-main)]">
                 <FiPhone />
               </span>
               <div className="min-w-0">
-                <p className="text-sm text-[var(--text-muted)]">WhatsApp</p>
-                <p className="truncate font-semibold">+62 877-8137-9800</p>
+                <p className="text-xs text-[var(--text-muted)]">WhatsApp</p>
+                <p className="truncate text-xs font-bold">+62 877-8137-9800</p>
               </div>
             </a>
 
-            <div className="flex items-center gap-4 rounded-2xl border border-[var(--border-main)] bg-[var(--bg-soft)] p-4 text-left text-[var(--text-soft)]">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--accent-soft)] text-[var(--accent-secondary)]">
+            <div className="clay-inset flex items-center gap-3.5 bg-[var(--bg-soft)] p-4 text-left text-[var(--text-soft)]">
+              <span className="clay-icon-box flex h-10 w-10 shrink-0 items-center justify-center bg-[var(--accent-soft)] text-[var(--accent-secondary)]">
                 <FiMapPin />
               </span>
               <div className="min-w-0">
-                <p className="text-sm text-[var(--text-muted)]">Location</p>
-                <p className="truncate font-semibold">Depok, West Java</p>
+                <p className="text-xs text-[var(--text-muted)]">Location</p>
+                <p className="truncate text-xs font-bold">Depok / Jakarta, Indonesia</p>
               </div>
             </div>
           </div>
 
           {/* Social Links */}
-          <div className="mt-8 flex justify-center gap-3">
+          <div className="mt-7 flex justify-center gap-3">
             <a
               href="https://github.com/bimoghanis"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
-              className="flex h-12 w-12 items-center justify-center rounded-xl border border-[var(--border-main)] bg-[var(--bg-card)] text-xl text-[var(--text-soft)] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[var(--accent-main)] hover:text-[var(--accent-main)]"
+              className="clay-button flex h-11 w-11 items-center justify-center bg-[var(--bg-card)] text-lg text-[var(--text-soft)] transition-colors duration-200 hover:text-[var(--accent-main)]"
             >
               <FiGithub />
             </a>
@@ -130,7 +128,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
-              className="flex h-12 w-12 items-center justify-center rounded-xl border border-[var(--border-main)] bg-[var(--bg-card)] text-xl text-[var(--text-soft)] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[var(--accent-secondary)] hover:text-[var(--accent-secondary)]"
+              className="clay-button flex h-11 w-11 items-center justify-center bg-[var(--bg-card)] text-lg text-[var(--text-soft)] transition-colors duration-200 hover:text-[var(--accent-secondary)]"
             >
               <FiLinkedin />
             </a>
@@ -138,13 +136,14 @@ const Footer = () => {
         </div>
 
         {/* Bottom Footer */}
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-[var(--border-main)] py-6 text-center md:flex-row md:text-left">
-          <p className="text-sm text-[var(--text-muted)]">
-            &copy; {new Date().getFullYear()} Bimo Ghanis Surya Putra Wibowo.
-            All rights reserved.
+        <div className="reveal mt-10 flex flex-col items-center justify-between gap-3 border-t border-[var(--border-soft)] py-6 text-center text-xs md:flex-row md:text-left" data-delay="150">
+          <p className="text-[var(--text-muted)]">
+            &copy; {new Date().getFullYear()} Bimo Ghanis Surya Putra Wibowo. All rights reserved.
           </p>
 
-
+          <p className="font-semibold text-[var(--text-muted)]">
+            Fresh Informatics Graduate • Telkom University
+          </p>
         </div>
       </div>
     </footer>
