@@ -35,7 +35,61 @@ const getElementEnergy = (element) => {
   return { icon: "⭐", bg: "#94a3b8", color: "#1e293b", name: "Colorless" };
 };
 
-// Dynamic Weakness, Resistance & Retreat Calculator per Element
+// 🔊 Sound FX Synthesizer (Zero-latency Web Audio API)
+const playArcadeSound = (type) => {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (type === "rip") {
+      const bufferSize = ctx.sampleRate * 0.35;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(1400, ctx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(3800, ctx.currentTime + 0.35);
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.4, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      noise.start();
+    } else if (type === "celebration") {
+      const notes = [523.25, 659.25, 783.99, 1046.5, 1318.51];
+      notes.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.08);
+        gain.gain.setValueAtTime(0.25, ctx.currentTime + idx * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.4);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + idx * 0.08);
+        osc.stop(ctx.currentTime + idx * 0.08 + 0.45);
+      });
+    } else if (type === "click") {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.09);
+    }
+  } catch {
+    // Silently continue if audio context is restricted
+  }
+};
 const getElementalBattleStats = (element, rarity) => {
   const el = element.toLowerCase();
   let weakness = { icon: "🔥", mult: "x2" };
@@ -903,11 +957,13 @@ const TechmonGacha = () => {
 
   // Execute the "Brewek / Rip Open" Animation
   const handleRipPack = () => {
+    playArcadeSound("rip");
     setPackStage("ripping");
 
     const topCard = currentPackPulls[0] || POKETECHS[10];
 
     setTimeout(() => {
+      playArcadeSound("celebration");
       setPackStage("revealed");
       setActiveCard(topCard);
       setIsFlipped(false);
@@ -999,15 +1055,16 @@ const TechmonGacha = () => {
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 -translate-x-1/2 w-[450px] h-[450px] rounded-full border border-blue-500/10 pointer-events-none" />
 
       <div ref={revealRef} className="container relative z-10 mx-auto px-6 pt-6 md:px-12 lg:px-24">
-        {/* Arena Header */}
-        <div className="reveal mb-12 text-center max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-950/70 px-4 py-1.5 text-xs font-black uppercase tracking-[0.25em] text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.3)] backdrop-blur-md mb-3">
-            <FiCompass className="animate-spin text-cyan-400" />
-            POKÉTECH BATTLE ARENA • 100 CARDS 🎴✨
+        {/* Arena Header (Super Playful & Cheerful Arcade Marquee) */}
+        <div className="reveal mb-10 text-center max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-2 rounded-full border-2 border-cyan-400 bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 px-5 py-2 text-xs font-black uppercase tracking-[0.2em] text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.5)] backdrop-blur-md mb-3 animate-pulse">
+            <span className="text-base">⚡</span>
+            <span>POKÉTECH BATTLE STADIUM • 100 CARDS</span>
+            <span className="text-base">🎴✨</span>
           </div>
 
-          <h2 className="text-3xl font-extrabold leading-tight text-white md:text-5xl drop-shadow-md">
-            PokéTech <span className="bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent">TCG Stadium</span>
+          <h2 className="text-3xl font-black leading-tight text-white md:text-5xl drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] tracking-tight">
+            PokéTech <span className="bg-gradient-to-r from-yellow-300 via-amber-400 to-orange-500 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(251,191,36,0.6)]">TCG Stadium</span> 🎮
           </h2>
 
           <p className="mt-3 text-sm leading-relaxed text-slate-300 font-medium">
@@ -1085,17 +1142,18 @@ const TechmonGacha = () => {
               <button
                 type="button"
                 onClick={() => {
+                  playArcadeSound("click");
                   setIsFlipped(!isFlipped);
                   setTilt({ x: 0, y: 0 });
                 }}
-                className="rounded-full border border-cyan-500/40 bg-slate-900/90 px-4 py-2 text-xs font-extrabold text-cyan-300 hover:text-white hover:bg-slate-800 hover:border-cyan-400 hover:scale-105 active:scale-95 flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.2)] transition-all backdrop-blur-md"
+                className="rounded-full border-2 border-cyan-400 bg-slate-900/90 px-4 py-2 text-xs font-black text-cyan-300 hover:text-white hover:bg-cyan-600 hover:border-cyan-300 hover:scale-105 active:scale-95 flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all backdrop-blur-md"
               >
-                <FiRepeat className={isFlipped ? "rotate-180 transition-transform text-amber-400" : "transition-transform text-cyan-400"} />
-                <span>{isFlipped ? "Depan" : "🔄 Balik 3D"}</span>
+                <FiRepeat className={isFlipped ? "rotate-180 transition-transform text-amber-400" : "transition-transform text-cyan-300"} />
+                <span>{isFlipped ? "Lihat Depan" : "Balik 3D"}</span>
               </button>
 
               <div className="flex items-center gap-1.5">
-                <span className="rounded-full border border-slate-700 bg-slate-900/90 px-3 py-1 text-[11px] font-mono font-bold text-slate-300">
+                <span className="rounded-full border border-slate-700 bg-slate-900/90 px-3.5 py-1 text-[11px] font-mono font-black text-amber-300 shadow-inner">
                   Pulls: {totalPulls}
                 </span>
 
@@ -1135,57 +1193,66 @@ const TechmonGacha = () => {
               </div>
             )}
 
-            {/* ─── PRIMARY GACHA BOOSTER LAUNCHPAD (Immediately visible on mobile!) ─── */}
-            <div className="w-full rounded-3xl border border-slate-800/90 bg-slate-900/90 p-4 sm:p-5 mt-4 shadow-2xl backdrop-blur-xl">
-              <div className="flex items-center justify-between mb-3">
+            {/* ─── PRIMARY GACHA BOOSTER LAUNCHPAD (Super Chunky Playful Arcade Style) ─── */}
+            <div className="w-full rounded-3xl border-2 border-slate-800 bg-slate-900/95 p-4 sm:p-5 mt-4 shadow-[0_15px_35px_rgba(0,0,0,0.7)] backdrop-blur-xl">
+              <div className="flex items-center justify-between mb-3.5">
                 <span className="text-xs font-black text-white flex items-center gap-1.5 uppercase tracking-wider">
-                  <FiStar className="text-amber-400" /> Buka Booster Pack
+                  <FiStar className="text-amber-400 animate-spin" /> BUKA BOOSTER PACK
                 </span>
-                <span className="text-[10px] font-bold text-cyan-400 animate-pulse">
+                <span className="text-[10px] font-black text-cyan-300 bg-cyan-950/80 border border-cyan-400/40 px-2 py-0.5 rounded-full animate-pulse shadow-sm">
                   ✂️ Sobek Foil & Dapatkan UR!
                 </span>
               </div>
 
-              {/* 3 Main Action Buttons */}
-              <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
-                {/* 1x Pack */}
+              {/* 3 Chunky 3D Arcade Buttons */}
+              <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+                {/* 1x Pack (Pikachu Electric Yellow) */}
                 <button
                   type="button"
-                  onClick={() => startPackCeremony(1)}
-                  className="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl border-2 border-blue-500/50 bg-gradient-to-b from-blue-950/80 to-slate-900 text-blue-300 hover:from-blue-600 hover:to-blue-700 hover:text-white hover:border-blue-400 shadow-[0_4px_12px_rgba(37,99,235,0.25)] hover:scale-105 active:scale-95 transition-all group"
+                  onClick={() => {
+                    playArcadeSound("click");
+                    startPackCeremony(1);
+                  }}
+                  className="flex flex-col items-center justify-center py-3 px-1 rounded-2xl bg-gradient-to-b from-yellow-300 via-yellow-400 to-amber-500 text-slate-950 font-black shadow-[0_5px_0_#b45309,0_8px_16px_rgba(245,158,11,0.4)] hover:brightness-110 active:translate-y-1 active:shadow-[0_1px_0_#b45309] transition-all group"
                 >
-                  <FiZap className="text-lg text-blue-400 group-hover:text-white group-hover:animate-bounce mb-0.5" />
-                  <span className="text-xs font-black">1x Pack</span>
+                  <FiZap className="text-xl group-hover:scale-125 transition-transform mb-0.5" />
+                  <span className="text-xs uppercase tracking-tight font-black">1x Pack</span>
                 </button>
 
-                {/* 5x Packs */}
+                {/* 5x Packs (Squirtle Ocean Cyan) */}
                 <button
                   type="button"
-                  onClick={() => startPackCeremony(5)}
-                  className="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl border-2 border-cyan-500/50 bg-gradient-to-b from-cyan-950/80 to-slate-900 text-cyan-300 hover:from-cyan-600 hover:to-cyan-700 hover:text-white hover:border-cyan-400 shadow-[0_4px_12px_rgba(6,182,212,0.25)] hover:scale-105 active:scale-95 transition-all group"
+                  onClick={() => {
+                    playArcadeSound("click");
+                    startPackCeremony(5);
+                  }}
+                  className="flex flex-col items-center justify-center py-3 px-1 rounded-2xl bg-gradient-to-b from-cyan-300 via-cyan-400 to-blue-500 text-slate-950 font-black shadow-[0_5px_0_#0369a1,0_8px_16px_rgba(6,182,212,0.4)] hover:brightness-110 active:translate-y-1 active:shadow-[0_1px_0_#0369a1] transition-all group"
                 >
-                  <FiGift className="text-lg text-cyan-400 group-hover:text-white group-hover:animate-bounce mb-0.5" />
-                  <span className="text-xs font-black">5x Packs</span>
+                  <FiGift className="text-xl group-hover:scale-125 transition-transform mb-0.5" />
+                  <span className="text-xs uppercase tracking-tight font-black">5x Packs</span>
                 </button>
 
-                {/* 10x Mega */}
+                {/* 10x Mega (Charizard Blazing Fire) */}
                 <button
                   type="button"
-                  onClick={() => startPackCeremony(10)}
-                  className="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl border-2 border-amber-500/60 bg-gradient-to-b from-amber-950/80 to-slate-900 text-amber-300 hover:from-amber-500 hover:to-yellow-500 hover:text-slate-950 hover:border-amber-300 shadow-[0_4px_16px_rgba(245,158,11,0.3)] hover:scale-105 active:scale-95 transition-all group"
+                  onClick={() => {
+                    playArcadeSound("click");
+                    startPackCeremony(10);
+                  }}
+                  className="flex flex-col items-center justify-center py-3 px-1 rounded-2xl bg-gradient-to-b from-rose-500 via-orange-500 to-amber-400 text-white font-black shadow-[0_5px_0_#9f1239,0_8px_16px_rgba(244,63,94,0.4)] hover:brightness-110 active:translate-y-1 active:shadow-[0_1px_0_#9f1239] transition-all group"
                 >
-                  <FiStar className="text-lg text-amber-400 group-hover:text-slate-950 group-hover:animate-spin mb-0.5" />
-                  <span className="text-xs font-black">10x Mega 🚀</span>
+                  <FiStar className="text-xl group-hover:scale-125 group-hover:rotate-45 transition-transform mb-0.5" />
+                  <span className="text-xs uppercase tracking-tight font-black">10x Mega 🚀</span>
                 </button>
               </div>
 
               {/* Rarity Drop Rates */}
-              <div className="mt-3 flex flex-wrap items-center justify-between text-[10px] font-bold text-slate-400 pt-2.5 border-t border-slate-800">
-                <span className="text-pink-400 font-black">✨ UR: 6%</span>
-                <span className="text-amber-400 font-bold">SSR: 16%</span>
-                <span className="text-purple-400 font-bold">SR: 30%</span>
-                <span className="text-blue-400 font-bold">Rare: 33%</span>
-                <span className="text-slate-400 font-medium">Com: 15%</span>
+              <div className="mt-3.5 flex flex-wrap items-center justify-between text-[10px] font-black text-slate-300 pt-2.5 border-t border-slate-800">
+                <span className="text-pink-400">✨ UR: 6%</span>
+                <span className="text-amber-400">SSR: 16%</span>
+                <span className="text-purple-400">SR: 30%</span>
+                <span className="text-blue-400">Rare: 33%</span>
+                <span className="text-slate-400">Com: 15%</span>
               </div>
             </div>
 
