@@ -2,6 +2,7 @@ import React, { useState, useRef, useMemo } from "react";
 import confetti from "canvas-confetti";
 import useScrollReveal from "../hooks/useScrollReveal";
 import { POKETECHS } from "../data/poketechs";
+import BitkachuImg from "../assets/pokemon/bitkachu.jpg";
 import {
   FiZap,
   FiGift,
@@ -12,6 +13,9 @@ import {
   FiSearch,
   FiRepeat,
   FiCompass,
+  FiScissors,
+  FiX,
+  FiArrowRight,
 } from "react-icons/fi";
 
 // Element to Energy Icon mapping
@@ -90,10 +94,8 @@ const getElementalBattleStats = (element, rarity) => {
 const PokemonCardBack = () => {
   return (
     <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl flex flex-col items-center justify-between p-3 select-none border-4 border-[#1e3a8a] bg-[#002661]">
-      {/* Outer Blue Border Rim */}
       <div className="absolute inset-1 rounded-xl border-2 border-[#60a5fa]/60 pointer-events-none" />
 
-      {/* Swirling Background Texture */}
       <div
         className="absolute inset-0 opacity-40 mix-blend-screen pointer-events-none"
         style={{
@@ -102,7 +104,6 @@ const PokemonCardBack = () => {
         }}
       />
 
-      {/* Spiral Swirl Whirlpool SVG */}
       <svg
         className="absolute inset-0 w-full h-full opacity-35"
         viewBox="0 0 300 420"
@@ -125,7 +126,7 @@ const PokemonCardBack = () => {
         />
       </svg>
 
-      {/* Top Parody Logo: PokéTech */}
+      {/* Top Parody Logo */}
       <div className="relative z-10 pt-2 text-center">
         <div className="relative inline-block">
           <span
@@ -145,12 +146,10 @@ const PokemonCardBack = () => {
         </div>
       </div>
 
-      {/* Center Glowing Pokéball / TechBall */}
+      {/* Center Glowing Pokéball */}
       <div className="relative z-10 my-auto flex items-center justify-center">
-        {/* Outer Glow Halo */}
         <div className="absolute h-36 w-36 rounded-full bg-cyan-400/30 blur-xl animate-pulse" />
 
-        {/* 3D Ball Sphere */}
         <div
           className="relative h-28 w-28 rounded-full border-4 border-slate-900 overflow-hidden shadow-2xl flex flex-col"
           style={{
@@ -158,9 +157,8 @@ const PokemonCardBack = () => {
               "inset -8px -8px 16px rgba(0,0,0,0.7), inset 8px 8px 16px rgba(255,255,255,0.4), 0 10px 25px rgba(0,0,0,0.8)",
           }}
         >
-          {/* Top Half (Red Shell with Gloss Highlight) */}
           <div
-            className="relative h-1/2 w-full bg-gradient-to-b from-red-500 to-red-600"
+            className="relative h-1/2 w-full"
             style={{
               background: "radial-gradient(circle at 35% 35%, #ff6b6b 0%, #dc2626 70%, #991b1b 100%)",
             }}
@@ -168,10 +166,8 @@ const PokemonCardBack = () => {
             <div className="absolute top-1 left-3 h-4 w-10 rounded-full bg-white/50 blur-[1px] rotate-[-20deg]" />
           </div>
 
-          {/* Middle Black Dividing Band */}
           <div className="h-2 w-full bg-slate-900 shrink-0" />
 
-          {/* Bottom Half (White Shell with 3D Shadow) */}
           <div
             className="h-1/2 w-full"
             style={{
@@ -179,7 +175,6 @@ const PokemonCardBack = () => {
             }}
           />
 
-          {/* Center Button */}
           <div className="absolute inset-0 m-auto h-9 w-9 rounded-full border-4 border-slate-900 bg-white flex items-center justify-center shadow-lg">
             <div className="h-3.5 w-3.5 rounded-full border-2 border-slate-900 bg-cyan-400 shadow-[0_0_8px_#22d3ee] animate-ping" />
             <div className="absolute h-3.5 w-3.5 rounded-full border-2 border-slate-900 bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
@@ -187,7 +182,7 @@ const PokemonCardBack = () => {
         </div>
       </div>
 
-      {/* Bottom Inverted Parody Logo: PokéTech */}
+      {/* Bottom Inverted Parody Logo */}
       <div className="relative z-10 pb-2 text-center rotate-180">
         <div className="relative inline-block">
           <span
@@ -210,8 +205,8 @@ const PokemonCardBack = () => {
   );
 };
 
-// Authentic Pokémon TCG Card Front Component (EX / Full-Art / Ultra Holographic Foil style)
-const PokemonCardFront = ({ card, tilt }) => {
+// Authentic Pokémon TCG Card Front Component
+const PokemonCardFront = ({ card, tilt = { x: 0, y: 0 } }) => {
   const energy = getElementEnergy(card.element);
   const battleStats = getElementalBattleStats(card.element, card.rarity);
 
@@ -238,24 +233,24 @@ const PokemonCardFront = ({ card, tilt }) => {
           : `0 0 35px ${card.themeColor}88, 0 20px 40px rgba(0,0,0,0.5)`,
       }}
     >
-      {/* Dynamic Tilt Tracking Holographic Starlight Flare */}
+      {/* Dynamic Tilt Tracking Holographic Flare */}
       <div
         className="absolute inset-0 pointer-events-none z-30 mix-blend-color-dodge transition-transform duration-75 ease-out"
         style={{
           opacity: isMythic ? 0.7 : isSSR ? 0.55 : 0.4,
-          background: `radial-gradient(circle at ${50 + tilt.y * 3.5}% ${
-            50 - tilt.x * 3.5
+          background: `radial-gradient(circle at ${50 + (tilt.y || 0) * 3.5}% ${
+            50 - (tilt.x || 0) * 3.5
           }%, rgba(255,255,255,0.95) 0%, rgba(255,215,0,0.6) 20%, rgba(236,72,153,0.45) 40%, rgba(6,182,212,0.35) 60%, transparent 80%)`,
         }}
       />
 
-      {/* Holographic Prismatic Diagonal Rainbow Sheen */}
+      {/* Holographic Prismatic Rainbow Sheen */}
       <div
         className="absolute inset-0 pointer-events-none opacity-40 mix-blend-overlay z-25"
         style={{
           background:
             "linear-gradient(115deg, transparent 15%, rgba(255,255,255,0.9) 30%, rgba(236,72,153,0.7) 45%, rgba(6,182,212,0.7) 55%, rgba(251,191,36,0.8) 70%, transparent 85%)",
-          transform: `translate(${tilt.y * 6}px, ${tilt.x * 6}px)`,
+          transform: `translate(${(tilt.y || 0) * 6}px, ${(tilt.x || 0) * 6}px)`,
         }}
       />
 
@@ -301,9 +296,8 @@ const PokemonCardFront = ({ card, tilt }) => {
           </div>
         </div>
 
-        {/* Artwork Display Box with 3D Shadow, Foil Glare & Inner Bevel */}
+        {/* Artwork Display Box */}
         <div className="my-1.5 relative rounded-lg overflow-hidden border-2 border-amber-300/80 shadow-md bg-gradient-to-b from-slate-200 via-slate-100 to-slate-300 flex flex-col items-center justify-center h-40 sm:h-44">
-          {/* Subtle Ambient Radial Glow */}
           <div
             className="absolute inset-0 opacity-45 pointer-events-none"
             style={{
@@ -311,7 +305,6 @@ const PokemonCardFront = ({ card, tilt }) => {
             }}
           />
 
-          {/* Glass Glare Sheen Reflection */}
           <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/25 to-transparent z-15" />
 
           <img
@@ -320,7 +313,6 @@ const PokemonCardFront = ({ card, tilt }) => {
             className="relative z-10 h-32 sm:h-36 w-auto object-contain drop-shadow-[0_10px_16px_rgba(0,0,0,0.4)] transition-transform hover:scale-105"
           />
 
-          {/* Bottom Caption Strip */}
           <div className="absolute bottom-0 inset-x-0 bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-200 py-0.5 px-2 text-[8px] font-extrabold text-slate-700 flex items-center justify-between border-t border-amber-300/80 z-20">
             <span>NO. {String(card.id).padStart(3, "0")} {card.title}</span>
             <span>ATK: {card.atk}</span>
@@ -366,7 +358,7 @@ const PokemonCardFront = ({ card, tilt }) => {
           </div>
         </div>
 
-        {/* Dynamic Weakness, Resistance & Retreat Cost */}
+        {/* Dynamic Weakness, Resistance & Retreat */}
         <div className="grid grid-cols-3 gap-1 pt-1.5 border-t border-slate-300 text-[8px] font-bold text-slate-600 text-center">
           <div>
             <span className="block text-[7px] text-slate-400 uppercase">Weakness</span>
@@ -388,7 +380,7 @@ const PokemonCardFront = ({ card, tilt }) => {
           </div>
         </div>
 
-        {/* Clean Footer (No Copyright Name / No Illustrator Name) */}
+        {/* Clean Footer */}
         <div className="flex items-center justify-between text-[7px] font-semibold text-slate-400 pt-1 border-t border-slate-200">
           <span className="font-bold text-slate-500">1st Edition • PROMO</span>
           <span className="font-black text-slate-700">
@@ -396,6 +388,222 @@ const PokemonCardFront = ({ card, tilt }) => {
           </span>
           <span className="font-bold text-slate-500">VER: 2026.1</span>
         </div>
+      </div>
+    </div>
+  );
+};
+
+// 🌟 BOOSTER PACK RIPPING CEREMONY MODAL ("Animasi Brewek / Sobek Pack")
+const BoosterPackModal = ({
+  isOpen,
+  stage, // 'sealed' | 'ripping' | 'revealed'
+  pulls,
+  onRip,
+  onClose,
+  onSelectCard,
+}) => {
+  if (!isOpen) return null;
+
+  const topCard = pulls[0] || POKETECHS[10];
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-xl animate-fade-in select-none">
+      {/* Stadium Cosmic Background Lights */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[500px] rounded-full bg-cyan-500/20 blur-[130px]" />
+        <div className="absolute -bottom-32 left-1/2 -translate-x-1/2 w-[600px] h-[500px] rounded-full bg-amber-500/20 blur-[130px]" />
+      </div>
+
+      {/* Close / Skip Button */}
+      <button
+        type="button"
+        onClick={onClose}
+        className="absolute top-6 right-6 z-50 h-10 w-10 rounded-full border border-slate-700 bg-slate-900/90 text-slate-300 hover:text-white hover:border-slate-500 flex items-center justify-center transition-all"
+        title="Tutup / Lewati"
+      >
+        <FiX className="text-lg" />
+      </button>
+
+      {/* Main Ceremony Container */}
+      <div className="relative z-10 flex flex-col items-center max-w-lg w-full">
+        {stage !== "revealed" ? (
+          /* ─── STAGE 1: FOIL BOOSTER PACK WITH RIP ANIMATION ─── */
+          <div className="flex flex-col items-center">
+            <p className="text-xs uppercase tracking-[0.3em] font-black text-cyan-400 mb-4 animate-pulse">
+              {stage === "sealed" ? "✨ SENTUH / KLIK UNTUK SOBEK PACK! ✨" : "⚡ MEMBUKA BOOSTER PACK..."}
+            </p>
+
+            {/* 3D Foil Booster Pack */}
+            <div
+              onClick={stage === "sealed" ? onRip : undefined}
+              className={`relative w-72 h-[420px] rounded-2xl cursor-pointer transition-all duration-300 group ${
+                stage === "sealed" ? "hover:scale-105 active:scale-95 shadow-[0_0_50px_rgba(6,182,212,0.4)]" : ""
+              }`}
+            >
+              {/* TOP FOIL STRIP (Brewek / Rips off) */}
+              <div
+                className={`relative w-full h-16 rounded-t-2xl z-30 overflow-hidden border-t-2 border-x-2 border-amber-300/80 transition-all duration-700 ${
+                  stage === "ripping"
+                    ? "-translate-y-24 -rotate-12 opacity-0 pointer-events-none"
+                    : "shadow-md"
+                }`}
+                style={{
+                  background:
+                    "linear-gradient(135deg, #1e293b 0%, #334155 30%, #f59e0b 50%, #1e293b 80%, #0f172a 100%)",
+                }}
+              >
+                {/* Metallic Crimped Seal Edges */}
+                <div
+                  className="w-full h-4 border-b border-amber-400/60 flex items-center justify-around opacity-75"
+                  style={{
+                    backgroundImage: "repeating-linear-gradient(90deg, #f59e0b, #f59e0b 2px, #0f172a 2px, #0f172a 4px)",
+                  }}
+                />
+
+                {/* Tear Here Laser Cutline Indicator */}
+                <div className="flex items-center justify-between px-4 pt-2">
+                  <div className="flex items-center gap-1.5 text-[10px] font-black text-amber-300">
+                    <FiScissors className="animate-bounce" />
+                    <span>SOBEK DI SINI</span>
+                  </div>
+                  <span className="text-[9px] font-mono text-cyan-300">POKÉTECH</span>
+                </div>
+              </div>
+
+              {/* Laser Cut Glow Line */}
+              <div
+                className={`w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent transition-opacity duration-300 ${
+                  stage === "ripping" ? "opacity-100 shadow-[0_0_20px_#22d3ee]" : "opacity-40"
+                }`}
+              />
+
+              {/* BOTTOM FOIL BODY */}
+              <div
+                className="relative w-full h-[354px] -mt-1 rounded-b-2xl overflow-hidden border-b-4 border-x-2 border-amber-400/80 p-4 flex flex-col items-center justify-between shadow-2xl z-20"
+                style={{
+                  background:
+                    "radial-gradient(circle at 50% 30%, #1e3a8a 0%, #0f172a 60%, #020617 100%)",
+                }}
+              >
+                {/* Prismatic Sheen on Foil */}
+                <div
+                  className="absolute inset-0 opacity-30 mix-blend-color-dodge pointer-events-none"
+                  style={{
+                    background:
+                      "linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.8) 40%, rgba(236,72,153,0.5) 50%, rgba(6,182,212,0.5) 60%, transparent 80%)",
+                  }}
+                />
+
+                {/* Pack Header Emblem */}
+                <div className="text-center pt-2 relative z-10">
+                  <span className="text-[9px] font-black tracking-widest text-amber-400 uppercase">
+                    100 CARDS EXPANSION
+                  </span>
+                  <h3
+                    className="text-2xl font-black text-white tracking-tight uppercase"
+                    style={{
+                      fontFamily: "'Impact', 'Arial Black', sans-serif",
+                      WebkitTextStroke: "1px #1e3a8a",
+                      textShadow: "0 0 15px rgba(251,191,36,0.7)",
+                    }}
+                  >
+                    POKÉTECH TCG
+                  </h3>
+                </div>
+
+                {/* Foil Cover Monster Artwork */}
+                <div className="relative my-auto flex items-center justify-center">
+                  <div className="h-28 w-28 rounded-full bg-cyan-400/20 blur-xl absolute" />
+                  <img
+                    src={BitkachuImg}
+                    alt="Booster Cover"
+                    className="h-32 w-32 object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] transition-transform group-hover:scale-110 duration-300"
+                  />
+                </div>
+
+                {/* Pack Bottom Footer */}
+                <div className="w-full text-center border-t border-slate-700/80 pt-2 relative z-10">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-[10px] font-black text-amber-300">
+                    <FiStar /> Berisi {pulls.length} Kartu Tersegel
+                  </div>
+                </div>
+
+                {/* Bottom Crimped Seal */}
+                <div
+                  className="absolute bottom-0 inset-x-0 h-3 border-t border-amber-400/60"
+                  style={{
+                    backgroundImage: "repeating-linear-gradient(90deg, #f59e0b, #f59e0b 2px, #0f172a 2px, #0f172a 4px)",
+                  }}
+                />
+              </div>
+
+              {/* Radiant Light Beam Burst when Ripping */}
+              {stage === "ripping" && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40">
+                  <div className="w-40 h-[600px] bg-gradient-to-t from-transparent via-cyan-300 to-transparent blur-md animate-ping opacity-80" />
+                </div>
+              )}
+            </div>
+
+            {/* Click to Rip Prompt Button */}
+            {stage === "sealed" && (
+              <button
+                type="button"
+                onClick={onRip}
+                className="mt-6 flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-sm shadow-[0_0_25px_rgba(251,191,36,0.6)] hover:scale-105 active:scale-95 transition-all"
+              >
+                <FiScissors className="text-base" /> SOBEK PACK SEKARANG!
+              </button>
+            )}
+          </div>
+        ) : (
+          /* ─── STAGE 2: CARD REVEAL IN ALL GLORY ─── */
+          <div className="flex flex-col items-center animate-scale-up w-full">
+            <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-cyan-950/80 border border-cyan-400/40 text-xs font-black text-cyan-300 mb-4 shadow-lg">
+              🎉 PULL BERHASIL! DITEMUKAN: {topCard.name} ({topCard.rarity})
+            </div>
+
+            {/* Spotlight 3D Revealed Card */}
+            <div className="w-[300px] sm:w-[320px] aspect-[2.5/3.5] relative mb-6">
+              <PokemonCardFront card={topCard} />
+            </div>
+
+            {/* If Multi-Pull (5x / 10x), Show Mini Carousel Cards */}
+            {pulls.length > 1 && (
+              <div className="w-full mb-6">
+                <p className="text-xs text-center text-slate-400 font-semibold mb-2">
+                  Seluruh Hasil Pull ({pulls.length} Kartu):
+                </p>
+                <div className="flex gap-2 overflow-x-auto pb-2 justify-center max-w-md mx-auto">
+                  {pulls.map((c, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => onSelectCard(c)}
+                      className={`h-12 w-10 rounded-lg p-0.5 border flex items-center justify-center bg-slate-900 shrink-0 transition-all ${
+                        c.id === topCard.id
+                          ? "border-cyan-400 ring-2 ring-cyan-400 scale-110 shadow-[0_0_10px_#22d3ee]"
+                          : "border-slate-700 opacity-70 hover:opacity-100"
+                      }`}
+                      title={c.name}
+                    >
+                      <img src={c.image} alt={c.name} className="h-full w-full object-contain" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Done & Insert to Binder Button */}
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-sm shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:scale-105 active:scale-95 transition-all"
+            >
+              Simpan ke Album Binder <FiArrowRight />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -410,13 +618,17 @@ const TechmonGacha = () => {
   const [activeCard, setActiveCard] = useState(POKETECHS[10]); // Bitkachu
   const [isFlipped, setIsFlipped] = useState(false); // 3D Card Flip Front/Back
   const [pulledQueue, setPulledQueue] = useState([]);
-  const [isOpening, setIsOpening] = useState(false);
   const [totalPulls, setTotalPulls] = useState(() => {
     return parseInt(localStorage.getItem("bimo_poketech_pulls") || "0", 10);
   });
   const [filterRarity, setFilterRarity] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+
+  // 🌟 Booster Pack Ceremony States
+  const [packModalOpen, setPackModalOpen] = useState(false);
+  const [packStage, setPackStage] = useState("sealed"); // 'sealed' | 'ripping' | 'revealed'
+  const [currentPackPulls, setCurrentPackPulls] = useState([]);
 
   // 3D Card Interactive Tilt Physics (Pokémon TCG Pocket Style Inspector)
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
@@ -458,7 +670,6 @@ const TechmonGacha = () => {
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.touches[0].clientX - rect.left - rect.width / 2;
     const y = e.touches[0].clientY - rect.top - rect.height / 2;
-    // Limit tilt angle up to ±22 degrees for comfy inspection
     const clampedX = Math.max(-rect.height / 2, Math.min(rect.height / 2, y));
     const clampedY = Math.max(-rect.width / 2, Math.min(rect.width / 2, x));
     setTilt({
@@ -547,10 +758,8 @@ const TechmonGacha = () => {
     }
   };
 
-  const handleGacha = (count = 1) => {
-    if (isOpening) return;
-    setIsOpening(true);
-
+  // Launch Booster Pack Ceremony
+  const startPackCeremony = (count = 1) => {
     const newPulls = [];
     for (let i = 0; i < count; i++) {
       newPulls.push(pullRandomCard());
@@ -558,29 +767,39 @@ const TechmonGacha = () => {
 
     const tierPriority = { UR: 5, SSR: 4, SR: 3, Rare: 2, Common: 1 };
     newPulls.sort((a, b) => tierPriority[b.rarity] - tierPriority[a.rarity]);
-    const topCard = newPulls[0];
+
+    setCurrentPackPulls(newPulls);
+    setPackStage("sealed");
+    setPackModalOpen(true);
+  };
+
+  // Execute the "Brewek / Rip Open" Animation
+  const handleRipPack = () => {
+    setPackStage("ripping");
+
+    const topCard = currentPackPulls[0] || POKETECHS[10];
 
     setTimeout(() => {
+      setPackStage("revealed");
       setActiveCard(topCard);
       setIsFlipped(false);
-      setPulledQueue(newPulls);
+      setPulledQueue(currentPackPulls);
 
       setUnlockedIds((prev) => {
-        const set = new Set([...prev, ...newPulls.map((c) => c.id)]);
+        const set = new Set([...prev, ...currentPackPulls.map((c) => c.id)]);
         const updated = Array.from(set);
         localStorage.setItem("bimo_poketech_unlocked", JSON.stringify(updated));
         return updated;
       });
 
       setTotalPulls((prev) => {
-        const updated = prev + count;
+        const updated = prev + currentPackPulls.length;
         localStorage.setItem("bimo_poketech_pulls", updated.toString());
         return updated;
       });
 
       triggerTierCelebration(topCard.rarity);
-      setIsOpening(false);
-    }, 650);
+    }, 700);
   };
 
   // Reset Collection System
@@ -617,6 +836,16 @@ const TechmonGacha = () => {
         background: "linear-gradient(180deg, #070d1e 0%, #0d1b3e 40%, #0b1531 80%, #060b18 100%)",
       }}
     >
+      {/* 🌟 RIPPING PACK CEREMONY MODAL OVERLAY */}
+      <BoosterPackModal
+        isOpen={packModalOpen}
+        stage={packStage}
+        pulls={currentPackPulls}
+        onRip={handleRipPack}
+        onClose={() => setPackModalOpen(false)}
+        onSelectCard={(c) => setActiveCard(c)}
+      />
+
       {/* TCG Championship Arena Cyber Playmat Grid Lines */}
       <div
         className="absolute inset-0 pointer-events-none opacity-20"
@@ -654,7 +883,7 @@ const TechmonGacha = () => {
           </h2>
 
           <p className="mt-3 text-sm leading-relaxed text-slate-300 font-medium">
-            Gacha kartu resmi <strong>PokéTech EX & UR</strong>! Ketuk kartu untuk membalik sisi depan & belakang (<strong>3D Card Flip</strong>), dan kumpulkan seluruh 100 kartu di PokéDex Binder!
+            Buka booster pack dan sobek bungkusnya untuk mendapatkan kartu <strong>PokéTech EX & UR</strong>! Geser kartu untuk rotasi 3D comfy ala Pokémon TCG Pocket!
           </p>
         </div>
 
@@ -677,9 +906,7 @@ const TechmonGacha = () => {
                 {/* 3D Flipping Container (Inspected in 3D, Flipped strictly by Button) */}
                 <div
                   ref={cardRef}
-                  className={`relative w-full h-full cursor-grab active:cursor-grabbing select-none ${
-                    isOpening ? "animate-pulse scale-95 blur-[2px]" : ""
-                  }`}
+                  className="relative w-full h-full cursor-grab active:cursor-grabbing select-none"
                   style={{
                     transformStyle: "preserve-3d",
                     transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y + (isFlipped ? 180 : 0)}deg)`,
@@ -822,39 +1049,36 @@ const TechmonGacha = () => {
                 </div>
               )}
 
-              {/* High-Tech Studio Trainer Buttons (Clean & Professional Gaming Theme) */}
+              {/* High-Tech Studio Trainer Buttons (Launches Booster Pack Ceremony) */}
               <div className="grid grid-cols-3 gap-2.5 sm:gap-3.5">
                 {/* 1x Pack */}
                 <button
                   type="button"
-                  onClick={() => handleGacha(1)}
-                  disabled={isOpening}
+                  onClick={() => startPackCeremony(1)}
                   className="flex items-center justify-center gap-1.5 py-3 text-xs sm:text-sm font-black rounded-2xl border border-blue-500/40 bg-slate-800/90 text-blue-300 hover:bg-blue-600 hover:text-white hover:border-blue-500 shadow-sm hover:scale-102 active:scale-98 transition-all"
                 >
                   <FiZap className="text-blue-400" />
-                  {isOpening ? "..." : "1x Pack"}
+                  1x Pack
                 </button>
 
                 {/* 5x Packs */}
                 <button
                   type="button"
-                  onClick={() => handleGacha(5)}
-                  disabled={isOpening}
+                  onClick={() => startPackCeremony(5)}
                   className="flex items-center justify-center gap-1.5 py-3 text-xs sm:text-sm font-black rounded-2xl border border-cyan-500/40 bg-slate-800/90 text-cyan-300 hover:bg-cyan-600 hover:text-white hover:border-cyan-500 shadow-sm hover:scale-102 active:scale-98 transition-all"
                 >
                   <FiGift className="text-cyan-400" />
-                  {isOpening ? "..." : "5x Packs"}
+                  5x Packs
                 </button>
 
                 {/* 10x Mega */}
                 <button
                   type="button"
-                  onClick={() => handleGacha(10)}
-                  disabled={isOpening}
+                  onClick={() => startPackCeremony(10)}
                   className="flex items-center justify-center gap-1.5 py-3 text-xs sm:text-sm font-black rounded-2xl border border-indigo-500/40 bg-slate-800/90 text-indigo-200 hover:bg-indigo-600 hover:text-white hover:border-indigo-500 shadow-sm hover:scale-102 active:scale-98 transition-all"
                 >
                   <FiStar className="text-indigo-400" />
-                  {isOpening ? "..." : "10x Mega 🚀"}
+                  10x Mega 🚀
                 </button>
               </div>
 
