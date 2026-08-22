@@ -1658,6 +1658,7 @@ const TechmonGacha = () => {
                 )}
               </div>
             )}
+          </div>
         </div>
       </div>
     </section>
