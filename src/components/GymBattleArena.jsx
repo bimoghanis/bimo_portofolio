@@ -17,9 +17,9 @@ import {
   FiCheckCircle,
 } from "react-icons/fi";
 
-// ─── 🏰 15 STAGES CAMPAIGN STRUCTURE (5 ZONES × 3 STAGES WITH 5 GRAND BOSSES) ───
+// ─── 🏰 15 STAGES CAMPAIGN (CALIBRATED MEDIUM DIFFICULTY) ───
 export const STAGE_LIST = [
-  // ─── ZONE 1: SYNTAX VALLEY (Grass / Bug) ───
+  // ─── ZONE 1: SYNTAX FOREST 🌲 (Grass / Bug) ───
   {
     stage: 1,
     zone: 1,
@@ -30,13 +30,13 @@ export const STAGE_LIST = [
     isBoss: false,
     element: "Bug / Lint",
     level: 12,
-    maxHp: 220,
-    atk: 28,
+    maxHp: 130,
+    atk: 18,
     avatar: "🐛",
     image: POKETECHS[4]?.image,
     moves: [
-      { name: "Trailing Whitespace", power: 22, desc: "Minor formatting alert!" },
-      { name: "Tab vs Space", power: 34, desc: "Annoying indentation error!" },
+      { name: "Trailing Whitespace", power: 15, desc: "Minor formatting alert!" },
+      { name: "Tab vs Space", power: 22, desc: "Indentation warning spike!" },
     ],
   },
   {
@@ -49,13 +49,13 @@ export const STAGE_LIST = [
     isBoss: false,
     element: "Grass / SQL",
     level: 18,
-    maxHp: 320,
-    atk: 38,
+    maxHp: 180,
+    atk: 24,
     avatar: "🌿",
     image: POKETECHS[5]?.image,
     moves: [
-      { name: "ETL Vine Whip", power: 32, desc: "Extracts dirty data strings!" },
-      { name: "Schema Confusion Spore", power: 46, desc: "Null column surprise!" },
+      { name: "ETL Vine Whip", power: 20, desc: "Extracts dirty data strings!" },
+      { name: "Schema Confusion Spore", power: 28, desc: "Null column surprise!" },
     ],
   },
   {
@@ -70,17 +70,17 @@ export const STAGE_LIST = [
     badgeIcon: "🟢",
     element: "Grass / Bug",
     level: 25,
-    maxHp: 550,
-    atk: 52,
+    maxHp: 320,
+    atk: 34,
     avatar: "🐛👑",
     image: POKETECHS[4]?.image,
     moves: [
-      { name: "Memory Leak Nightmare", power: 45, desc: "Steals stack memory!" },
-      { name: "Infinite Loop Catastrophe", power: 65, desc: "Freezes browser main thread!" },
+      { name: "Memory Leak Bite", power: 30, desc: "Steals stack memory!" },
+      { name: "Infinite Loop Crash", power: 42, desc: "Freezes execution thread!" },
     ],
   },
 
-  // ─── ZONE 2: MEMORY LEAK LAGOON (Water / Memory) ───
+  // ─── ZONE 2: MEMORY LAGOON 🌊 (Water / Memory) ───
   {
     stage: 4,
     zone: 2,
@@ -91,13 +91,13 @@ export const STAGE_LIST = [
     isBoss: false,
     element: "Water / SQL",
     level: 32,
-    maxHp: 480,
-    atk: 58,
+    maxHp: 260,
+    atk: 38,
     avatar: "🐢",
     image: POKETECHS[3]?.image,
     moves: [
-      { name: "SELECT * Flood", power: 48, desc: "Full table scan deluge!" },
-      { name: "Unindexed Water Pulse", power: 65, desc: "Database bottleneck blast!" },
+      { name: "SELECT * Flood", power: 32, desc: "Full table scan wave!" },
+      { name: "Unindexed Water Pulse", power: 45, desc: "Database bottleneck splash!" },
     ],
   },
   {
@@ -108,15 +108,15 @@ export const STAGE_LIST = [
     name: "Dangling Pointer Slowbro",
     title: "Redis Cache Stall",
     isBoss: false,
-    element: "Water / Psychic",
+    element: "Water / Memory",
     level: 40,
-    maxHp: 640,
-    atk: 72,
+    maxHp: 340,
+    atk: 46,
     avatar: "🦛",
     image: POKETECHS[10]?.image,
     moves: [
-      { name: "TTL Cache Eviction", power: 58, desc: "Stale session payload!" },
-      { name: "Memory Overflow Stare", power: 78, desc: "Deep sleep lock!" },
+      { name: "TTL Cache Eviction", power: 38, desc: "Stale session payload!" },
+      { name: "Buffer Overflow Slumber", power: 52, desc: "Heavy cache rest!" },
     ],
   },
   {
@@ -131,17 +131,17 @@ export const STAGE_LIST = [
     badgeIcon: "🔵",
     element: "Water / Memory",
     level: 48,
-    maxHp: 950,
-    atk: 90,
+    maxHp: 490,
+    atk: 56,
     avatar: "🦆👑",
     image: POKETECHS[10]?.image,
     moves: [
-      { name: "Hydro Socket Deluge", power: 70, desc: "Floods client socket!" },
-      { name: "Fatal Migraine 404", power: 105, desc: "Server unavailable 503 crash!" },
+      { name: "Hydro Socket Deluge", power: 48, desc: "Floods client socket!" },
+      { name: "Fatal Migraine 404", power: 68, desc: "Server unavailable burst!" },
     ],
   },
 
-  // ─── ZONE 3: NEURAL CITADEL (Electric / Psychic / AI) ───
+  // ─── ZONE 3: NEURAL CITADEL ⚡ (Electric / Psychic / AI) ───
   {
     stage: 7,
     zone: 3,
@@ -152,13 +152,13 @@ export const STAGE_LIST = [
     isBoss: false,
     element: "Electric / Python",
     level: 55,
-    maxHp: 820,
-    atk: 105,
+    maxHp: 420,
+    atk: 58,
     avatar: "⚡",
     image: POKETECHS[1]?.image,
     moves: [
-      { name: "Thunder Jitter", power: 85, desc: "High ping network spike!" },
-      { name: "Volt Async/Await", power: 115, desc: "Concurrent thread surge!" },
+      { name: "Thunder Jitter", power: 52, desc: "High ping network spark!" },
+      { name: "Volt Async/Await", power: 70, desc: "Concurrent thread surge!" },
     ],
   },
   {
@@ -171,13 +171,13 @@ export const STAGE_LIST = [
     isBoss: false,
     element: "Psychic / Normal",
     level: 62,
-    maxHp: 1050,
-    atk: 120,
+    maxHp: 520,
+    atk: 68,
     avatar: "🦊",
     image: POKETECHS[6]?.image,
     moves: [
-      { name: "Docker Container Swarm", power: 95, desc: "Spawns 50 micro pods!" },
-      { name: "Kubernetes Auto-Scale", power: 130, desc: "Overwhelms memory node!" },
+      { name: "Docker Container Swarm", power: 60, desc: "Spawns 50 micro pods!" },
+      { name: "Kubernetes Auto-Scale", power: 82, desc: "Overwhelms memory node!" },
     ],
   },
   {
@@ -192,17 +192,17 @@ export const STAGE_LIST = [
     badgeIcon: "🟣",
     element: "Psychic / AI",
     level: 72,
-    maxHp: 1550,
-    atk: 145,
+    maxHp: 740,
+    atk: 82,
     avatar: "🔮👑",
     image: POKETECHS[7]?.image,
     moves: [
-      { name: "Neural Mind Telepathy", power: 110, desc: "Predicts user behavior!" },
-      { name: "Fatal Segmentation Purge", power: 165, desc: "Wipes registers to zero!" },
+      { name: "Neural Mind Telepathy", power: 72, desc: "Predicts user behavior!" },
+      { name: "Fatal Segmentation Purge", power: 102, desc: "Wipes memory registers!" },
     ],
   },
 
-  // ─── ZONE 4: GIT CHAOS CALDERA (Dragon / Fire) ───
+  // ─── ZONE 4: GIT CHAOS CALDERA 🔥 (Dragon / Fire) ───
   {
     stage: 10,
     zone: 4,
@@ -213,13 +213,13 @@ export const STAGE_LIST = [
     isBoss: false,
     element: "Fire / Compiler",
     level: 80,
-    maxHp: 1400,
-    atk: 155,
+    maxHp: 650,
+    atk: 86,
     avatar: "🔥",
     image: POKETECHS[1]?.image,
     moves: [
-      { name: "Cargo Build Inferno", power: 125, desc: "Compiles at 100% CPU!" },
-      { name: "Flame Graph Overheat", power: 175, desc: "Thermal throttling blast!" },
+      { name: "Cargo Build Inferno", power: 78, desc: "Compiles at 100% CPU!" },
+      { name: "Flame Graph Overheat", power: 108, desc: "Thermal throttling blast!" },
     ],
   },
   {
@@ -232,13 +232,13 @@ export const STAGE_LIST = [
     isBoss: false,
     element: "Normal / Heavy",
     level: 86,
-    maxHp: 2100,
-    atk: 135,
+    maxHp: 880,
+    atk: 75,
     avatar: "💤",
     image: POKETECHS[2]?.image,
     moves: [
-      { name: "Table Exclusive Lock", power: 110, desc: "Freezes all transactions!" },
-      { name: "Rest & Buffer Cache", power: 150, desc: "Heavy slumber recovery!" },
+      { name: "Table Exclusive Lock", power: 70, desc: "Freezes transactions!" },
+      { name: "Rest & Buffer Cache", power: 95, desc: "Heavy slumber recovery!" },
     ],
   },
   {
@@ -253,17 +253,17 @@ export const STAGE_LIST = [
     badgeIcon: "🔴",
     element: "Dragon / Fire",
     level: 92,
-    maxHp: 2450,
-    atk: 195,
+    maxHp: 1100,
+    atk: 108,
     avatar: "🐉👑",
     image: POKETECHS[12]?.image,
     moves: [
-      { name: "Rebase Conflict Cataclysm", power: 140, desc: "Destroys commit history!" },
-      { name: "Force Push Annihilation", power: 220, desc: "Obliterates master branch!" },
+      { name: "Rebase Conflict Cataclysm", power: 95, desc: "Destroys commit history!" },
+      { name: "Force Push Annihilation", power: 135, desc: "Obliterates master branch!" },
     ],
   },
 
-  // ─── ZONE 5: CELESTIAL OLYMPUS (Cosmic / Python - GOD TIER) ───
+  // ─── ZONE 5: CELESTIAL OLYMPUS 👑 (Cosmic / Python - GOD TIER) ───
   {
     stage: 13,
     zone: 5,
@@ -274,13 +274,13 @@ export const STAGE_LIST = [
     isBoss: false,
     element: "Ozone / AI",
     level: 96,
-    maxHp: 2700,
-    atk: 225,
+    maxHp: 1150,
+    atk: 115,
     avatar: "🌌",
     image: POKETECHS[8]?.image,
     moves: [
-      { name: "Hyper-Beam Inference", power: 170, desc: "100 Trillion parameter beam!" },
-      { name: "GPU Cluster Supernova", power: 245, desc: "Full cluster parallel shock!" },
+      { name: "Hyper-Beam Inference", power: 105, desc: "100T parameter beam!" },
+      { name: "GPU Cluster Supernova", power: 145, desc: "Parallel compute shock!" },
     ],
   },
   {
@@ -293,13 +293,13 @@ export const STAGE_LIST = [
     isBoss: false,
     element: "Aero / Cloud",
     level: 99,
-    maxHp: 3100,
-    atk: 245,
+    maxHp: 1350,
+    atk: 128,
     avatar: "☁️",
     image: POKETECHS[3]?.image,
     moves: [
-      { name: "Aeroblast 99.999% SLA", power: 190, desc: "Zero downtime gust!" },
-      { name: "Multi-Region Failover", power: 270, desc: "Global cluster reset wave!" },
+      { name: "Aeroblast 99.999% SLA", power: 118, desc: "Zero downtime gust!" },
+      { name: "Multi-Region Failover", power: 162, desc: "Global cluster reset!" },
     ],
   },
   {
@@ -314,49 +314,64 @@ export const STAGE_LIST = [
     badgeIcon: "👑",
     element: "Cosmic / Python",
     level: 100,
-    maxHp: 4200,
-    atk: 290,
+    maxHp: 1750,
+    atk: 155,
     avatar: "👑✨",
     image: POKETECHS[0]?.image,
     moves: [
-      { name: "Genesis Global Interpreter Lock", power: 220, desc: "Locks reality itself!" },
-      { name: "Judgement Divine Supernova", power: 340, desc: "Cosmic computational singularity!" },
+      { name: "Genesis Global Interpreter Lock", power: 135, desc: "Locks reality itself!" },
+      { name: "Judgement Divine Supernova", power: 195, desc: "Cosmic computational singularity!" },
     ],
   },
 ];
 
-// Type Advantage Calculations
+// Type Advantage System
 const getTypeMultiplier = (playerElement, bossElement) => {
   const p = (playerElement || "").toLowerCase();
   const b = (bossElement || "").toLowerCase();
 
-  if (p.includes("water") && (b.includes("fire") || b.includes("dragon"))) return 1.45;
-  if (p.includes("fire") && (b.includes("grass") || b.includes("bug"))) return 1.45;
-  if (p.includes("grass") && b.includes("water")) return 1.45;
-  if (p.includes("electric") && (b.includes("water") || b.includes("lint"))) return 1.45;
-  if (p.includes("psychic") && (b.includes("bug") || b.includes("grass"))) return 1.35;
-  if (p.includes("cosmic")) return 1.35;
+  if (p.includes("water") && (b.includes("fire") || b.includes("dragon"))) return 1.35;
+  if (p.includes("fire") && (b.includes("grass") || b.includes("bug"))) return 1.35;
+  if (p.includes("grass") && b.includes("water")) return 1.35;
+  if (p.includes("electric") && (b.includes("water") || b.includes("lint"))) return 1.35;
+  if (p.includes("psychic") && (b.includes("bug") || b.includes("grass"))) return 1.3;
+  if (p.includes("cosmic")) return 1.3;
   return 1.0;
 };
 
-// Calculate Card Battle Stats (Buffs Shiny & High Rarity)
+// 🎯 CALIBRATED MEDIUM DIFFICULTY CARD STATS FORMULA
 const calculateCardStats = (card, isShiny) => {
-  let baseHp = card.hp;
-  let baseAtk = card.atk;
+  let baseHp = 160;
+  let baseAtk = 32;
 
-  // Scale based on rarity
   if (card.rarity === "UR") {
-    baseHp = Math.round(baseHp * 1.35 + 200);
-    baseAtk = Math.round(baseAtk * 1.35 + 35);
+    baseHp = 580;
+    baseAtk = 92;
   } else if (card.rarity === "SSR") {
-    baseHp = Math.round(baseHp * 1.2 + 100);
-    baseAtk = Math.round(baseAtk * 1.2 + 20);
+    baseHp = 380;
+    baseAtk = 65;
+  } else if (card.rarity === "SR") {
+    baseHp = 280;
+    baseAtk = 50;
+  } else if (card.rarity === "Rare") {
+    baseHp = 210;
+    baseAtk = 38;
+  } else {
+    // Common
+    baseHp = 150;
+    baseAtk = 28;
   }
 
-  // Shiny Transformation Bonus (+500 HP / +60 ATK & 1.35x Multiplier)
+  // Card slight variance
+  const hpVariance = (card.id % 6) * 10;
+  const atkVariance = (card.id % 4) * 3;
+  baseHp += hpVariance;
+  baseAtk += atkVariance;
+
+  // ✨ Shiny Transformation Buff (+140 HP / +28 ATK)
   if (isShiny) {
-    baseHp = Math.round(baseHp * 1.35 + 400);
-    baseAtk = Math.round(baseAtk * 1.3 + 50);
+    baseHp += 140;
+    baseAtk += 28;
   }
 
   return { hp: baseHp, atk: baseAtk };
@@ -402,14 +417,14 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
 
   const activePlayerCard = teamCards[activeTeamIndex] || teamCards[0];
 
-  // ─── ⚔️ BATTLE HP & LOGIC STATE ───
+  // ─── ⚔️ BATTLE HP & ENGINE STATE ───
   const [teamHp, setTeamHp] = useState([teamCards[0].hp, teamCards[1].hp, teamCards[2].hp]);
   const [bossHp, setBossHp] = useState(currentStage.maxHp);
   const [healsRemaining, setHealsRemaining] = useState(2);
   const [dialogueText, setDialogueText] = useState(
     `Stage ${currentStage.stage} (${currentStage.name}) Lv.${currentStage.level} menghadang! Apa yang akan dilakukan ${activePlayerCard.name.toUpperCase()}?`
   );
-  const [menuMode, setMenuMode] = useState("main"); // 'main' | 'fight' | 'switch' | 'run_confirm'
+  const [menuMode, setMenuMode] = useState("main");
   const [isAttacking, setIsAttacking] = useState(false);
   const [bossAttacking, setBossAttacking] = useState(false);
   const [damageEffect, setDamageEffect] = useState(null);
@@ -431,7 +446,7 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
     setActiveTeamIndex(0);
     setBossHp(currentStage.maxHp);
     setHealsRemaining(2);
-    setDialogueText(`Stage ${currentStage.stage} dimulai! Apa yang akan dilakukan ${teamCards[0].name.toUpperCase()}?`);
+    setDialogueText(`Duel Stage ${currentStage.stage} dimulai! Apa yang akan dilakukan ${teamCards[0].name.toUpperCase()}?`);
     setBattleState("in_progress");
     setMenuMode("main");
     setDamageEffect(null);
@@ -452,14 +467,14 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
     let attackName = "";
 
     if (moveType === "move1") {
-      baseDmg = Math.round(activePlayerCard.atk * (0.95 + Math.random() * 0.3) * multiplier);
+      baseDmg = Math.round(activePlayerCard.atk * (0.85 + Math.random() * 0.2) * multiplier);
       attackName = activePlayerCard.ability;
     } else {
-      baseDmg = Math.round(activePlayerCard.atk * 1.65 * (0.95 + Math.random() * 0.3) * multiplier);
+      baseDmg = Math.round(activePlayerCard.atk * (1.38 + Math.random() * 0.25) * multiplier);
       attackName = `⚡ Ultimate ${activePlayerCard.name.split(".")[0]} Blast`;
     }
 
-    const isCrit = Math.random() > 0.6;
+    const isCrit = Math.random() > 0.75;
     const finalDmg = isCrit ? Math.round(baseDmg * 1.35) : baseDmg;
 
     setDamageEffect({
@@ -523,7 +538,7 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
 
       const isSpecial = Math.random() > 0.5;
       const bossMove = isSpecial ? currentStage.moves[1] : currentStage.moves[0];
-      const bossDmg = Math.round(currentStage.atk * (isSpecial ? 1.4 : 0.95) * (0.85 + Math.random() * 0.3));
+      const bossDmg = Math.round(currentStage.atk * (isSpecial ? 1.25 : 0.85) * (0.85 + Math.random() * 0.25));
 
       setTimeout(() => {
         setDamageEffect({ target: "player", text: `-${bossDmg} HP!` });
@@ -560,12 +575,12 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
     }, 900);
   };
 
-  // 🎒 HEAL ITEM (+45% HP)
+  // 🎒 HEAL ITEM (+40% HP)
   const handleHealItem = () => {
     if (isAttacking || bossAttacking || battleState !== "in_progress" || currentActiveHp <= 0 || healsRemaining <= 0) return;
     if (playSound) playSound("click");
 
-    const healAmount = Math.round(activePlayerCard.hp * 0.45);
+    const healAmount = Math.round(activePlayerCard.hp * 0.4);
     const newHp = Math.min(activePlayerCard.hp, currentActiveHp + healAmount);
     setHealsRemaining((prev) => prev - 1);
 
@@ -580,7 +595,7 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
     // Enemy turn
     setTimeout(() => {
       setBossAttacking(true);
-      const bossDmg = Math.round(currentStage.atk * 0.9 * (0.85 + Math.random() * 0.3));
+      const bossDmg = Math.round(currentStage.atk * 0.85 * (0.85 + Math.random() * 0.25));
       setTimeout(() => {
         setDamageEffect({ target: "player", text: `-${bossDmg} HP!` });
         setTeamHp((prev) => {
@@ -613,7 +628,6 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
   const bossHpPercent = Math.max(0, Math.round((bossHp / currentStage.maxHp) * 100));
   const playerHpPercent = Math.max(0, Math.round((currentActiveHp / activePlayerCard.hp) * 100));
 
-  // Filter stages by active zone
   const zoneStages = STAGE_LIST.filter((s) => s.zone === activeZone);
 
   return (
@@ -819,7 +833,7 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
         </div>
       )}
 
-      {/* ─── 🎮 RETRO BATTLE SCREEN (AUTHENTIC DS / GBA PROPORTIONS) ─── */}
+      {/* ─── 🎮 RETRO BATTLE SCREEN ─── */}
       <div
         className="relative rounded-2xl border-4 border-slate-700 overflow-hidden shadow-2xl my-2"
         style={{
@@ -845,7 +859,7 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
           }}
         />
 
-        {/* ─── TOP LEFT: OPPONENT BOSS STATUS BANNER ─── */}
+        {/* ─── TOP LEFT: OPPONENT STATUS BANNER ─── */}
         <div className="absolute top-3 left-3 z-20 w-44 sm:w-56 bg-slate-950/90 border-2 border-slate-400/80 rounded-2xl p-2 shadow-2xl backdrop-blur-md">
           <div className="flex items-center justify-between">
             <span className="text-[11px] sm:text-xs font-black text-white truncate max-w-[110px]">
@@ -999,7 +1013,7 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
                   className="py-2 px-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-[10px] text-left truncate shadow-sm transition-all flex flex-col justify-center"
                 >
                   <span className="truncate">{activePlayerCard.ability}</span>
-                  <span className="text-[8px] opacity-80">ATK {activePlayerCard.atk}</span>
+                  <span className="text-[8px] opacity-80">ATK {Math.round(activePlayerCard.atk * 0.85)}</span>
                 </button>
 
                 <button
@@ -1009,7 +1023,7 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
                   className="py-2 px-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px] text-left truncate shadow-sm transition-all flex flex-col justify-center"
                 >
                   <span className="truncate">⚡ Ultimate Blast</span>
-                  <span className="text-[8px] opacity-80">ATK {Math.round(activePlayerCard.atk * 1.65)}</span>
+                  <span className="text-[8px] opacity-80">ATK {Math.round(activePlayerCard.atk * 1.38)}</span>
                 </button>
               </div>
 
@@ -1109,7 +1123,7 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
                     ? "bg-gradient-to-b from-emerald-500 to-green-600 shadow-[0_3px_0_#166534] active:translate-y-0.5 active:shadow-none hover:brightness-110"
                     : "bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700"
                 }`}
-                title={`Pulihkan +45% HP (${healsRemaining}x sisa)`}
+                title={`Pulihkan +40% HP (${healsRemaining}x sisa)`}
               >
                 <FiShield /> BAG ({healsRemaining}x)
               </button>
