@@ -39,10 +39,13 @@ const getElementEnergy = (element) => {
   return { icon: "⭐", bg: "#94a3b8", color: "#1e293b", name: "Colorless" };
 };
 
-// 🔊 Sound FX Synthesizer (Zero-latency Web Audio API)
-const playArcadeSound = (type) => {
+// 🔊 Sound FX Synthesizer (Zero-latency Web Audio API with Full Mute Support)
+const playArcadeSound = (type, isMuted = false) => {
+  if (isMuted) return;
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = ctx.currentTime;
+
     if (type === "rip") {
       const bufferSize = ctx.sampleRate * 0.35;
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
@@ -54,41 +57,90 @@ const playArcadeSound = (type) => {
       noise.buffer = buffer;
       const filter = ctx.createBiquadFilter();
       filter.type = "bandpass";
-      filter.frequency.setValueAtTime(1400, ctx.currentTime);
-      filter.frequency.exponentialRampToValueAtTime(3800, ctx.currentTime + 0.35);
+      filter.frequency.setValueAtTime(1400, now);
+      filter.frequency.exponentialRampToValueAtTime(3800, now + 0.35);
       const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.4, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
       noise.connect(filter);
       filter.connect(gain);
       gain.connect(ctx.destination);
       noise.start();
-    } else if (type === "celebration") {
+    } else if (type === "celebration" || type === "victory") {
       const notes = [523.25, 659.25, 783.99, 1046.5, 1318.51];
       notes.forEach((freq, idx) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = "triangle";
-        osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.08);
-        gain.gain.setValueAtTime(0.25, ctx.currentTime + idx * 0.08);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.4);
+        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+        gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.4);
         osc.connect(gain);
         gain.connect(ctx.destination);
-        osc.start(ctx.currentTime + idx * 0.08);
-        osc.stop(ctx.currentTime + idx * 0.08 + 0.45);
+        osc.start(now + idx * 0.08);
+        osc.stop(now + idx * 0.08 + 0.45);
       });
-    } else if (type === "click") {
+    } else if (type === "attack" || type === "hit") {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(440, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
-      gain.gain.setValueAtTime(0.2, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(160, now);
+      osc.frequency.exponentialRampToValueAtTime(40, now + 0.12);
+      gain.gain.setValueAtTime(0.3, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start();
-      osc.stop(ctx.currentTime + 0.09);
+      osc.stop(now + 0.13);
+    } else if (type === "zap" || type === "thunder") {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "square";
+      osc.frequency.setValueAtTime(880, now);
+      osc.frequency.linearRampToValueAtTime(220, now + 0.15);
+      gain.gain.setValueAtTime(0.25, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(now + 0.16);
+    } else if (type === "heal" || type === "shiny") {
+      [659.25, 783.99, 987.77, 1318.51].forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+        gain.gain.setValueAtTime(0.2, now + idx * 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.25);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + idx * 0.06);
+        osc.stop(now + idx * 0.06 + 0.3);
+      });
+    } else if (type === "spin") {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(900, now);
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.03);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(now + 0.035);
+    } else {
+      // click
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(480, now);
+      osc.frequency.exponentialRampToValueAtTime(960, now + 0.06);
+      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(now + 0.07);
     }
   } catch {
     // Silently continue if audio context is restricted
@@ -868,6 +920,26 @@ const TechmonGacha = () => {
     return saved ? JSON.parse(saved) : [];
   });
 
+  // 🔇 Audio Sound Engine Mute State
+  const [isMuted, setIsMuted] = useState(() => {
+    return localStorage.getItem("bimo_poketech_muted") === "true";
+  });
+
+  const toggleMute = () => {
+    setIsMuted((prev) => {
+      const next = !prev;
+      localStorage.setItem("bimo_poketech_muted", next.toString());
+      if (!next) {
+        playArcadeSound("click", false);
+      }
+      return next;
+    });
+  };
+
+  const playSound = (type) => {
+    playArcadeSound(type, isMuted);
+  };
+
   // 🎰 Lucky Spin Wheel States
   const [isSpinModalOpen, setIsSpinModalOpen] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
@@ -889,7 +961,7 @@ const TechmonGacha = () => {
     if (isSpinning) return;
     setIsSpinning(true);
     setSpinReward(null);
-    playArcadeSound("rip");
+    playSound("rip");
 
     const prizeIdx = Math.floor(Math.random() * SPIN_PRIZES.length);
     const extraRounds = 5 + Math.floor(Math.random() * 3);
@@ -1270,7 +1342,7 @@ const TechmonGacha = () => {
           <button
             type="button"
             onClick={() => {
-              playArcadeSound("click");
+              playSound("click");
               setActiveGameTab("battle");
             }}
             className={`px-4 py-2.5 rounded-2xl font-black text-xs sm:text-sm flex items-center gap-2 border-2 transition-all shadow-md ${
@@ -1289,7 +1361,7 @@ const TechmonGacha = () => {
           <button
             type="button"
             onClick={() => {
-              playArcadeSound("click");
+              playSound("click");
               setActiveGameTab("fusion");
             }}
             className={`px-4 py-2.5 rounded-2xl font-black text-xs sm:text-sm flex items-center gap-2 border-2 transition-all shadow-md ${
@@ -1308,7 +1380,7 @@ const TechmonGacha = () => {
           <button
             type="button"
             onClick={() => {
-              playArcadeSound("click");
+              playSound("click");
               setActiveGameTab("achievements");
             }}
             className={`px-4 py-2.5 rounded-2xl font-black text-xs sm:text-sm flex items-center gap-2 border-2 transition-all shadow-md ${
@@ -1325,13 +1397,28 @@ const TechmonGacha = () => {
           <button
             type="button"
             onClick={() => {
-              playArcadeSound("click");
+              playSound("click");
               setIsSpinModalOpen(true);
             }}
             className="px-3.5 py-2 rounded-2xl font-black text-xs sm:text-sm flex items-center gap-1.5 border-2 border-amber-400 bg-gradient-to-r from-amber-500 via-pink-500 to-indigo-500 text-white shadow-[0_0_15px_rgba(251,191,36,0.6)] hover:scale-105 active:scale-95 transition-all animate-bounce"
           >
             <span>🎰</span>
             <span>LUCKY SPIN</span>
+          </button>
+
+          {/* 🔊 / 🔇 SOUND TOGGLE BUTTON (ON / MUTE) */}
+          <button
+            type="button"
+            onClick={toggleMute}
+            className={`px-3 py-2 rounded-2xl font-black text-xs sm:text-sm flex items-center gap-1.5 border-2 transition-all shadow-md ${
+              isMuted
+                ? "bg-slate-900/90 text-slate-400 border-slate-700 hover:border-slate-500 hover:text-white"
+                : "bg-emerald-950/90 text-emerald-300 border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]"
+            }`}
+            title={isMuted ? "Suara dinonaktifkan (Klik untuk aktifkan)" : "Suara aktif (Klik untuk mute)"}
+          >
+            <span>{isMuted ? "🔇" : "🔊"}</span>
+            <span>{isMuted ? "MUTE" : "SOUND ON"}</span>
           </button>
         </div>
 
@@ -1747,7 +1834,7 @@ const TechmonGacha = () => {
                 unlockedIds={unlockedIds}
                 shinyIds={shinyIds}
                 onWinReward={handleGymWin}
-                playSound={playArcadeSound}
+                playSound={playSound}
               />
             )}
 
@@ -1757,7 +1844,7 @@ const TechmonGacha = () => {
                 shinyIds={shinyIds}
                 onUpgradeToShiny={handleShinyUpgrade}
                 stardust={stardust}
-                playSound={playArcadeSound}
+                playSound={playSound}
               />
             )}
 

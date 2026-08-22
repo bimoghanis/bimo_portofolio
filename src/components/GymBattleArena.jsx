@@ -458,7 +458,14 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
   const executePlayerMove = (moveType) => {
     if (isAttacking || bossAttacking || battleState !== "in_progress" || currentActiveHp <= 0) return;
     setIsAttacking(true);
-    if (playSound) playSound("click");
+
+    if (playSound) {
+      if (activePlayerCard.element.toLowerCase().includes("electric")) {
+        playSound("zap");
+      } else {
+        playSound("attack");
+      }
+    }
 
     const multiplier = getTypeMultiplier(activePlayerCard.element, currentStage.element);
     const isSuperEffective = multiplier > 1.0;
@@ -542,6 +549,7 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
 
       setTimeout(() => {
         setDamageEffect({ target: "player", text: `-${bossDmg} HP!` });
+        if (playSound) playSound("attack");
         const nextPlayerHp = Math.max(0, currentActiveHp - bossDmg);
 
         setTeamHp((prev) => {
@@ -578,7 +586,7 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
   // 🎒 HEAL ITEM (+40% HP)
   const handleHealItem = () => {
     if (isAttacking || bossAttacking || battleState !== "in_progress" || currentActiveHp <= 0 || healsRemaining <= 0) return;
-    if (playSound) playSound("click");
+    if (playSound) playSound("heal");
 
     const healAmount = Math.round(activePlayerCard.hp * 0.4);
     const newHp = Math.min(activePlayerCard.hp, currentActiveHp + healAmount);
