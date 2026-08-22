@@ -20,7 +20,6 @@ import {
   FiX,
   FiArrowRight,
   FiShield,
-  FiSparkles,
 } from "react-icons/fi";
 
 // Element to Energy Icon mapping

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import confetti from "canvas-confetti";
-import { FiStar, FiZap, FiSparkles, FiCheckCircle, FiArrowUpRight, FiRefreshCw } from "react-icons/fi";
+import { FiStar, FiZap, FiCheckCircle, FiArrowUpRight, FiRefreshCw } from "react-icons/fi";
 import { POKETECHS } from "../data/poketechs";
 
 const FusionLab = ({
@@ -150,7 +150,7 @@ const FusionLab = ({
                 `Butuh ${COST} Stardust (Kurang ${COST - stardust} ⭐)`
               ) : (
                 <>
-                  <FiSparkles className="text-lg animate-bounce" />
+                  <span className="text-lg animate-bounce">✨</span>
                   FUSE MENJADI SHINY HOLO ({COST} ⭐)
                 </>
               )}
