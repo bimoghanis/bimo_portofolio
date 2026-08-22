@@ -1235,9 +1235,9 @@ const TechmonGacha = () => {
         {/* ─── DYNAMIC ARCADE VIEW CONTAINER ─── */}
         {activeGameTab === "vault" ? (
           /* 🧰 MODE 1: GACHA PACK OPENING & 100-CARD CHEST BINDER (2-Column Grid) */
-          <div className="grid gap-8 lg:grid-cols-[1fr_1.35fr] items-start max-w-6xl mx-auto">
+          <div className="grid gap-8 lg:grid-cols-[1fr_1.35fr] items-start max-w-6xl mx-auto animate-fadeIn">
             {/* Left Column: Active 3D Card Stage + Ergonomic Gacha Launchpad */}
-            <div className="reveal flex flex-col items-center w-full max-w-[360px] sm:max-w-[400px] mx-auto" data-delay="100">
+            <div className="flex flex-col items-center w-full max-w-[360px] sm:max-w-[400px] mx-auto">
               {/* Hologram Pedestal Stage Ring */}
               <div className="relative w-full flex flex-col items-center">
                 {/* 3D Perspective Card Box with Touch Support */}
@@ -1450,7 +1450,7 @@ const TechmonGacha = () => {
             </div>
 
             {/* Right Column: 🧰 CHEERFUL LOOT CHEST VAULT BINDER */}
-            <div className="reveal w-full" data-delay="200">
+            <div className="w-full">
               <div
                 className="relative rounded-3xl p-5 sm:p-7 shadow-2xl overflow-hidden border-4 border-[#5d4037]"
                 style={{
@@ -1638,7 +1638,7 @@ const TechmonGacha = () => {
           </div>
         ) : (
           /* 🕹️ MODE 2, 3 & 4: GYM BATTLE / FUSION LAB / ACHIEVEMENTS (Centered Dedicated Game Consoles) */
-          <div className="reveal w-full max-w-3xl mx-auto" data-delay="100">
+          <div className="w-full max-w-3xl mx-auto">
             {activeGameTab === "battle" && (
               <GymBattleArena
                 unlockedIds={unlockedIds}
