@@ -461,3 +461,66 @@ body {
 .dark .skill-glow:hover {
   box-shadow: var(--shadow-clay-pill), 0 0 16px rgba(59, 130, 246, 0.4);
 }
+
+/* ─── 🎮 Retro PokéTech Battle Animations ─── */
+@keyframes pokeIdleBreath {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-6px) scale(1.02);
+  }
+}
+
+@keyframes pokeShadowPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(0.88);
+    opacity: 0.4;
+  }
+}
+
+@keyframes pokeHitShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-12px) rotate(-3deg); filter: brightness(2) contrast(1.5); }
+  40% { transform: translateX(10px) rotate(3deg); filter: brightness(2) contrast(1.5); }
+  60% { transform: translateX(-8px) rotate(-2deg); }
+  80% { transform: translateX(6px) rotate(2deg); }
+}
+
+@keyframes pokePlayerLunge {
+  0% { transform: translate(0, 0) scale(1); }
+  40% { transform: translate(45px, -25px) scale(1.15) rotate(5deg); }
+  70% { transform: translate(60px, -35px) scale(1.2) rotate(8deg); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes pokeBossLunge {
+  0% { transform: translate(0, 0) scale(1); }
+  40% { transform: translate(-45px, 25px) scale(1.15) rotate(-5deg); }
+  70% { transform: translate(-60px, 35px) scale(1.2) rotate(-8deg); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+.animate-poke-idle {
+  animation: pokeIdleBreath 2.8s ease-in-out infinite;
+}
+
+.animate-shadow-pulse {
+  animation: pokeShadowPulse 2.8s ease-in-out infinite;
+}
+
+.animate-hit-shake {
+  animation: pokeHitShake 0.45s ease-in-out;
+}
+
+.animate-player-lunge {
+  animation: pokePlayerLunge 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.animate-boss-lunge {
+  animation: pokeBossLunge 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
