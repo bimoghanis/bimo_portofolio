@@ -105,10 +105,18 @@ const FusionLab = ({
             <h4 className="text-lg font-black text-white">{card.name}</h4>
             <div className="flex items-center justify-center gap-3 mt-1 text-xs font-black">
               <span className={isAlreadyShiny ? "text-emerald-400 font-bold" : "text-slate-400"}>
-                HP: {card.hp + (isAlreadyShiny ? 40 : 0)} {isAlreadyShiny ? "(+40)" : ""}
+                HP: {(() => {
+                  let base = card.rarity === "UR" ? 580 : card.rarity === "SSR" ? 380 : card.rarity === "SR" ? 280 : card.rarity === "Rare" ? 210 : 150;
+                  base += (card.id % 6) * 10;
+                  return isAlreadyShiny ? base + 140 : base;
+                })()} {isAlreadyShiny ? "(+140 ✨)" : ""}
               </span>
               <span className={isAlreadyShiny ? "text-amber-400 font-bold" : "text-slate-400"}>
-                ATK: {card.atk + (isAlreadyShiny ? 20 : 0)} {isAlreadyShiny ? "(+20)" : ""}
+                ATK: {(() => {
+                  let base = card.rarity === "UR" ? 92 : card.rarity === "SSR" ? 65 : card.rarity === "SR" ? 50 : card.rarity === "Rare" ? 38 : 28;
+                  base += (card.id % 4) * 3;
+                  return isAlreadyShiny ? base + 28 : base;
+                })()} {isAlreadyShiny ? "(+28 ✨)" : ""}
               </span>
             </div>
           </div>
@@ -121,9 +129,9 @@ const FusionLab = ({
               ✨ <strong>Keuntungan Upgrade Shiny:</strong>
             </p>
             <ul className="list-disc list-inside space-y-1 text-slate-400 font-medium">
-              <li>Mendapatkan efek starlight rainbow prism di arena 3D.</li>
-              <li>Meningkatkan HP sebesar +40 poin untuk duel Gym.</li>
-              <li>Meningkatkan ATK sebesar +20 poin damage.</li>
+              <li>Mendapatkan efek kilau pelangi prisma di arena 3D.</li>
+              <li>Meningkatkan HP sebesar +140 poin untuk duel Gym.</li>
+              <li>Meningkatkan ATK sebesar +28 poin damage.</li>
               <li>Membuka badge Shiny Collector di album binder!</li>
             </ul>
           </div>

@@ -263,6 +263,42 @@ const PokemonCardBack = () => {
   );
 };
 
+// 🎯 Standardized Card Stats Calibration for Gym Battle & Card Faces
+export const calculateCardStats = (card, isShiny = false) => {
+  if (!card) return { hp: 150, atk: 28 };
+  let baseHp = 160;
+  let baseAtk = 32;
+
+  if (card.rarity === "UR") {
+    baseHp = 580;
+    baseAtk = 92;
+  } else if (card.rarity === "SSR") {
+    baseHp = 380;
+    baseAtk = 65;
+  } else if (card.rarity === "SR") {
+    baseHp = 280;
+    baseAtk = 50;
+  } else if (card.rarity === "Rare") {
+    baseHp = 210;
+    baseAtk = 38;
+  } else {
+    baseHp = 150;
+    baseAtk = 28;
+  }
+
+  const hpVariance = (card.id % 6) * 10;
+  const atkVariance = (card.id % 4) * 3;
+  baseHp += hpVariance;
+  baseAtk += atkVariance;
+
+  if (isShiny) {
+    baseHp += 140;
+    baseAtk += 28;
+  }
+
+  return { hp: baseHp, atk: baseAtk };
+};
+
 // Dynamic Pokémon Card Front Face (Ultra Holographic Foil System)
 const PokemonCardFront = ({ card, tilt = { x: 0, y: 0 }, isShiny = false }) => {
   const energy = getElementEnergy(card.element);
@@ -271,8 +307,9 @@ const PokemonCardFront = ({ card, tilt = { x: 0, y: 0 }, isShiny = false }) => {
   const isMythic = card.rarity === "UR";
   const isSSR = card.rarity === "SSR";
 
-  const effectiveHp = card.hp + (isShiny ? 40 : 0);
-  const effectiveAtk = card.atk + (isShiny ? 20 : 0);
+  const stats = calculateCardStats(card, isShiny);
+  const effectiveHp = stats.hp;
+  const effectiveAtk = stats.atk;
 
   const cardBorderGradient = isShiny
     ? "linear-gradient(135deg, #ffd700 0%, #ff007f 25%, #8b5cf6 50%, #00ffff 75%, #ffd700 100%)"
@@ -379,7 +416,7 @@ const PokemonCardFront = ({ card, tilt = { x: 0, y: 0 }, isShiny = false }) => {
 
           <div className="absolute bottom-0 inset-x-0 bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-200 py-0.5 px-2 text-[8px] font-extrabold text-slate-700 flex items-center justify-between border-t border-amber-300/80 z-20">
             <span>NO. {String(card.id).padStart(3, "0")} {card.title}</span>
-            <span>ATK: {card.atk}</span>
+            <span>ATK: {effectiveAtk}</span>
           </div>
         </div>
 
@@ -405,7 +442,7 @@ const PokemonCardFront = ({ card, tilt = { x: 0, y: 0 }, isShiny = false }) => {
                 </span>
               </div>
               <span className="text-xs sm:text-sm font-black text-slate-900 font-mono">
-                {card.atk * 2}+
+                {effectiveAtk}+
               </span>
             </div>
 
@@ -831,6 +868,59 @@ const TechmonGacha = () => {
     return saved ? JSON.parse(saved) : [];
   });
 
+  // 🎰 Lucky Spin Wheel States
+  const [isSpinModalOpen, setIsSpinModalOpen] = useState(false);
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [wheelRotation, setWheelRotation] = useState(0);
+  const [spinReward, setSpinReward] = useState(null);
+
+  const SPIN_PRIZES = [
+    { label: "+50 Stardust ⭐", icon: "⭐", type: "stardust", amount: 50, color: "#f59e0b" },
+    { label: "Free 3x Pack 🎴", icon: "🎴", type: "pack", amount: 3, color: "#06b6d4" },
+    { label: "+100 Stardust 🌟", icon: "🌟", type: "stardust", amount: 100, color: "#ec4899" },
+    { label: "Free 1x Pack 📦", icon: "📦", type: "pack", amount: 1, color: "#10b981" },
+    { label: "+75 Stardust 💫", icon: "💫", type: "stardust", amount: 75, color: "#8b5cf6" },
+    { label: "Free 5x Mega 🚀", icon: "🚀", type: "pack", amount: 5, color: "#3b82f6" },
+    { label: "JACKPOT +250 ⭐ 👑", icon: "👑", type: "stardust", amount: 250, color: "#e11d48" },
+    { label: "+35 Stardust ⭐", icon: "✨", type: "stardust", amount: 35, color: "#d97706" },
+  ];
+
+  const handleSpinWheel = () => {
+    if (isSpinning) return;
+    setIsSpinning(true);
+    setSpinReward(null);
+    playArcadeSound("rip");
+
+    const prizeIdx = Math.floor(Math.random() * SPIN_PRIZES.length);
+    const extraRounds = 5 + Math.floor(Math.random() * 3);
+    const sliceAngle = 360 / SPIN_PRIZES.length;
+    const targetDeg = extraRounds * 360 + (SPIN_PRIZES.length - prizeIdx) * sliceAngle - sliceAngle / 2;
+
+    setWheelRotation((prev) => prev + targetDeg);
+
+    setTimeout(() => {
+      setIsSpinning(false);
+      const won = SPIN_PRIZES[prizeIdx];
+      setSpinReward(won);
+      playArcadeSound("celebration");
+
+      if (won.type === "stardust") {
+        setStardust((prev) => {
+          const next = prev + won.amount;
+          localStorage.setItem("bimo_poketech_stardust", next.toString());
+          return next;
+        });
+      }
+
+      confetti({
+        particleCount: 160,
+        spread: 85,
+        origin: { y: 0.5 },
+        colors: ["#fbbf24", "#38bdf8", "#ec4899", "#22c55e", "#a855f7"],
+      });
+    }, 3800);
+  };
+
   // 🌟 Booster Pack Ceremony States
   const [packModalOpen, setPackModalOpen] = useState(false);
   const [packStage, setPackStage] = useState("sealed"); // 'sealed' | 'ripping' | 'revealed'
@@ -1229,6 +1319,19 @@ const TechmonGacha = () => {
           >
             <span>🏆</span>
             <span>ACHIEVEMENTS</span>
+          </button>
+
+          {/* 🎰 LUCKY SPIN WHEEL TRIGGER BUTTON */}
+          <button
+            type="button"
+            onClick={() => {
+              playArcadeSound("click");
+              setIsSpinModalOpen(true);
+            }}
+            className="px-3.5 py-2 rounded-2xl font-black text-xs sm:text-sm flex items-center gap-1.5 border-2 border-amber-400 bg-gradient-to-r from-amber-500 via-pink-500 to-indigo-500 text-white shadow-[0_0_15px_rgba(251,191,36,0.6)] hover:scale-105 active:scale-95 transition-all animate-bounce"
+          >
+            <span>🎰</span>
+            <span>LUCKY SPIN</span>
           </button>
         </div>
 
@@ -1661,6 +1764,104 @@ const TechmonGacha = () => {
             {activeGameTab === "achievements" && (
               <AchievementBoard stats={achievementStats} />
             )}
+          </div>
+        )}
+
+        {/* 🎰 LUCKY SPIN WHEEL MODAL */}
+        {isSpinModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn">
+            <div className="relative w-full max-w-sm rounded-3xl bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-950 border-4 border-amber-400 p-5 shadow-[0_0_50px_rgba(251,191,36,0.5)] text-center">
+              {/* Close Button */}
+              <button
+                type="button"
+                disabled={isSpinning}
+                onClick={() => {
+                  setIsSpinModalOpen(false);
+                  setSpinReward(null);
+                }}
+                className="absolute top-3 right-3 text-xs font-bold text-slate-400 hover:text-white px-2.5 py-1 rounded-xl bg-slate-800 border border-slate-700"
+              >
+                ✕
+              </button>
+
+              <div className="flex items-center justify-center gap-2 mb-1">
+                <span className="text-2xl">🎰</span>
+                <h3 className="text-base sm:text-lg font-black text-amber-300 uppercase tracking-wide">
+                  LUCKY SPIN WHEEL
+                </h3>
+              </div>
+              <p className="text-[11px] text-slate-300 mb-3 font-semibold">
+                Putar roda hoki untuk memenangkan Stardust ⭐ & Hadiah Menarik!
+              </p>
+
+              {/* Roda Putar Visual Container */}
+              <div className="relative w-56 h-56 mx-auto my-3 flex items-center justify-center">
+                {/* Pointer Triangle */}
+                <div className="absolute -top-3.5 z-30 text-amber-300 text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] filter">
+                  ▼
+                </div>
+
+                {/* Outer Glowing Ring */}
+                <div className="absolute inset-0 rounded-full border-4 border-amber-400 shadow-[0_0_25px_#fbbf24] pointer-events-none z-20" />
+
+                {/* Spinning Wheel */}
+                <div
+                  className="w-full h-full rounded-full relative overflow-hidden border-2 border-white/40 shadow-inner transition-transform duration-[3800ms] cubic-bezier(0.15,0.9,0.2,1)"
+                  style={{
+                    transform: `rotate(${wheelRotation}deg)`,
+                    background: "conic-gradient(#f59e0b 0deg 45deg, #06b6d4 45deg 90deg, #ec4899 90deg 135deg, #10b981 135deg 180deg, #8b5cf6 180deg 225deg, #3b82f6 225deg 270deg, #e11d48 270deg 315deg, #d97706 315deg 360deg)",
+                  }}
+                >
+                  {/* Wheel Slices Text Labels */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {SPIN_PRIZES.map((item, idx) => {
+                      const deg = idx * 45 + 22.5;
+                      return (
+                        <div
+                          key={idx}
+                          className="absolute w-full h-full flex items-start justify-center pt-2.5 pointer-events-none"
+                          style={{
+                            transform: `rotate(${deg}deg)`,
+                          }}
+                        >
+                          <span className="text-[9px] font-black text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] truncate max-w-[60px]">
+                            {item.icon} {item.amount ? item.amount : ""}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Center Pin */}
+                <div className="absolute h-11 w-11 rounded-full bg-gradient-to-r from-amber-300 to-yellow-500 border-2 border-white shadow-xl z-20 flex items-center justify-center font-black text-xs text-slate-950">
+                  ⭐
+                </div>
+              </div>
+
+              {/* Reward Won Celebration Box */}
+              {spinReward && (
+                <div className="my-2.5 p-2.5 rounded-2xl bg-amber-500/20 border-2 border-amber-400 text-amber-200 animate-bounce">
+                  <span className="text-[10px] font-black uppercase block">🎉 SELAMAT! KAMU MEMENANGKAN:</span>
+                  <span className="text-xs sm:text-sm font-black text-amber-300">{spinReward.label}</span>
+                </div>
+              )}
+
+              {/* Spin Button */}
+              <button
+                type="button"
+                disabled={isSpinning}
+                onClick={handleSpinWheel}
+                className={`w-full mt-2 py-3 rounded-2xl font-black text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-all ${
+                  isSpinning
+                    ? "bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700"
+                    : "bg-gradient-to-r from-amber-400 via-pink-500 to-indigo-500 text-white hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(251,191,36,0.6)]"
+                }`}
+              >
+                <span>🎯</span>
+                <span>{isSpinning ? "SEDANG BERPUTAR..." : "PUTAR RODA SEKARANG!"}</span>
+              </button>
+            </div>
           </div>
         )}
       </div>
