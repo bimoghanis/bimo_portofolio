@@ -1232,247 +1232,225 @@ const TechmonGacha = () => {
           </button>
         </div>
 
-        {/* Main Gacha Battle Stage & Dynamic Arcade View */}
-        <div className="grid gap-8 lg:grid-cols-[1fr_1.35fr] items-start max-w-6xl mx-auto">
-          {/* Left Column: Active 3D Card Stage + Ergonomic Gacha Launchpad */}
-          <div className="reveal flex flex-col items-center w-full max-w-[360px] sm:max-w-[400px] mx-auto" data-delay="100">
-            {/* Hologram Pedestal Stage Ring */}
-            <div className="relative w-full flex flex-col items-center">
-              {/* 3D Perspective Card Box with Touch Support */}
-              <div
-                style={{ perspective: "1200px" }}
-                className="w-full max-w-[320px] sm:max-w-[340px] aspect-[2.5/3.5] relative z-20 touch-manipulation"
-                onMouseMove={handleCardMouseMove}
-                onMouseLeave={handleCardMouseLeave}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-              >
-                {/* 3D Flipping Container */}
+        {/* ─── DYNAMIC ARCADE VIEW CONTAINER ─── */}
+        {activeGameTab === "vault" ? (
+          /* 🧰 MODE 1: GACHA PACK OPENING & 100-CARD CHEST BINDER (2-Column Grid) */
+          <div className="grid gap-8 lg:grid-cols-[1fr_1.35fr] items-start max-w-6xl mx-auto">
+            {/* Left Column: Active 3D Card Stage + Ergonomic Gacha Launchpad */}
+            <div className="reveal flex flex-col items-center w-full max-w-[360px] sm:max-w-[400px] mx-auto" data-delay="100">
+              {/* Hologram Pedestal Stage Ring */}
+              <div className="relative w-full flex flex-col items-center">
+                {/* 3D Perspective Card Box with Touch Support */}
                 <div
-                  ref={cardRef}
-                  className="relative w-full h-full cursor-grab active:cursor-grabbing select-none"
+                  style={{ perspective: "1200px" }}
+                  className="w-full max-w-[320px] sm:max-w-[340px] aspect-[2.5/3.5] relative z-20 touch-manipulation"
+                  onMouseMove={handleCardMouseMove}
+                  onMouseLeave={handleCardMouseLeave}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                >
+                  {/* 3D Flipping Container */}
+                  <div
+                    ref={cardRef}
+                    className="relative w-full h-full cursor-grab active:cursor-grabbing select-none"
+                    style={{
+                      transformStyle: "preserve-3d",
+                      transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y + (isFlipped ? 180 : 0)}deg)`,
+                      transition: isInteracting
+                        ? "none"
+                        : "transform 0.45s cubic-bezier(0.34, 1.25, 0.64, 1)",
+                    }}
+                    title="Geser atau arahkan kursor untuk memiringkan kartu 3D!"
+                  >
+                    {/* CARD FRONT */}
+                    <div
+                      className="absolute inset-0 w-full h-full"
+                      style={{
+                        backfaceVisibility: "hidden",
+                        WebkitBackfaceVisibility: "hidden",
+                      }}
+                    >
+                      <PokemonCardFront
+                        card={activeCard}
+                        tilt={tilt}
+                        isShiny={shinyIds.includes(activeCard.id)}
+                      />
+                    </div>
+
+                    {/* CARD BACK */}
+                    <div
+                      className="absolute inset-0 w-full h-full"
+                      style={{
+                        backfaceVisibility: "hidden",
+                        WebkitBackfaceVisibility: "hidden",
+                        transform: "rotateY(180deg)",
+                      }}
+                    >
+                      <PokemonCardBack />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Glowing Holographic Base Projection Plate */}
+                <div
+                  className="w-64 h-14 -mt-6 rounded-[100%] pointer-events-none blur-[2px] transition-all duration-700"
                   style={{
-                    transformStyle: "preserve-3d",
-                    transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y + (isFlipped ? 180 : 0)}deg)`,
-                    transition: isInteracting
-                      ? "none"
-                      : "transform 0.45s cubic-bezier(0.34, 1.25, 0.64, 1)",
+                    background: `radial-gradient(ellipse at center, ${activeCard.themeColor} 0%, rgba(6,182,212,0.4) 40%, transparent 75%)`,
+                    boxShadow: `0 0 35px ${activeCard.themeColor}`,
                   }}
-                  title="Geser atau arahkan kursor untuk memiringkan kartu 3D!"
-                >
-                  {/* CARD FRONT */}
-                  <div
-                    className="absolute inset-0 w-full h-full"
-                    style={{
-                      backfaceVisibility: "hidden",
-                      WebkitBackfaceVisibility: "hidden",
-                    }}
-                  >
-                    <PokemonCardFront
-                      card={activeCard}
-                      tilt={tilt}
-                      isShiny={shinyIds.includes(activeCard.id)}
-                    />
-                  </div>
-
-                  {/* CARD BACK */}
-                  <div
-                    className="absolute inset-0 w-full h-full"
-                    style={{
-                      backfaceVisibility: "hidden",
-                      WebkitBackfaceVisibility: "hidden",
-                      transform: "rotateY(180deg)",
-                    }}
-                  >
-                    <PokemonCardBack />
-                  </div>
-                </div>
+                />
               </div>
 
-              {/* Glowing Holographic Base Projection Plate */}
-              <div
-                className="w-64 h-14 -mt-6 rounded-[100%] pointer-events-none blur-[2px] transition-all duration-700"
-                style={{
-                  background: `radial-gradient(ellipse at center, ${activeCard.themeColor} 0%, rgba(6,182,212,0.4) 40%, transparent 75%)`,
-                  boxShadow: `0 0 35px ${activeCard.themeColor}`,
-                }}
-              />
-            </div>
-
-            {/* Quick Action Bar (Flip & Reset) */}
-            <div className="mt-3 flex w-full items-center justify-between px-2 gap-2">
-              {/* Flip Button */}
-              <button
-                type="button"
-                onClick={() => {
-                  playArcadeSound("click");
-                  setIsFlipped(!isFlipped);
-                  setTilt({ x: 0, y: 0 });
-                }}
-                className="rounded-full border-2 border-cyan-400 bg-slate-900/90 px-4 py-2 text-xs font-black text-cyan-300 hover:text-white hover:bg-cyan-600 hover:border-cyan-300 hover:scale-105 active:scale-95 flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all backdrop-blur-md"
-              >
-                <FiRepeat className={isFlipped ? "rotate-180 transition-transform text-amber-400" : "transition-transform text-cyan-300"} />
-                <span>{isFlipped ? "Lihat Depan" : "Balik 3D"}</span>
-              </button>
-
-              <div className="flex items-center gap-1.5">
-                <span className="rounded-full border border-slate-700 bg-slate-900/90 px-3.5 py-1 text-[11px] font-mono font-black text-amber-300 shadow-inner">
-                  Pulls: {totalPulls}
-                </span>
-
+              {/* Quick Action Bar (Flip & Reset) */}
+              <div className="mt-3 flex w-full items-center justify-between px-2 gap-2">
+                {/* Flip Button */}
                 <button
                   type="button"
-                  onClick={() => setShowResetConfirm(true)}
-                  className="rounded-full border border-slate-700 bg-slate-900/90 p-2 text-xs text-slate-400 hover:text-rose-400 hover:border-rose-500 transition-all"
-                  title="Reset Koleksi Gacha"
+                  onClick={() => {
+                    playArcadeSound("click");
+                    setIsFlipped(!isFlipped);
+                    setTilt({ x: 0, y: 0 });
+                  }}
+                  className="rounded-full border-2 border-cyan-400 bg-slate-900/90 px-4 py-2 text-xs font-black text-cyan-300 hover:text-white hover:bg-cyan-600 hover:border-cyan-300 hover:scale-105 active:scale-95 flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all backdrop-blur-md"
                 >
-                  <FiRotateCcw className="text-xs" />
+                  <FiRepeat className={isFlipped ? "rotate-180 transition-transform text-amber-400" : "transition-transform text-cyan-300"} />
+                  <span>{isFlipped ? "Lihat Depan" : "Balik 3D"}</span>
                 </button>
-              </div>
-            </div>
 
-            {/* Reset Confirmation Prompt */}
-            {showResetConfirm && (
-              <div className="w-full rounded-2xl border border-rose-500/60 bg-rose-950/70 p-3 mt-3 text-xs flex items-center justify-between gap-2 shadow-lg">
-                <span className="font-semibold text-rose-300">
-                  Reset semua kartu koleksi?
-                </span>
-                <div className="flex gap-1.5 shrink-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="rounded-full border border-slate-700 bg-slate-900/90 px-3.5 py-1 text-[11px] font-mono font-black text-amber-300 shadow-inner">
+                    Pulls: {totalPulls}
+                  </span>
+
                   <button
                     type="button"
-                    onClick={handleResetCollection}
-                    className="rounded-lg bg-rose-600 text-white px-2.5 py-1 font-bold hover:bg-rose-500 text-[11px]"
+                    onClick={() => setShowResetConfirm(true)}
+                    className="rounded-full border border-slate-700 bg-slate-900/90 p-2 text-xs text-slate-400 hover:text-rose-400 hover:border-rose-500 transition-all"
+                    title="Reset Koleksi Gacha"
                   >
-                    Ya, Reset
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowResetConfirm(false)}
-                    className="rounded-lg bg-slate-800 text-slate-300 px-2.5 py-1 font-bold hover:bg-slate-700 text-[11px]"
-                  >
-                    Batal
+                    <FiRotateCcw className="text-xs" />
                   </button>
                 </div>
               </div>
-            )}
 
-            {/* ─── PRIMARY GACHA BOOSTER LAUNCHPAD (Super Chunky Playful Arcade Style) ─── */}
-            <div className="w-full rounded-3xl border-2 border-slate-800 bg-slate-900/95 p-4 sm:p-5 mt-4 shadow-[0_15px_35px_rgba(0,0,0,0.7)] backdrop-blur-xl">
-              <div className="flex items-center justify-between mb-3.5">
-                <span className="text-xs font-black text-white flex items-center gap-1.5 uppercase tracking-wider">
-                  <FiStar className="text-amber-400 animate-spin" /> BUKA BOOSTER PACK
-                </span>
-                <span className="text-[10px] font-black text-cyan-300 bg-cyan-950/80 border border-cyan-400/40 px-2 py-0.5 rounded-full animate-pulse shadow-sm">
-                  ✂️ Sobek Foil & Dapatkan UR!
-                </span>
-              </div>
+              {/* Reset Confirmation Prompt */}
+              {showResetConfirm && (
+                <div className="w-full rounded-2xl border border-rose-500/60 bg-rose-950/70 p-3 mt-3 text-xs flex items-center justify-between gap-2 shadow-lg">
+                  <span className="font-semibold text-rose-300">
+                    Reset semua kartu koleksi?
+                  </span>
+                  <div className="flex gap-1.5 shrink-0">
+                    <button
+                      type="button"
+                      onClick={handleResetCollection}
+                      className="rounded-lg bg-rose-600 text-white px-2.5 py-1 font-bold hover:bg-rose-500 text-[11px]"
+                    >
+                      Ya, Reset
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowResetConfirm(false)}
+                      className="rounded-lg bg-slate-800 text-slate-300 px-2.5 py-1 font-bold hover:bg-slate-700 text-[11px]"
+                    >
+                      Batal
+                    </button>
+                  </div>
+                </div>
+              )}
 
-              {/* 3 Chunky 3D Arcade Buttons */}
-              <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
-                {/* 1x Pack (Pikachu Electric Yellow) */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    playArcadeSound("click");
-                    startPackCeremony(1);
-                  }}
-                  className="flex flex-col items-center justify-center py-3 px-1 rounded-2xl bg-gradient-to-b from-yellow-300 via-yellow-400 to-amber-500 text-slate-950 font-black shadow-[0_5px_0_#b45309,0_8px_16px_rgba(245,158,11,0.4)] hover:brightness-110 active:translate-y-1 active:shadow-[0_1px_0_#b45309] transition-all group"
-                >
-                  <FiZap className="text-xl group-hover:scale-125 transition-transform mb-0.5" />
-                  <span className="text-xs uppercase tracking-tight font-black">1x Pack</span>
-                </button>
+              {/* ─── PRIMARY GACHA BOOSTER LAUNCHPAD ─── */}
+              <div className="w-full rounded-3xl border-2 border-slate-800 bg-slate-900/95 p-4 sm:p-5 mt-4 shadow-[0_15px_35px_rgba(0,0,0,0.7)] backdrop-blur-xl">
+                <div className="flex items-center justify-between mb-3.5">
+                  <span className="text-xs font-black text-white flex items-center gap-1.5 uppercase tracking-wider">
+                    <FiStar className="text-amber-400 animate-spin" /> BUKA BOOSTER PACK
+                  </span>
+                  <span className="text-[10px] font-black text-cyan-300 bg-cyan-950/80 border border-cyan-400/40 px-2 py-0.5 rounded-full animate-pulse shadow-sm">
+                    ✂️ Sobek Foil & Dapatkan UR!
+                  </span>
+                </div>
 
-                {/* 5x Packs (Squirtle Ocean Cyan) */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    playArcadeSound("click");
-                    startPackCeremony(5);
-                  }}
-                  className="flex flex-col items-center justify-center py-3 px-1 rounded-2xl bg-gradient-to-b from-cyan-300 via-cyan-400 to-blue-500 text-slate-950 font-black shadow-[0_5px_0_#0369a1,0_8px_16px_rgba(6,182,212,0.4)] hover:brightness-110 active:translate-y-1 active:shadow-[0_1px_0_#0369a1] transition-all group"
-                >
-                  <FiGift className="text-xl group-hover:scale-125 transition-transform mb-0.5" />
-                  <span className="text-xs uppercase tracking-tight font-black">5x Packs</span>
-                </button>
-
-                {/* 10x Mega (Charizard Blazing Fire) */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    playArcadeSound("click");
-                    startPackCeremony(10);
-                  }}
-                  className="flex flex-col items-center justify-center py-3 px-1 rounded-2xl bg-gradient-to-b from-rose-500 via-orange-500 to-amber-400 text-white font-black shadow-[0_5px_0_#9f1239,0_8px_16px_rgba(244,63,94,0.4)] hover:brightness-110 active:translate-y-1 active:shadow-[0_1px_0_#9f1239] transition-all group"
-                >
-                  <FiStar className="text-xl group-hover:scale-125 group-hover:rotate-45 transition-transform mb-0.5" />
-                  <span className="text-xs uppercase tracking-tight font-black">10x Mega 🚀</span>
-                </button>
-              </div>
-
-              {/* Rarity Drop Rates */}
-              <div className="mt-3.5 flex flex-wrap items-center justify-between text-[10px] font-black text-slate-300 pt-2.5 border-t border-slate-800">
-                <span className="text-pink-400">✨ UR: 6%</span>
-                <span className="text-amber-400">SSR: 16%</span>
-                <span className="text-purple-400">SR: 30%</span>
-                <span className="text-blue-400">Rare: 33%</span>
-                <span className="text-slate-400">Com: 15%</span>
-              </div>
-            </div>
-
-            {/* Pulled Queue Pills */}
-            {pulledQueue.length > 1 && (
-              <div className="flex flex-wrap gap-1.5 mt-3 text-xs items-center justify-center w-full">
-                <span className="text-slate-400 text-[11px] font-semibold">Hasil Pull:</span>
-                {pulledQueue.map((c, i) => (
+                {/* 3 Chunky 3D Arcade Buttons */}
+                <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+                  {/* 1x Pack (Pikachu Electric Yellow) */}
                   <button
-                    key={i}
                     type="button"
                     onClick={() => {
-                      setActiveCard(c);
-                      setIsFlipped(false);
+                      playArcadeSound("click");
+                      startPackCeremony(1);
                     }}
-                    className="rounded-xl border border-slate-700 bg-slate-900/90 px-2 py-0.5 font-bold text-[9px] text-slate-200 hover:border-cyan-400 hover:scale-105 flex items-center gap-1 shadow-sm"
+                    className="flex flex-col items-center justify-center py-3 px-1 rounded-2xl bg-gradient-to-b from-yellow-300 via-yellow-400 to-amber-500 text-slate-950 font-black shadow-[0_5px_0_#b45309,0_8px_16px_rgba(245,158,11,0.4)] hover:brightness-110 active:translate-y-1 active:shadow-[0_1px_0_#b45309] transition-all group"
                   >
-                    <span>{c.name.split(".")[0]}</span>
-                    <span
-                      className="text-[8px] font-black"
-                      style={{ color: c.themeColor }}
-                    >
-                      ({c.rarity})
-                    </span>
+                    <FiZap className="text-xl group-hover:scale-125 transition-transform mb-0.5" />
+                    <span className="text-xs uppercase tracking-tight font-black">1x Pack</span>
                   </button>
-                ))}
+
+                  {/* 5x Packs (Squirtle Ocean Cyan) */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playArcadeSound("click");
+                      startPackCeremony(5);
+                    }}
+                    className="flex flex-col items-center justify-center py-3 px-1 rounded-2xl bg-gradient-to-b from-cyan-300 via-cyan-400 to-blue-500 text-slate-950 font-black shadow-[0_5px_0_#0369a1,0_8px_16px_rgba(6,182,212,0.4)] hover:brightness-110 active:translate-y-1 active:shadow-[0_1px_0_#0369a1] transition-all group"
+                  >
+                    <FiGift className="text-xl group-hover:scale-125 transition-transform mb-0.5" />
+                    <span className="text-xs uppercase tracking-tight font-black">5x Packs</span>
+                  </button>
+
+                  {/* 10x Mega (Charizard Blazing Fire) */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playArcadeSound("click");
+                      startPackCeremony(10);
+                    }}
+                    className="flex flex-col items-center justify-center py-3 px-1 rounded-2xl bg-gradient-to-b from-rose-500 via-orange-500 to-amber-400 text-white font-black shadow-[0_5px_0_#9f1239,0_8px_16px_rgba(244,63,94,0.4)] hover:brightness-110 active:translate-y-1 active:shadow-[0_1px_0_#9f1239] transition-all group"
+                  >
+                    <FiStar className="text-xl group-hover:scale-125 group-hover:rotate-45 transition-transform mb-0.5" />
+                    <span className="text-xs uppercase tracking-tight font-black">10x Mega 🚀</span>
+                  </button>
+                </div>
+
+                {/* Rarity Drop Rates */}
+                <div className="mt-3.5 flex flex-wrap items-center justify-between text-[10px] font-black text-slate-300 pt-2.5 border-t border-slate-800">
+                  <span className="text-pink-400">✨ UR: 6%</span>
+                  <span className="text-amber-400">SSR: 16%</span>
+                  <span className="text-purple-400">SR: 30%</span>
+                  <span className="text-blue-400">Rare: 33%</span>
+                  <span className="text-slate-400">Com: 15%</span>
+                </div>
               </div>
-            )}
-          </div>
 
-          {/* Right Column: Dynamic Arcade Screen (Vault / Battle / Fusion / Achievements) */}
-          <div className="reveal w-full" data-delay="200">
-            {activeGameTab === "battle" && (
-              <GymBattleArena
-                unlockedIds={unlockedIds}
-                onWinReward={handleGymWin}
-                playSound={playArcadeSound}
-              />
-            )}
+              {/* Pulled Queue Pills */}
+              {pulledQueue.length > 1 && (
+                <div className="flex flex-wrap gap-1.5 mt-3 text-xs items-center justify-center w-full">
+                  <span className="text-slate-400 text-[11px] font-semibold">Hasil Pull:</span>
+                  {pulledQueue.map((c, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => {
+                        setActiveCard(c);
+                        setIsFlipped(false);
+                      }}
+                      className="rounded-xl border border-slate-700 bg-slate-900/90 px-2 py-0.5 font-bold text-[9px] text-slate-200 hover:border-cyan-400 hover:scale-105 flex items-center gap-1 shadow-sm"
+                    >
+                      <span>{c.name.split(".")[0]}</span>
+                      <span
+                        className="text-[8px] font-black"
+                        style={{ color: c.themeColor }}
+                      >
+                        ({c.rarity})
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
-            {activeGameTab === "fusion" && (
-              <FusionLab
-                unlockedIds={unlockedIds}
-                shinyIds={shinyIds}
-                onUpgradeToShiny={handleShinyUpgrade}
-                stardust={stardust}
-                playSound={playArcadeSound}
-              />
-            )}
-
-            {activeGameTab === "achievements" && (
-              <AchievementBoard stats={achievementStats} />
-            )}
-
-            {activeGameTab === "vault" && (
-              /* Playful Wooden Loot Chest Container */
+            {/* Right Column: 🧰 CHEERFUL LOOT CHEST VAULT BINDER */}
+            <div className="reveal w-full" data-delay="200">
               <div
                 className="relative rounded-3xl p-5 sm:p-7 shadow-2xl overflow-hidden border-4 border-[#5d4037]"
                 style={{
@@ -1656,9 +1634,34 @@ const TechmonGacha = () => {
                   </div>
                 )}
               </div>
+            </div>
+          </div>
+        ) : (
+          /* 🕹️ MODE 2, 3 & 4: GYM BATTLE / FUSION LAB / ACHIEVEMENTS (Centered Dedicated Game Consoles) */
+          <div className="reveal w-full max-w-3xl mx-auto" data-delay="100">
+            {activeGameTab === "battle" && (
+              <GymBattleArena
+                unlockedIds={unlockedIds}
+                onWinReward={handleGymWin}
+                playSound={playArcadeSound}
+              />
+            )}
+
+            {activeGameTab === "fusion" && (
+              <FusionLab
+                unlockedIds={unlockedIds}
+                shinyIds={shinyIds}
+                onUpgradeToShiny={handleShinyUpgrade}
+                stardust={stardust}
+                playSound={playArcadeSound}
+              />
+            )}
+
+            {activeGameTab === "achievements" && (
+              <AchievementBoard stats={achievementStats} />
             )}
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
