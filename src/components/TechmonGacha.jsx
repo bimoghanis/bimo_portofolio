@@ -210,7 +210,7 @@ const PokemonCardBack = () => {
   );
 };
 
-// Authentic Pokémon TCG Card Front Component (EX / Full-Art / Foil style)
+// Authentic Pokémon TCG Card Front Component (EX / Full-Art / Ultra Holographic Foil style)
 const PokemonCardFront = ({ card, tilt }) => {
   const energy = getElementEnergy(card.element);
   const battleStats = getElementalBattleStats(card.element, card.rarity);
@@ -219,44 +219,61 @@ const PokemonCardFront = ({ card, tilt }) => {
   const isSSR = card.rarity === "SSR";
 
   const cardBorderGradient = isMythic
-    ? "linear-gradient(135deg, #f59e0b 0%, #ec4899 25%, #8b5cf6 50%, #06b6d4 75%, #f59e0b 100%)"
+    ? "linear-gradient(135deg, #ffd700 0%, #ec4899 25%, #8b5cf6 50%, #00ffff 75%, #ffd700 100%)"
     : isSSR
-    ? "linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%)"
+    ? "linear-gradient(135deg, #fef08a 0%, #f59e0b 35%, #fbbf24 70%, #d97706 100%)"
     : card.rarity === "SR"
-    ? "linear-gradient(135deg, #c084fc 0%, #9333ea 50%, #6b21a8 100%)"
-    : "linear-gradient(135deg, #cbd5e1 0%, #94a3b8 50%, #64748b 100%)";
+    ? "linear-gradient(135deg, #e9d5ff 0%, #a855f7 40%, #7e22ce 100%)"
+    : "linear-gradient(135deg, #f8fafc 0%, #94a3b8 50%, #64748b 100%)";
 
   return (
     <div
-      className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl p-2.5 sm:p-3 text-slate-900 select-none flex flex-col justify-between"
+      className="relative w-full h-full rounded-2xl overflow-hidden p-2.5 sm:p-3 text-slate-900 select-none flex flex-col justify-between transition-all"
       style={{
         background: cardBorderGradient,
         boxShadow: isMythic
-          ? "0 0 40px rgba(236,72,153,0.6), 0 20px 40px rgba(0,0,0,0.5)"
+          ? "0 0 50px rgba(236,72,153,0.7), 0 0 30px rgba(6,182,212,0.6), 0 0 15px rgba(251,191,36,0.8), 0 25px 50px rgba(0,0,0,0.7)"
           : isSSR
-          ? "0 0 32px rgba(245,158,11,0.55), 0 20px 40px rgba(0,0,0,0.45)"
-          : "0 20px 40px rgba(0,0,0,0.4)",
+          ? "0 0 45px rgba(245,158,11,0.65), 0 0 20px rgba(251,191,36,0.6), 0 25px 50px rgba(0,0,0,0.6)"
+          : `0 0 35px ${card.themeColor}88, 0 20px 40px rgba(0,0,0,0.5)`,
       }}
     >
-      {/* Holographic Prismatic Foil Overlay for UR / SSR */}
-      {(isMythic || isSSR) && (
-        <div
-          className="absolute inset-0 pointer-events-none opacity-35 mix-blend-color-dodge z-30"
-          style={{
-            background:
-              "linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.85) 35%, rgba(236,72,153,0.7) 45%, rgba(6,182,212,0.7) 55%, rgba(251,191,36,0.8) 65%, transparent 80%)",
-            transform: `translate(${tilt.y * 5}px, ${tilt.x * 5}px)`,
-          }}
-        />
-      )}
+      {/* Dynamic Tilt Tracking Holographic Starlight Flare */}
+      <div
+        className="absolute inset-0 pointer-events-none z-30 mix-blend-color-dodge transition-transform duration-75 ease-out"
+        style={{
+          opacity: isMythic ? 0.7 : isSSR ? 0.55 : 0.4,
+          background: `radial-gradient(circle at ${50 + tilt.y * 3.5}% ${
+            50 - tilt.x * 3.5
+          }%, rgba(255,255,255,0.95) 0%, rgba(255,215,0,0.6) 20%, rgba(236,72,153,0.45) 40%, rgba(6,182,212,0.35) 60%, transparent 80%)`,
+        }}
+      />
+
+      {/* Holographic Prismatic Diagonal Rainbow Sheen */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-40 mix-blend-overlay z-25"
+        style={{
+          background:
+            "linear-gradient(115deg, transparent 15%, rgba(255,255,255,0.9) 30%, rgba(236,72,153,0.7) 45%, rgba(6,182,212,0.7) 55%, rgba(251,191,36,0.8) 70%, transparent 85%)",
+          transform: `translate(${tilt.y * 6}px, ${tilt.x * 6}px)`,
+        }}
+      />
+
+      {/* Floating Twinkle Diamond Sparkles */}
+      <div className="absolute inset-0 pointer-events-none z-30 overflow-hidden">
+        <span className="absolute top-4 left-6 text-amber-300 text-xs animate-ping font-black">✦</span>
+        <span className="absolute top-14 right-6 text-pink-300 text-sm animate-pulse font-black">✨</span>
+        <span className="absolute bottom-24 left-8 text-cyan-300 text-xs animate-pulse font-black">✦</span>
+        <span className="absolute bottom-10 right-8 text-yellow-200 text-xs animate-ping font-black">✨</span>
+      </div>
 
       {/* Main Inner Card Background */}
-      <div className="relative z-10 w-full h-full rounded-xl bg-gradient-to-b from-slate-50 via-white to-slate-100 p-2 sm:p-2.5 flex flex-col justify-between border border-white/70 shadow-inner">
+      <div className="relative z-10 w-full h-full rounded-xl bg-gradient-to-b from-slate-50 via-white to-slate-100 p-2 sm:p-2.5 flex flex-col justify-between border border-white/80 shadow-inner">
         {/* Top Header: Evolution Stage, Name, HP, Element Icon */}
         <div className="flex items-center justify-between border-b border-slate-300 pb-1.5">
           <div className="flex items-center gap-1.5">
             <span
-              className="px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider text-white shadow-sm"
+              className="px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider text-white shadow-md"
               style={{ background: card.badgeBg }}
             >
               {isMythic ? "✨ UR EX" : isSSR ? "🌟 SSR EX" : "BASIC"}
@@ -284,19 +301,23 @@ const PokemonCardFront = ({ card, tilt }) => {
           </div>
         </div>
 
-        {/* Artwork Display Box with 3D Shadow & Inner Bevel */}
+        {/* Artwork Display Box with 3D Shadow, Foil Glare & Inner Bevel */}
         <div className="my-1.5 relative rounded-lg overflow-hidden border-2 border-amber-300/80 shadow-md bg-gradient-to-b from-slate-200 via-slate-100 to-slate-300 flex flex-col items-center justify-center h-40 sm:h-44">
+          {/* Subtle Ambient Radial Glow */}
           <div
-            className="absolute inset-0 opacity-40 pointer-events-none"
+            className="absolute inset-0 opacity-45 pointer-events-none"
             style={{
               background: `radial-gradient(circle at 50% 50%, ${card.themeColor} 0%, transparent 70%)`,
             }}
           />
 
+          {/* Glass Glare Sheen Reflection */}
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/25 to-transparent z-15" />
+
           <img
             src={card.image}
             alt={card.name}
-            className="relative z-10 h-32 sm:h-36 w-auto object-contain drop-shadow-[0_8px_12px_rgba(0,0,0,0.35)] transition-transform hover:scale-105"
+            className="relative z-10 h-32 sm:h-36 w-auto object-contain drop-shadow-[0_10px_16px_rgba(0,0,0,0.4)] transition-transform hover:scale-105"
           />
 
           {/* Bottom Caption Strip */}
