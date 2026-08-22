@@ -17,132 +17,366 @@ import {
   FiCheckCircle,
 } from "react-icons/fi";
 
-const BOSS_LIST = [
+// ─── 🏰 15 STAGES CAMPAIGN STRUCTURE (5 ZONES × 3 STAGES WITH 5 GRAND BOSSES) ───
+export const STAGE_LIST = [
+  // ─── ZONE 1: SYNTAX VALLEY (Grass / Bug) ───
   {
     stage: 1,
-    id: "boss_buggar",
-    name: "Buggar the Infinite Loop",
-    title: "Runtime Crash Spectre",
-    badgeName: "Syntax Badge 🟢",
-    badgeIcon: "🟢",
-    element: "Grass / Bug",
-    level: 20,
-    maxHp: 280,
-    atk: 32,
+    zone: 1,
+    zoneName: "Zone 1: Syntax Forest 🌲",
+    id: "stage_1",
+    name: "Junior Linter Bug",
+    title: "Syntax Checker Minion",
+    isBoss: false,
+    element: "Bug / Lint",
+    level: 12,
+    maxHp: 220,
+    atk: 28,
     avatar: "🐛",
     image: POKETECHS[4]?.image,
-    themeColor: "#16a34a",
     moves: [
-      { name: "Memory Leak", power: 28, desc: "Steals stack memory!" },
-      { name: "Uncaught Exception", power: 42, desc: "Syntax crash spike!" },
+      { name: "Trailing Whitespace", power: 22, desc: "Minor formatting alert!" },
+      { name: "Tab vs Space", power: 34, desc: "Annoying indentation error!" },
     ],
   },
   {
     stage: 2,
-    id: "boss_psyduck",
-    name: "404 Psyduck Panic",
-    title: "Stack Memory Overflower",
-    badgeName: "Hydra Badge 🔵",
-    badgeIcon: "🔵",
-    element: "Water / Memory",
-    level: 38,
-    maxHp: 420,
-    atk: 48,
-    avatar: "🦆",
-    image: POKETECHS[10]?.image,
-    themeColor: "#0284c7",
+    zone: 1,
+    zoneName: "Zone 1: Syntax Forest 🌲",
+    id: "stage_2",
+    name: "Bulbadata Spore",
+    title: "Data Pipeline Sentry",
+    isBoss: false,
+    element: "Grass / SQL",
+    level: 18,
+    maxHp: 320,
+    atk: 38,
+    avatar: "🌿",
+    image: POKETECHS[5]?.image,
     moves: [
-      { name: "Water Gun Hydro-Query", power: 40, desc: "Floods client socket!" },
-      { name: "Severe Migraine 404", power: 62, desc: "Server unavailable burst!" },
+      { name: "ETL Vine Whip", power: 32, desc: "Extracts dirty data strings!" },
+      { name: "Schema Confusion Spore", power: 46, desc: "Null column surprise!" },
     ],
   },
   {
     stage: 3,
-    id: "boss_mewtwo",
-    name: "NullPointer Mewtwo",
-    title: "AI Neural Overlord",
-    badgeName: "Neural Badge 🟣",
-    badgeIcon: "🟣",
-    element: "Psychic / AI",
-    level: 55,
-    maxHp: 560,
-    atk: 65,
-    avatar: "🔮",
-    image: POKETECHS[7]?.image,
-    themeColor: "#9333ea",
+    zone: 1,
+    zoneName: "Zone 1: Syntax Forest 🌲",
+    id: "boss_1_buggar",
+    name: "Buggar the Infinite Loop",
+    title: "GYM LEADER 1 👑",
+    isBoss: true,
+    badgeName: "Syntax Badge 🟢",
+    badgeIcon: "🟢",
+    element: "Grass / Bug",
+    level: 25,
+    maxHp: 550,
+    atk: 52,
+    avatar: "🐛👑",
+    image: POKETECHS[4]?.image,
     moves: [
-      { name: "Neural Mind Telepathy", power: 55, desc: "Distorts memory registers!" },
-      { name: "Fatal Segmentation", power: 85, desc: "Total system purge blast!" },
+      { name: "Memory Leak Nightmare", power: 45, desc: "Steals stack memory!" },
+      { name: "Infinite Loop Catastrophe", power: 65, desc: "Freezes browser main thread!" },
     ],
   },
+
+  // ─── ZONE 2: MEMORY LEAK LAGOON (Water / Memory) ───
   {
     stage: 4,
-    id: "boss_dragonite",
-    name: "Merge Conflict Dragonite",
-    title: "Git Rebellion Titan",
-    badgeName: "Git Cataclysm Badge 🔴",
-    badgeIcon: "🔴",
-    element: "Dragon / Fire",
-    level: 75,
-    maxHp: 720,
-    atk: 85,
-    avatar: "🐉",
-    image: POKETECHS[12]?.image,
-    themeColor: "#ea580c",
+    zone: 2,
+    zoneName: "Zone 2: Memory Lagoon 🌊",
+    id: "stage_4",
+    name: "SquirtQL Query",
+    title: "Relational DB Minion",
+    isBoss: false,
+    element: "Water / SQL",
+    level: 32,
+    maxHp: 480,
+    atk: 58,
+    avatar: "🐢",
+    image: POKETECHS[3]?.image,
     moves: [
-      { name: "Rebase Cataclysm", power: 70, desc: "Overwrites commit branches!" },
-      { name: "Force Push Annihilation", power: 110, desc: "Obliterates master branch!" },
+      { name: "SELECT * Flood", power: 48, desc: "Full table scan deluge!" },
+      { name: "Unindexed Water Pulse", power: 65, desc: "Database bottleneck blast!" },
     ],
   },
   {
     stage: 5,
-    id: "boss_arceus",
-    name: "Arceus.py Celestial Creator",
-    title: "Master Tech Gym Champion 👑",
-    badgeName: "Celestial Champion Badge 👑✨",
+    zone: 2,
+    zoneName: "Zone 2: Memory Lagoon 🌊",
+    id: "stage_5",
+    name: "Dangling Pointer Slowbro",
+    title: "Redis Cache Stall",
+    isBoss: false,
+    element: "Water / Psychic",
+    level: 40,
+    maxHp: 640,
+    atk: 72,
+    avatar: "🦛",
+    image: POKETECHS[10]?.image,
+    moves: [
+      { name: "TTL Cache Eviction", power: 58, desc: "Stale session payload!" },
+      { name: "Memory Overflow Stare", power: 78, desc: "Deep sleep lock!" },
+    ],
+  },
+  {
+    stage: 6,
+    zone: 2,
+    zoneName: "Zone 2: Memory Lagoon 🌊",
+    id: "boss_2_psyduck",
+    name: "404 Psyduck Panic Overlord",
+    title: "GYM LEADER 2 👑",
+    isBoss: true,
+    badgeName: "Hydra Badge 🔵",
+    badgeIcon: "🔵",
+    element: "Water / Memory",
+    level: 48,
+    maxHp: 950,
+    atk: 90,
+    avatar: "🦆👑",
+    image: POKETECHS[10]?.image,
+    moves: [
+      { name: "Hydro Socket Deluge", power: 70, desc: "Floods client socket!" },
+      { name: "Fatal Migraine 404", power: 105, desc: "Server unavailable 503 crash!" },
+    ],
+  },
+
+  // ─── ZONE 3: NEURAL CITADEL (Electric / Psychic / AI) ───
+  {
+    stage: 7,
+    zone: 3,
+    zoneName: "Zone 3: Neural Citadel ⚡",
+    id: "stage_7",
+    name: "Bitkachu Volt Apprentice",
+    title: "Micro-Voltage Courier",
+    isBoss: false,
+    element: "Electric / Python",
+    level: 55,
+    maxHp: 820,
+    atk: 105,
+    avatar: "⚡",
+    image: POKETECHS[1]?.image,
+    moves: [
+      { name: "Thunder Jitter", power: 85, desc: "High ping network spike!" },
+      { name: "Volt Async/Await", power: 115, desc: "Concurrent thread surge!" },
+    ],
+  },
+  {
+    stage: 8,
+    zone: 3,
+    zoneName: "Zone 3: Neural Citadel ⚡",
+    id: "stage_8",
+    name: "Eeveeng Microservice",
+    title: "Dynamic Polyglot",
+    isBoss: false,
+    element: "Psychic / Normal",
+    level: 62,
+    maxHp: 1050,
+    atk: 120,
+    avatar: "🦊",
+    image: POKETECHS[6]?.image,
+    moves: [
+      { name: "Docker Container Swarm", power: 95, desc: "Spawns 50 micro pods!" },
+      { name: "Kubernetes Auto-Scale", power: 130, desc: "Overwhelms memory node!" },
+    ],
+  },
+  {
+    stage: 9,
+    zone: 3,
+    zoneName: "Zone 3: Neural Citadel ⚡",
+    id: "boss_3_mewtwo",
+    name: "NullPointer Mewtwo Matrix",
+    title: "GYM LEADER 3 👑",
+    isBoss: true,
+    badgeName: "Neural Badge 🟣",
+    badgeIcon: "🟣",
+    element: "Psychic / AI",
+    level: 72,
+    maxHp: 1550,
+    atk: 145,
+    avatar: "🔮👑",
+    image: POKETECHS[7]?.image,
+    moves: [
+      { name: "Neural Mind Telepathy", power: 110, desc: "Predicts user behavior!" },
+      { name: "Fatal Segmentation Purge", power: 165, desc: "Wipes registers to zero!" },
+    ],
+  },
+
+  // ─── ZONE 4: GIT CHAOS CALDERA (Dragon / Fire) ───
+  {
+    stage: 10,
+    zone: 4,
+    zoneName: "Zone 4: Git Caldera 🔥",
+    id: "stage_10",
+    name: "Codezard Compiler Flame",
+    title: "Rust Core Engine",
+    isBoss: false,
+    element: "Fire / Compiler",
+    level: 80,
+    maxHp: 1400,
+    atk: 155,
+    avatar: "🔥",
+    image: POKETECHS[1]?.image,
+    moves: [
+      { name: "Cargo Build Inferno", power: 125, desc: "Compiles at 100% CPU!" },
+      { name: "Flame Graph Overheat", power: 175, desc: "Thermal throttling blast!" },
+    ],
+  },
+  {
+    stage: 11,
+    zone: 4,
+    zoneName: "Zone 4: Git Caldera 🔥",
+    id: "stage_11",
+    name: "Snoorlax Deadlock",
+    title: "Postgres Row Locker",
+    isBoss: false,
+    element: "Normal / Heavy",
+    level: 86,
+    maxHp: 2100,
+    atk: 135,
+    avatar: "💤",
+    image: POKETECHS[2]?.image,
+    moves: [
+      { name: "Table Exclusive Lock", power: 110, desc: "Freezes all transactions!" },
+      { name: "Rest & Buffer Cache", power: 150, desc: "Heavy slumber recovery!" },
+    ],
+  },
+  {
+    stage: 12,
+    zone: 4,
+    zoneName: "Zone 4: Git Caldera 🔥",
+    id: "boss_4_dragonite",
+    name: "Merge Conflict Dragonite Titan",
+    title: "GYM LEADER 4 👑",
+    isBoss: true,
+    badgeName: "Git Cataclysm Badge 🔴",
+    badgeIcon: "🔴",
+    element: "Dragon / Fire",
+    level: 92,
+    maxHp: 2450,
+    atk: 195,
+    avatar: "🐉👑",
+    image: POKETECHS[12]?.image,
+    moves: [
+      { name: "Rebase Conflict Cataclysm", power: 140, desc: "Destroys commit history!" },
+      { name: "Force Push Annihilation", power: 220, desc: "Obliterates master branch!" },
+    ],
+  },
+
+  // ─── ZONE 5: CELESTIAL OLYMPUS (Cosmic / Python - GOD TIER) ───
+  {
+    stage: 13,
+    zone: 5,
+    zoneName: "Zone 5: Celestial Olympus 👑",
+    id: "stage_13",
+    name: "Rayquaz.ai Sky Sovereign",
+    title: "Cloud Tensor Lord",
+    isBoss: false,
+    element: "Ozone / AI",
+    level: 96,
+    maxHp: 2700,
+    atk: 225,
+    avatar: "🌌",
+    image: POKETECHS[8]?.image,
+    moves: [
+      { name: "Hyper-Beam Inference", power: 170, desc: "100 Trillion parameter beam!" },
+      { name: "GPU Cluster Supernova", power: 245, desc: "Full cluster parallel shock!" },
+    ],
+  },
+  {
+    stage: 14,
+    zone: 5,
+    zoneName: "Zone 5: Celestial Olympus 👑",
+    id: "stage_14",
+    name: "Lugiacloud High Availability",
+    title: "Kubernetes Arbiter",
+    isBoss: false,
+    element: "Aero / Cloud",
+    level: 99,
+    maxHp: 3100,
+    atk: 245,
+    avatar: "☁️",
+    image: POKETECHS[3]?.image,
+    moves: [
+      { name: "Aeroblast 99.999% SLA", power: 190, desc: "Zero downtime gust!" },
+      { name: "Multi-Region Failover", power: 270, desc: "Global cluster reset wave!" },
+    ],
+  },
+  {
+    stage: 15,
+    zone: 5,
+    zoneName: "Zone 5: Celestial Olympus 👑",
+    id: "boss_5_arceus",
+    name: "Arceus.py the Divine Creator",
+    title: "FINAL TECH GOD BOSS 👑✨",
+    isBoss: true,
+    badgeName: "Grand Master Sovereign Badge 👑🌟",
     badgeIcon: "👑",
     element: "Cosmic / Python",
-    level: 99,
-    maxHp: 950,
-    atk: 105,
-    avatar: "✨",
+    level: 100,
+    maxHp: 4200,
+    atk: 290,
+    avatar: "👑✨",
     image: POKETECHS[0]?.image,
-    themeColor: "#e11d48",
     moves: [
-      { name: "Genesis Global Interpreter Lock", power: 90, desc: "Freezes all execution threads!" },
-      { name: "Judgement Supernova", power: 140, desc: "Ultimate divine computational purge!" },
+      { name: "Genesis Global Interpreter Lock", power: 220, desc: "Locks reality itself!" },
+      { name: "Judgement Divine Supernova", power: 340, desc: "Cosmic computational singularity!" },
     ],
   },
 ];
 
-// Calculate Elemental Advantage Multiplier
+// Type Advantage Calculations
 const getTypeMultiplier = (playerElement, bossElement) => {
   const p = (playerElement || "").toLowerCase();
   const b = (bossElement || "").toLowerCase();
 
-  if (p.includes("water") && (b.includes("fire") || b.includes("dragon"))) return 1.4;
-  if (p.includes("fire") && (b.includes("grass") || b.includes("bug"))) return 1.4;
-  if (p.includes("grass") && b.includes("water")) return 1.4;
-  if (p.includes("electric") && b.includes("water")) return 1.4;
+  if (p.includes("water") && (b.includes("fire") || b.includes("dragon"))) return 1.45;
+  if (p.includes("fire") && (b.includes("grass") || b.includes("bug"))) return 1.45;
+  if (p.includes("grass") && b.includes("water")) return 1.45;
+  if (p.includes("electric") && (b.includes("water") || b.includes("lint"))) return 1.45;
   if (p.includes("psychic") && (b.includes("bug") || b.includes("grass"))) return 1.35;
-  if (p.includes("cosmic")) return 1.3;
+  if (p.includes("cosmic")) return 1.35;
   return 1.0;
 };
 
-const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
-  // ─── 🗺️ GYM STAGE PROGRESSION STATE ───
+// Calculate Card Battle Stats (Buffs Shiny & High Rarity)
+const calculateCardStats = (card, isShiny) => {
+  let baseHp = card.hp;
+  let baseAtk = card.atk;
+
+  // Scale based on rarity
+  if (card.rarity === "UR") {
+    baseHp = Math.round(baseHp * 1.35 + 200);
+    baseAtk = Math.round(baseAtk * 1.35 + 35);
+  } else if (card.rarity === "SSR") {
+    baseHp = Math.round(baseHp * 1.2 + 100);
+    baseAtk = Math.round(baseAtk * 1.2 + 20);
+  }
+
+  // Shiny Transformation Bonus (+500 HP / +60 ATK & 1.35x Multiplier)
+  if (isShiny) {
+    baseHp = Math.round(baseHp * 1.35 + 400);
+    baseAtk = Math.round(baseAtk * 1.3 + 50);
+  }
+
+  return { hp: baseHp, atk: baseAtk };
+};
+
+const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSound }) => {
+  // ─── 🗺️ CAMPAIGN STATE (1-15 Stages) ───
   const [highestUnlockedStage, setHighestUnlockedStage] = useState(() => {
     const saved = localStorage.getItem("bimo_poketech_gym_stage_unlocked");
     return saved ? parseInt(saved, 10) : 1;
   });
 
-  const [defeatedBosses, setDefeatedBosses] = useState(() => {
-    const saved = localStorage.getItem("bimo_poketech_gym_defeated");
+  const [defeatedStages, setDefeatedStages] = useState(() => {
+    const saved = localStorage.getItem("bimo_poketech_gym_defeated_stages");
     return saved ? JSON.parse(saved) : [];
   });
 
-  const [selectedBossIndex, setSelectedBossIndex] = useState(0);
-  const boss = BOSS_LIST[selectedBossIndex];
+  const [activeZone, setActiveZone] = useState(1);
+  const [selectedStageIndex, setSelectedStageIndex] = useState(0);
+  const currentStage = STAGE_LIST[selectedStageIndex] || STAGE_LIST[0];
 
   // ─── 👥 3-CARD TEAM ROSTER ───
   const [teamIds, setTeamIds] = useState(() => {
@@ -159,26 +393,32 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
   const [activeTeamIndex, setActiveTeamIndex] = useState(0);
   const [isTeamBuilderOpen, setIsTeamBuilderOpen] = useState(false);
 
-  const teamCards = teamIds.map((id) => POKETECHS.find((p) => p.id === id) || POKETECHS[10]);
+  const teamCards = teamIds.map((id) => {
+    const raw = POKETECHS.find((p) => p.id === id) || POKETECHS[10];
+    const isShiny = shinyIds.includes(raw.id);
+    const stats = calculateCardStats(raw, isShiny);
+    return { ...raw, ...stats, isShiny };
+  });
+
   const activePlayerCard = teamCards[activeTeamIndex] || teamCards[0];
 
-  // ─── ⚔️ BATTLE HP & ENGINE STATE ───
+  // ─── ⚔️ BATTLE HP & LOGIC STATE ───
   const [teamHp, setTeamHp] = useState([teamCards[0].hp, teamCards[1].hp, teamCards[2].hp]);
-  const [bossHp, setBossHp] = useState(boss.maxHp);
-  const [healsRemaining, setHealsRemaining] = useState(2); // 2x System Restore per battle
+  const [bossHp, setBossHp] = useState(currentStage.maxHp);
+  const [healsRemaining, setHealsRemaining] = useState(2);
   const [dialogueText, setDialogueText] = useState(
-    `Stage ${boss.stage} Gym: Lawan ${boss.name} (Lv.${boss.level}) muncul! Apa yang akan dilakukan ${activePlayerCard.name.toUpperCase()}?`
+    `Stage ${currentStage.stage} (${currentStage.name}) Lv.${currentStage.level} menghadang! Apa yang akan dilakukan ${activePlayerCard.name.toUpperCase()}?`
   );
   const [menuMode, setMenuMode] = useState("main"); // 'main' | 'fight' | 'switch' | 'run_confirm'
   const [isAttacking, setIsAttacking] = useState(false);
   const [bossAttacking, setBossAttacking] = useState(false);
-  const [damageEffect, setDamageEffect] = useState(null); // { target: 'player'|'boss', text: string, isCrit?: boolean }
-  const [battleState, setBattleState] = useState("in_progress"); // 'in_progress' | 'won' | 'lost' | 'escaped'
+  const [damageEffect, setDamageEffect] = useState(null);
+  const [battleState, setBattleState] = useState("in_progress");
 
-  // Reset when boss or team roster changes
+  // Reset when stage or team changes
   useEffect(() => {
     resetBattle();
-  }, [teamIds, selectedBossIndex]);
+  }, [teamIds, selectedStageIndex, shinyIds]);
 
   const saveTeam = (newTeam) => {
     setTeamIds(newTeam);
@@ -189,9 +429,9 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
   const resetBattle = () => {
     setTeamHp([teamCards[0].hp, teamCards[1].hp, teamCards[2].hp]);
     setActiveTeamIndex(0);
-    setBossHp(boss.maxHp);
+    setBossHp(currentStage.maxHp);
     setHealsRemaining(2);
-    setDialogueText(`Duel Stage ${boss.stage} dimulai! Apa yang akan dilakukan ${teamCards[0].name.toUpperCase()}?`);
+    setDialogueText(`Stage ${currentStage.stage} dimulai! Apa yang akan dilakukan ${teamCards[0].name.toUpperCase()}?`);
     setBattleState("in_progress");
     setMenuMode("main");
     setDamageEffect(null);
@@ -199,13 +439,13 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
 
   const currentActiveHp = teamHp[activeTeamIndex] || 0;
 
-  // ─── 🕹️ TURN-BASED COMBAT ENGINE ───
+  // ─── 🕹️ COMBAT ACTION ENGINE ───
   const executePlayerMove = (moveType) => {
     if (isAttacking || bossAttacking || battleState !== "in_progress" || currentActiveHp <= 0) return;
     setIsAttacking(true);
     if (playSound) playSound("click");
 
-    const multiplier = getTypeMultiplier(activePlayerCard.element, boss.element);
+    const multiplier = getTypeMultiplier(activePlayerCard.element, currentStage.element);
     const isSuperEffective = multiplier > 1.0;
 
     let baseDmg = 0;
@@ -215,12 +455,12 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
       baseDmg = Math.round(activePlayerCard.atk * (0.95 + Math.random() * 0.3) * multiplier);
       attackName = activePlayerCard.ability;
     } else {
-      baseDmg = Math.round(activePlayerCard.atk * 1.6 * (0.95 + Math.random() * 0.3) * multiplier);
+      baseDmg = Math.round(activePlayerCard.atk * 1.65 * (0.95 + Math.random() * 0.3) * multiplier);
       attackName = `⚡ Ultimate ${activePlayerCard.name.split(".")[0]} Blast`;
     }
 
-    const isCrit = Math.random() > 0.65;
-    const finalDmg = isCrit ? Math.round(baseDmg * 1.3) : baseDmg;
+    const isCrit = Math.random() > 0.6;
+    const finalDmg = isCrit ? Math.round(baseDmg * 1.35) : baseDmg;
 
     setDamageEffect({
       target: "boss",
@@ -231,53 +471,59 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
     const nextBossHp = Math.max(0, bossHp - finalDmg);
     setBossHp(nextBossHp);
 
-    let logMsg = `${activePlayerCard.name} menggunakan ${attackName}! (-${finalDmg} DMG)`;
+    let logMsg = `${activePlayerCard.name} melepaskan ${attackName}! (-${finalDmg} DMG)`;
     if (isSuperEffective) logMsg += ` 💥 SANGAT EFEKTIF!`;
     if (isCrit) logMsg += ` ⚡ CRITICAL HIT!`;
     setDialogueText(logMsg);
 
     if (nextBossHp <= 0) {
-      // 🏆 VICTORY OVER THIS BOSS
+      // 🏆 STAGE CLEARED
       setTimeout(() => {
         setIsAttacking(false);
         setBattleState("won");
-        setDialogueText(`🏆 VICTORY! ${boss.name} berhasil kamu taklukkan! Lencana ${boss.badgeName} berhasil diraih!`);
+
+        const isFinal = currentStage.stage === 15;
+        const msg = isFinal
+          ? `🏆 VICTORY AKBAR! Kamu telah menaklukkan FINAL GOD BOSS Arceus.py dan menjadi Grand Champion PokéTech!`
+          : `🏆 STAGE ${currentStage.stage} CLEARED! ${currentStage.name} berhasil ditaklukkan!`;
+
+        setDialogueText(msg);
 
         // Unlock next stage
-        const nextStage = Math.min(5, boss.stage + 1);
+        const nextStage = Math.min(15, currentStage.stage + 1);
         if (nextStage > highestUnlockedStage) {
           setHighestUnlockedStage(nextStage);
           localStorage.setItem("bimo_poketech_gym_stage_unlocked", nextStage.toString());
         }
 
-        if (!defeatedBosses.includes(boss.id)) {
-          const updatedDefeated = [...defeatedBosses, boss.id];
-          setDefeatedBosses(updatedDefeated);
-          localStorage.setItem("bimo_poketech_gym_defeated", JSON.stringify(updatedDefeated));
+        if (!defeatedStages.includes(currentStage.stage)) {
+          const updated = [...defeatedStages, currentStage.stage];
+          setDefeatedStages(updated);
+          localStorage.setItem("bimo_poketech_gym_defeated_stages", JSON.stringify(updated));
         }
 
         if (playSound) playSound("celebration");
         confetti({
-          particleCount: 160,
-          spread: 85,
+          particleCount: 180,
+          spread: 90,
           origin: { y: 0.55 },
           colors: ["#fbbf24", "#38bdf8", "#ec4899", "#22c55e", "#a855f7"],
         });
 
-        if (onWinReward) onWinReward(boss.id);
+        if (onWinReward) onWinReward(currentStage.id);
       }, 700);
       return;
     }
 
-    // 👹 BOSS COUNTER ATTACK (Turn delay: 900ms)
+    // 👹 ENEMY COUNTER-ATTACK
     setTimeout(() => {
       setIsAttacking(false);
       setDamageEffect(null);
       setBossAttacking(true);
 
       const isSpecial = Math.random() > 0.5;
-      const bossMove = isSpecial ? boss.moves[1] : boss.moves[0];
-      const bossDmg = Math.round(boss.atk * (isSpecial ? 1.35 : 0.95) * (0.85 + Math.random() * 0.3));
+      const bossMove = isSpecial ? currentStage.moves[1] : currentStage.moves[0];
+      const bossDmg = Math.round(currentStage.atk * (isSpecial ? 1.4 : 0.95) * (0.85 + Math.random() * 0.3));
 
       setTimeout(() => {
         setDamageEffect({ target: "player", text: `-${bossDmg} HP!` });
@@ -289,10 +535,9 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
           return copy;
         });
 
-        setDialogueText(`👹 ${boss.name} membalas dengan ${bossMove.name}! (${bossDmg} DMG)`);
+        setDialogueText(`👹 ${currentStage.name} membalas dengan ${bossMove.name}! (${bossDmg} DMG)`);
         setBossAttacking(false);
 
-        // Check if active player card fainted
         if (nextPlayerHp <= 0) {
           setTimeout(() => {
             const nextAliveIndex = teamHp.findIndex((hp, idx) => idx !== activeTeamIndex && hp > 0);
@@ -302,7 +547,7 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
               setMenuMode("main");
             } else {
               setBattleState("lost");
-              setDialogueText(`💀 Seluruh tim PokéTech kamu kehabisan HP! Coba upgrade di Fusion Lab!`);
+              setDialogueText(`💀 Seluruh tim tumbang! Gacha kartu langka (SSR/UR) dan Upgrade Shiny di Lab untuk menaikkan HP & ATK!`);
             }
           }, 800);
         } else {
@@ -315,7 +560,7 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
     }, 900);
   };
 
-  // 🎒 BAG: Use System Restore (+45% HP)
+  // 🎒 HEAL ITEM (+45% HP)
   const handleHealItem = () => {
     if (isAttacking || bossAttacking || battleState !== "in_progress" || currentActiveHp <= 0 || healsRemaining <= 0) return;
     if (playSound) playSound("click");
@@ -330,12 +575,12 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
       return copy;
     });
 
-    setDialogueText(`💚 Menggunakan System Restore Patch! ${activePlayerCard.name} pulih +${healAmount} HP! (Sisa: ${healsRemaining - 1}x)`);
+    setDialogueText(`💚 System Restore Patch! ${activePlayerCard.name} pulih +${healAmount} HP! (Sisa: ${healsRemaining - 1}x)`);
 
-    // Boss Turn
+    // Enemy turn
     setTimeout(() => {
       setBossAttacking(true);
-      const bossDmg = Math.round(boss.atk * 0.9 * (0.85 + Math.random() * 0.3));
+      const bossDmg = Math.round(currentStage.atk * 0.9 * (0.85 + Math.random() * 0.3));
       setTimeout(() => {
         setDamageEffect({ target: "player", text: `-${bossDmg} HP!` });
         setTeamHp((prev) => {
@@ -343,7 +588,7 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
           copy[activeTeamIndex] = Math.max(0, newHp - bossDmg);
           return copy;
         });
-        setDialogueText(`👹 ${boss.name} menyergap saat kamu memulihkan HP! (${bossDmg} DMG)`);
+        setDialogueText(`👹 ${currentStage.name} menyergap saat pemulihan! (${bossDmg} DMG)`);
         setBossAttacking(false);
       }, 500);
     }, 900);
@@ -358,36 +603,39 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
     setDialogueText(`Maju, ${teamCards[index].name}! Tunjukkan kemampuanmu!`);
   };
 
-  // 🏃 RUN: Escape Battle
+  // 🏃 ESCAPE BATTLE
   const handleConfirmRun = () => {
     if (playSound) playSound("click");
     setBattleState("escaped");
-    setDialogueText(`💨 Kamu berhasil melarikan diri dari pertarungan melawan ${boss.name}!`);
+    setDialogueText(`💨 Kamu berhasil mundur dengan aman dari Stage ${currentStage.stage}!`);
   };
 
-  const bossHpPercent = Math.max(0, Math.round((bossHp / boss.maxHp) * 100));
+  const bossHpPercent = Math.max(0, Math.round((bossHp / currentStage.maxHp) * 100));
   const playerHpPercent = Math.max(0, Math.round((currentActiveHp / activePlayerCard.hp) * 100));
+
+  // Filter stages by active zone
+  const zoneStages = STAGE_LIST.filter((s) => s.zone === activeZone);
 
   return (
     <div
-      className="relative rounded-3xl p-4 sm:p-6 shadow-2xl overflow-hidden border-4 border-[#334155]"
+      className="relative rounded-3xl p-3.5 sm:p-6 shadow-2xl overflow-hidden border-4 border-[#334155]"
       style={{
         background: "linear-gradient(180deg, #090d16 0%, #030712 100%)",
         fontFamily: "'Fredoka', sans-serif",
       }}
     >
-      {/* ─── ARENA HEADER ─── */}
+      {/* ─── HEADER & TEAM ROSTER TRIGGER ─── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800 gap-2 mb-3">
         <div className="flex items-center gap-2.5">
-          <div className="h-10 w-10 rounded-2xl border-2 border-rose-500 bg-rose-950/80 flex items-center justify-center text-xl shadow-[0_0_15px_rgba(244,63,94,0.5)]">
+          <div className="h-10 w-10 rounded-2xl border-2 border-rose-500 bg-rose-950/80 flex items-center justify-center text-xl shadow-[0_0_15px_rgba(244,63,94,0.5)] shrink-0">
             ⚔️
           </div>
           <div>
-            <h3 className="text-base sm:text-lg font-black text-rose-400 uppercase tracking-wide flex items-center gap-2">
-              POKÉTECH GYM LEAGUE • 5 BOSS ROADMAP
+            <h3 className="text-sm sm:text-base font-black text-rose-400 uppercase tracking-wide flex items-center gap-1.5">
+              POKÉTECH GYM LEAGUE (15 STAGES)
             </h3>
             <span className="text-[10px] text-slate-400 font-bold">
-              Kalahkan 5 Gym Boss untuk meraih Lencana Master Champion! 🏆
+              5 Zone • 5 Grand Bosses • Clear Stage 15 to Win! 🏆
             </span>
           </div>
         </div>
@@ -401,64 +649,96 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
         </button>
       </div>
 
-      {/* ─── 🗺️ STAGE TIMELINE ROADMAP (5 BOSS GYM ROAD) ─── */}
-      <div className="mb-4 p-3 rounded-2xl bg-slate-950/90 border-2 border-slate-800 shadow-inner">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[10px] font-black uppercase text-amber-400 tracking-wider flex items-center gap-1">
-            <FiAward /> STAGE ROADMAP PROGRESSION:
-          </span>
-          <span className="text-[9px] font-mono text-slate-400 font-bold">
-            Badges: {defeatedBosses.length}/5 Diraih
-          </span>
-        </div>
-
-        <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
-          {BOSS_LIST.map((b, idx) => {
-            const isUnlocked = b.stage <= highestUnlockedStage;
-            const isDefeated = defeatedBosses.includes(b.id);
-            const isSelected = selectedBossIndex === idx;
+      {/* ─── 🗺️ 5-ZONE TABS & 15-STAGE ROADMAP NAVIGATION ─── */}
+      <div className="mb-3 p-2.5 sm:p-3.5 rounded-2xl bg-slate-950/90 border-2 border-slate-800 shadow-inner">
+        {/* Zone Switcher Tabs */}
+        <div className="flex gap-1 overflow-x-auto pb-2 scrollbar-none">
+          {[
+            { zone: 1, label: "🌲 Z1 (Syntax)" },
+            { zone: 2, label: "🌊 Z2 (Memory)" },
+            { zone: 3, label: "⚡ Z3 (Neural)" },
+            { zone: 4, label: "🔥 Z4 (Git Chaos)" },
+            { zone: 5, label: "👑 Z5 (Celestial)" },
+          ].map(({ zone, label }) => {
+            const isZoneUnlocked = (zone - 1) * 3 + 1 <= highestUnlockedStage;
+            const isActive = activeZone === zone;
 
             return (
               <button
-                key={b.id}
+                key={zone}
+                type="button"
+                disabled={!isZoneUnlocked}
+                onClick={() => {
+                  setActiveZone(zone);
+                  const firstStageIdx = (zone - 1) * 3;
+                  if (firstStageIdx + 1 <= highestUnlockedStage) {
+                    setSelectedStageIndex(firstStageIdx);
+                  }
+                }}
+                className={`px-2.5 py-1 rounded-xl text-[10px] sm:text-xs font-black shrink-0 transition-all border ${
+                  !isZoneUnlocked
+                    ? "opacity-35 border-slate-800 bg-slate-900/50 text-slate-500 cursor-not-allowed"
+                    : isActive
+                    ? "bg-rose-600 text-white border-rose-400 shadow-[0_0_10px_rgba(244,63,94,0.5)] scale-105"
+                    : "bg-slate-900 text-slate-300 border-slate-800 hover:border-slate-700"
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* 3 Stages in Current Zone */}
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mt-2">
+          {zoneStages.map((s) => {
+            const sIdx = STAGE_LIST.findIndex((item) => item.stage === s.stage);
+            const isUnlocked = s.stage <= highestUnlockedStage;
+            const isDefeated = defeatedStages.includes(s.stage);
+            const isSelected = selectedStageIndex === sIdx;
+
+            return (
+              <button
+                key={s.stage}
                 type="button"
                 disabled={!isUnlocked}
                 onClick={() => {
-                  if (isUnlocked) {
-                    setSelectedBossIndex(idx);
-                    if (playSound) playSound("click");
-                  }
+                  setSelectedStageIndex(sIdx);
+                  if (playSound) playSound("click");
                 }}
                 className={`relative p-2 rounded-xl border-2 flex flex-col items-center justify-between transition-all ${
                   !isUnlocked
-                    ? "border-slate-800 bg-slate-900/40 opacity-40 cursor-not-allowed"
+                    ? "border-slate-800 bg-slate-900/30 opacity-40 cursor-not-allowed"
                     : isSelected
                     ? "border-rose-500 bg-rose-950/80 shadow-[0_0_15px_rgba(244,63,94,0.5)] scale-105 z-10"
+                    : s.isBoss
+                    ? "border-amber-500/70 bg-amber-950/40 hover:border-amber-400"
                     : isDefeated
-                    ? "border-emerald-500/80 bg-emerald-950/50 hover:border-emerald-400"
-                    : "border-amber-500/60 bg-amber-950/40 hover:border-amber-400"
+                    ? "border-emerald-500/70 bg-emerald-950/40 hover:border-emerald-400"
+                    : "border-slate-700 bg-slate-900/80 hover:border-slate-500"
                 }`}
               >
-                {/* Stage Pill */}
-                <div className="flex items-center justify-between w-full mb-1">
+                <div className="flex items-center justify-between w-full mb-0.5">
                   <span className="text-[8px] font-black text-slate-300">
-                    S{b.stage}
+                    STAGE {s.stage}
                   </span>
                   {isDefeated ? (
                     <FiCheckCircle className="text-[10px] text-emerald-400" />
                   ) : !isUnlocked ? (
-                    <FiLock className="text-[9px] text-slate-500" />
+                    <FiLock className="text-[8px] text-slate-500" />
+                  ) : s.isBoss ? (
+                    <span className="text-[9px] text-amber-400 animate-pulse">👑</span>
                   ) : (
-                    <span className="text-[9px] animate-pulse">⚔️</span>
+                    <span className="text-[8px] text-rose-400">⚔️</span>
                   )}
                 </div>
 
-                <span className="text-base sm:text-lg mb-0.5">{b.avatar}</span>
-                <span className="text-[8px] font-black truncate w-full text-center text-white">
-                  {b.name.split(" ")[0]}
+                <span className="text-sm sm:text-base my-0.5">{s.avatar}</span>
+                <span className="text-[8px] sm:text-[9px] font-black truncate w-full text-center text-white">
+                  {s.name.split(" ")[0]}
                 </span>
-                <span className="text-[7px] font-mono text-slate-400">
-                  Lv.{b.level}
+                <span className="text-[7px] font-mono font-bold text-amber-300">
+                  Lv.{s.level} {s.isBoss ? "• BOSS" : ""}
                 </span>
               </button>
             );
@@ -468,10 +748,10 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
 
       {/* ─── 👥 TEAM BUILDER DRAWER ─── */}
       {isTeamBuilderOpen && (
-        <div className="p-4 mb-4 rounded-2xl bg-indigo-950/95 border-2 border-indigo-500/60 shadow-xl space-y-3">
+        <div className="p-3.5 mb-3 rounded-2xl bg-indigo-950/95 border-2 border-indigo-500/60 shadow-xl space-y-3">
           <div className="flex items-center justify-between">
             <h4 className="text-xs sm:text-sm font-black text-indigo-200 uppercase flex items-center gap-1.5">
-              <FiUsers /> Pilih 3 Kartu untuk Tim Bertarungmu:
+              <FiUsers /> Pilih 3 Kartu untuk Tim Tempur:
             </h4>
             <button
               type="button"
@@ -482,32 +762,33 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
             </button>
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
             {[0, 1, 2].map((slotIdx) => {
-              const currentId = teamIds[slotIdx];
-              const card = POKETECHS.find((p) => p.id === currentId) || POKETECHS[10];
+              const card = teamCards[slotIdx];
 
               return (
-                <div key={slotIdx} className="p-2 rounded-xl bg-slate-900/90 border border-indigo-500/40 text-center">
-                  <span className="text-[9px] font-black uppercase text-indigo-400 block mb-1">
-                    Slot {slotIdx + 1}
+                <div key={slotIdx} className="p-1.5 rounded-xl bg-slate-900/90 border border-indigo-500/40 text-center">
+                  <span className="text-[8px] font-black uppercase text-indigo-400 block mb-0.5">
+                    Slot {slotIdx + 1} {card.isShiny ? "✨" : ""}
                   </span>
-                  <img src={card.image} alt={card.name} className="h-12 w-12 object-contain mx-auto mb-1" />
-                  <p className="text-[10px] font-black truncate text-white">{card.name.split(".")[0]}</p>
+                  <img src={card.image} alt={card.name} className="h-10 w-10 object-contain mx-auto mb-0.5" />
+                  <p className="text-[9px] font-black truncate text-white">{card.name.split(".")[0]}</p>
+                  <p className="text-[7px] font-mono text-emerald-400 font-bold">HP {card.hp} • ATK {card.atk}</p>
                 </div>
               );
             })}
           </div>
 
-          <p className="text-[10px] text-indigo-300/80 font-medium">
+          <p className="text-[9px] text-indigo-300/80 font-medium">
             Klik kartu dari koleksimu di bawah untuk mengganti Slot Tim:
           </p>
 
-          <div className="flex gap-2 overflow-x-auto pb-2">
+          <div className="flex gap-1.5 overflow-x-auto pb-1.5">
             {unlockedIds.map((id) => {
               const c = POKETECHS.find((p) => p.id === id);
               if (!c) return null;
               const isSelected = teamIds.includes(c.id);
+              const isShiny = shinyIds.includes(c.id);
 
               return (
                 <button
@@ -521,15 +802,15 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
                       saveTeam(nextTeam);
                     }
                   }}
-                  className={`h-16 w-14 rounded-xl p-1 border-2 flex flex-col items-center justify-between shrink-0 transition-all ${
+                  className={`h-14 w-12 rounded-xl p-0.5 border-2 flex flex-col items-center justify-between shrink-0 transition-all ${
                     isSelected
                       ? "border-amber-400 bg-amber-950/60 shadow-[0_0_10px_#fbbf24]"
                       : "border-slate-800 bg-slate-900/80 hover:border-indigo-400"
                   }`}
                 >
-                  <img src={c.image} alt={c.name} className="h-8 w-8 object-contain" />
-                  <span className="text-[8px] font-black truncate w-full text-slate-300">
-                    {c.name.split(".")[0]}
+                  <img src={c.image} alt={c.name} className="h-7 w-7 object-contain" />
+                  <span className="text-[7px] font-black truncate w-full text-slate-300">
+                    {isShiny ? "✨" : ""}{c.name.split(".")[0]}
                   </span>
                 </button>
               );
@@ -538,17 +819,17 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
         </div>
       )}
 
-      {/* ─── 🎮 RETRO HANDHELD POKÉMON BATTLE SCREEN ─── */}
+      {/* ─── 🎮 RETRO BATTLE SCREEN (AUTHENTIC DS / GBA PROPORTIONS) ─── */}
       <div
         className="relative rounded-2xl border-4 border-slate-700 overflow-hidden shadow-2xl my-2"
         style={{
-          height: "360px",
+          height: "320px",
           background: "linear-gradient(180deg, #1e293b 0%, #0f172a 45%, #14532d 75%, #052e16 100%)",
         }}
       >
         {/* Opponent Podium (Top Right) */}
         <div
-          className="absolute top-20 right-8 w-44 h-16 rounded-[100%] border-2 border-emerald-500/40 pointer-events-none animate-shadow-pulse"
+          className="absolute top-16 right-6 w-36 sm:w-44 h-14 rounded-[100%] border-2 border-emerald-500/40 pointer-events-none animate-shadow-pulse"
           style={{
             background: "radial-gradient(ellipse at center, rgba(34,197,94,0.35) 0%, rgba(15,23,42,0.8) 75%)",
             boxShadow: "0 0 25px rgba(34,197,94,0.3)",
@@ -557,7 +838,7 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
 
         {/* Player Podium (Bottom Left) */}
         <div
-          className="absolute bottom-6 left-8 w-52 h-20 rounded-[100%] border-2 border-cyan-500/40 pointer-events-none animate-shadow-pulse"
+          className="absolute bottom-5 left-6 w-44 sm:w-52 h-16 rounded-[100%] border-2 border-cyan-500/40 pointer-events-none animate-shadow-pulse"
           style={{
             background: "radial-gradient(ellipse at center, rgba(6,182,212,0.4) 0%, rgba(15,23,42,0.8) 75%)",
             boxShadow: "0 0 30px rgba(6,182,212,0.3)",
@@ -565,19 +846,19 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
         />
 
         {/* ─── TOP LEFT: OPPONENT BOSS STATUS BANNER ─── */}
-        <div className="absolute top-4 left-4 z-20 w-52 sm:w-60 bg-slate-950/90 border-2 border-slate-400/80 rounded-2xl p-2.5 shadow-2xl backdrop-blur-md">
+        <div className="absolute top-3 left-3 z-20 w-44 sm:w-56 bg-slate-950/90 border-2 border-slate-400/80 rounded-2xl p-2 shadow-2xl backdrop-blur-md">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black text-white truncate max-w-[130px]">
-              {boss.name.split(" ")[0]}
+            <span className="text-[11px] sm:text-xs font-black text-white truncate max-w-[110px]">
+              {currentStage.name.split(" ")[0]}
             </span>
-            <span className="text-[10px] font-black text-rose-400 font-mono">
-              Lv.{boss.level}
+            <span className="text-[9px] font-black text-rose-400 font-mono">
+              Lv.{currentStage.level}
             </span>
           </div>
 
-          <div className="flex items-center gap-1 mt-1">
-            <span className="text-[9px] font-black text-amber-400">HP</span>
-            <div className="flex-1 h-2.5 bg-slate-900 rounded-full border border-slate-700 overflow-hidden">
+          <div className="flex items-center gap-1 mt-0.5">
+            <span className="text-[8px] font-black text-amber-400">HP</span>
+            <div className="flex-1 h-2 bg-slate-900 rounded-full border border-slate-700 overflow-hidden">
               <div
                 className={`h-full transition-all duration-300 ${
                   bossHpPercent > 50 ? "bg-emerald-500" : bossHpPercent > 20 ? "bg-amber-500" : "bg-rose-600 animate-pulse"
@@ -586,26 +867,26 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
               />
             </div>
           </div>
-          <div className="flex justify-between items-center text-[9px] font-mono font-bold text-slate-400 mt-0.5">
-            <span className="text-amber-300/90">{boss.element}</span>
-            <span>{bossHp} / {boss.maxHp}</span>
+          <div className="flex justify-between items-center text-[8px] font-mono font-bold text-slate-400 mt-0.5">
+            <span className="text-amber-300/90 truncate">{currentStage.element}</span>
+            <span>{bossHp} / {currentStage.maxHp}</span>
           </div>
         </div>
 
-        {/* ─── TOP RIGHT: LIVING OPPONENT BOSS SPRITE ─── */}
+        {/* ─── TOP RIGHT: LIVING OPPONENT SPRITE ─── */}
         <div
-          className={`absolute top-10 right-14 z-10 flex flex-col items-center transition-transform duration-300 ${
+          className={`absolute top-8 right-10 sm:right-14 z-10 flex flex-col items-center transition-transform duration-300 ${
             bossAttacking ? "animate-boss-lunge" : "animate-poke-idle"
           } ${damageEffect?.target === "boss" ? "animate-hit-shake" : ""}`}
         >
           <div className="relative">
             <img
-              src={boss.image}
-              alt={boss.name}
-              className="h-32 w-32 object-contain drop-shadow-[0_15px_15px_rgba(0,0,0,0.9)]"
+              src={currentStage.image}
+              alt={currentStage.name}
+              className="h-28 w-28 sm:h-32 sm:w-32 object-contain drop-shadow-[0_15px_15px_rgba(0,0,0,0.9)]"
             />
             {damageEffect?.target === "boss" && (
-              <div className={`absolute top-0 right-0 px-3 py-1 text-slate-950 font-black text-xs rounded-xl shadow-lg animate-bounce ${
+              <div className={`absolute top-0 right-0 px-2.5 py-0.5 text-slate-950 font-black text-[11px] rounded-xl shadow-lg animate-bounce ${
                 damageEffect.isCrit ? "bg-amber-400 scale-110 shadow-[0_0_15px_#fbbf24]" : "bg-cyan-400"
               }`}>
                 {damageEffect.text}
@@ -616,7 +897,7 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
 
         {/* ─── BOTTOM LEFT: LIVING PLAYER ACTIVE POKÉMON SPRITE ─── */}
         <div
-          className={`absolute bottom-6 left-14 z-10 flex flex-col items-center transition-transform duration-300 ${
+          className={`absolute bottom-5 left-10 sm:left-14 z-10 flex flex-col items-center transition-transform duration-300 ${
             isAttacking ? "animate-player-lunge" : "animate-poke-idle"
           } ${damageEffect?.target === "player" ? "animate-hit-shake" : ""}`}
         >
@@ -624,10 +905,15 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
             <img
               src={activePlayerCard.image}
               alt={activePlayerCard.name}
-              className="h-32 w-32 object-contain drop-shadow-[0_15px_20px_rgba(0,0,0,0.9)]"
+              className={`h-28 w-28 sm:h-32 sm:w-32 object-contain drop-shadow-[0_15px_20px_rgba(0,0,0,0.9)] ${
+                activePlayerCard.isShiny ? "filter drop-shadow-[0_0_15px_rgba(251,191,36,0.8)]" : ""
+              }`}
             />
+            {activePlayerCard.isShiny && (
+              <span className="absolute -top-2 -right-2 text-xs animate-bounce">✨</span>
+            )}
             {damageEffect?.target === "player" && (
-              <div className="absolute top-0 right-0 px-3 py-1 bg-rose-600 text-white font-black text-xs rounded-xl shadow-lg animate-bounce">
+              <div className="absolute top-0 right-0 px-2.5 py-0.5 bg-rose-600 text-white font-black text-[11px] rounded-xl shadow-lg animate-bounce">
                 {damageEffect.text}
               </div>
             )}
@@ -635,23 +921,23 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
         </div>
 
         {/* ─── BOTTOM RIGHT: PLAYER STATUS BANNER ─── */}
-        <div className="absolute bottom-4 right-4 z-20 w-56 sm:w-64 bg-slate-950/90 border-2 border-slate-400/80 rounded-2xl p-2.5 shadow-2xl backdrop-blur-md">
+        <div className="absolute bottom-3 right-3 z-20 w-48 sm:w-60 bg-slate-950/90 border-2 border-slate-400/80 rounded-2xl p-2 shadow-2xl backdrop-blur-md">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black text-cyan-300 truncate max-w-[140px]">
-              {activePlayerCard.name}
+            <span className="text-[11px] sm:text-xs font-black text-cyan-300 truncate max-w-[120px] flex items-center gap-1">
+              {activePlayerCard.isShiny ? "✨" : ""}{activePlayerCard.name}
             </span>
-            <div className="flex gap-1">
+            <div className="flex gap-0.5">
               {teamHp.map((hp, idx) => (
-                <span key={idx} className="text-[10px]" title={`Slot ${idx + 1}: ${hp} HP`}>
+                <span key={idx} className="text-[8px]">
                   {hp > 0 ? "🔴" : "⚫"}
                 </span>
               ))}
             </div>
           </div>
 
-          <div className="flex items-center gap-1 mt-1">
-            <span className="text-[9px] font-black text-emerald-400">HP</span>
-            <div className="flex-1 h-2.5 bg-slate-900 rounded-full border border-slate-700 overflow-hidden">
+          <div className="flex items-center gap-1 mt-0.5">
+            <span className="text-[8px] font-black text-emerald-400">HP</span>
+            <div className="flex-1 h-2 bg-slate-900 rounded-full border border-slate-700 overflow-hidden">
               <div
                 className={`h-full transition-all duration-300 ${
                   playerHpPercent > 50 ? "bg-emerald-500" : playerHpPercent > 20 ? "bg-amber-500" : "bg-rose-600 animate-pulse"
@@ -661,42 +947,44 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
             </div>
           </div>
 
-          <div className="flex justify-between items-center text-[9px] font-mono font-bold text-slate-300 mt-0.5">
+          <div className="flex justify-between items-center text-[8px] font-mono font-bold text-slate-300 mt-0.5">
             <span className="text-amber-300">{activePlayerCard.element}</span>
             <span>{currentActiveHp} / {activePlayerCard.hp}</span>
           </div>
         </div>
       </div>
 
-      {/* ─── 🕹️ CLASSIC POKÉMON COMMAND & DIALOGUE CONSOLE ─── */}
-      <div className="grid sm:grid-cols-[1.2fr_1fr] gap-3 mt-3 items-stretch">
-        {/* Left: Classic Dialogue Text Window */}
-        <div className="rounded-2xl border-4 border-slate-700 bg-slate-950 p-4 flex items-center shadow-inner min-h-[90px]">
-          <p className="text-xs sm:text-sm font-bold text-slate-100 leading-relaxed font-mono">
+      {/* ─── 🕹️ RETRO DIALOGUE & 4 COMMAND BUTTONS ─── */}
+      <div className="grid sm:grid-cols-[1.2fr_1fr] gap-2.5 mt-2.5 items-stretch">
+        {/* Dialogue Screen */}
+        <div className="rounded-2xl border-4 border-slate-700 bg-slate-950 p-3 flex items-center shadow-inner min-h-[80px]">
+          <p className="text-xs font-bold text-slate-100 leading-relaxed font-mono">
             {dialogueText}
           </p>
         </div>
 
-        {/* Right: 4 Classic Command Action Buttons or Move Select */}
+        {/* Command Box */}
         <div className="rounded-2xl border-4 border-slate-700 bg-slate-900 p-2 shadow-inner flex flex-col justify-center">
           {battleState !== "in_progress" ? (
             <div className="space-y-1.5">
               <button
                 type="button"
                 onClick={resetBattle}
-                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md hover:scale-105 active:scale-95 transition-all"
+                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 shadow-md hover:scale-105 active:scale-95 transition-all"
               >
-                <FiRotateCcw /> Main Lagi (Tanding Ulang)
+                <FiRotateCcw /> Tanding Ulang Stage Ini
               </button>
-              {battleState === "won" && selectedBossIndex < 4 && (
+              {battleState === "won" && selectedStageIndex < 14 && (
                 <button
                   type="button"
                   onClick={() => {
-                    setSelectedBossIndex((prev) => Math.min(4, prev + 1));
+                    const nextIdx = selectedStageIndex + 1;
+                    setSelectedStageIndex(nextIdx);
+                    setActiveZone(STAGE_LIST[nextIdx].zone);
                   }}
                   className="w-full py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-md"
                 >
-                  Tantang Boss Stage {selectedBossIndex + 2} ➔
+                  Lanjut ke Stage {selectedStageIndex + 2} ➔
                 </button>
               )}
             </div>
@@ -708,7 +996,7 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
                   type="button"
                   disabled={isAttacking || bossAttacking}
                   onClick={() => executePlayerMove("move1")}
-                  className="py-2 px-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-[11px] text-left truncate shadow-sm transition-all flex flex-col justify-center"
+                  className="py-2 px-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-[10px] text-left truncate shadow-sm transition-all flex flex-col justify-center"
                 >
                   <span className="truncate">{activePlayerCard.ability}</span>
                   <span className="text-[8px] opacity-80">ATK {activePlayerCard.atk}</span>
@@ -718,10 +1006,10 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
                   type="button"
                   disabled={isAttacking || bossAttacking}
                   onClick={() => executePlayerMove("move2")}
-                  className="py-2 px-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[11px] text-left truncate shadow-sm transition-all flex flex-col justify-center"
+                  className="py-2 px-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px] text-left truncate shadow-sm transition-all flex flex-col justify-center"
                 >
                   <span className="truncate">⚡ Ultimate Blast</span>
-                  <span className="text-[8px] opacity-80">ATK {Math.round(activePlayerCard.atk * 1.6)}</span>
+                  <span className="text-[8px] opacity-80">ATK {Math.round(activePlayerCard.atk * 1.65)}</span>
                 </button>
               </div>
 
@@ -756,10 +1044,10 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
                           : "border-emerald-500 bg-emerald-950/80 hover:scale-105"
                       }`}
                     >
-                      <span className="text-[9px] font-black truncate block text-white">
-                        {c.name.split(".")[0]}
+                      <span className="text-[8px] font-black truncate block text-white">
+                        {c.isShiny ? "✨" : ""}{c.name.split(".")[0]}
                       </span>
-                      <span className="text-[8px] font-mono text-emerald-400 font-bold">
+                      <span className="text-[7px] font-mono text-emerald-400 font-bold">
                         {hp} HP
                       </span>
                     </button>
@@ -779,20 +1067,20 @@ const GymBattleArena = ({ unlockedIds = [11], onWinReward, playSound }) => {
             /* RUN CONFIRMATION SUB-MENU */
             <div className="space-y-1.5">
               <p className="text-[10px] font-bold text-amber-300 text-center">
-                Kabur dan kembali ke pemilihan stage?
+                Mundur dan kembali ke pemilihan stage?
               </p>
               <div className="grid grid-cols-2 gap-1">
                 <button
                   type="button"
                   onClick={handleConfirmRun}
-                  className="py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[11px]"
+                  className="py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px]"
                 >
-                  Ya, Kabur!
+                  Ya, Mundur!
                 </button>
                 <button
                   type="button"
                   onClick={() => setMenuMode("main")}
-                  className="py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold text-[11px]"
+                  className="py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold text-[10px]"
                 >
                   Batal
                 </button>

@@ -1642,6 +1642,7 @@ const TechmonGacha = () => {
             {activeGameTab === "battle" && (
               <GymBattleArena
                 unlockedIds={unlockedIds}
+                shinyIds={shinyIds}
                 onWinReward={handleGymWin}
                 playSound={playArcadeSound}
               />
