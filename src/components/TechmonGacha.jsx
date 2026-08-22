@@ -887,12 +887,12 @@ const TechmonGacha = () => {
           </p>
         </div>
 
-        {/* Main Gacha Battle Stage */}
+        {/* Main Gacha Battle Stage & Chest Vault */}
         <div className="grid gap-8 lg:grid-cols-[1fr_1.35fr] items-start max-w-6xl mx-auto">
-          {/* Left: Active Summon Card with Glowing Hologram Pedestal */}
-          <div className="reveal flex flex-col items-center" data-delay="100">
+          {/* Left Column: Active 3D Card Stage + Ergonomic Gacha Launchpad */}
+          <div className="reveal flex flex-col items-center w-full max-w-[360px] sm:max-w-[400px] mx-auto" data-delay="100">
             {/* Hologram Pedestal Stage Ring */}
-            <div className="relative w-full max-w-[340px] flex flex-col items-center">
+            <div className="relative w-full flex flex-col items-center">
               {/* 3D Perspective Card Box with Touch Support */}
               <div
                 style={{ perspective: "1200px" }}
@@ -903,7 +903,7 @@ const TechmonGacha = () => {
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
               >
-                {/* 3D Flipping Container (Inspected in 3D, Flipped strictly by Button) */}
+                {/* 3D Flipping Container */}
                 <div
                   ref={cardRef}
                   className="relative w-full h-full cursor-grab active:cursor-grabbing select-none"
@@ -943,7 +943,7 @@ const TechmonGacha = () => {
 
               {/* Glowing Holographic Base Projection Plate */}
               <div
-                className="w-64 h-16 -mt-6 rounded-[100%] pointer-events-none blur-[2px] transition-all duration-700"
+                className="w-64 h-14 -mt-6 rounded-[100%] pointer-events-none blur-[2px] transition-all duration-700"
                 style={{
                   background: `radial-gradient(ellipse at center, ${activeCard.themeColor} 0%, rgba(6,182,212,0.4) 40%, transparent 75%)`,
                   boxShadow: `0 0 35px ${activeCard.themeColor}`,
@@ -951,25 +951,120 @@ const TechmonGacha = () => {
               />
             </div>
 
-            {/* Flip Card Action Button (Dedicated Trigger) */}
-            <div className="mt-4 flex items-center gap-3">
+            {/* Quick Action Bar (Flip & Reset) */}
+            <div className="mt-3 flex w-full items-center justify-between px-2 gap-2">
+              {/* Flip Button */}
               <button
                 type="button"
                 onClick={() => {
                   setIsFlipped(!isFlipped);
                   setTilt({ x: 0, y: 0 });
                 }}
-                className="rounded-full border border-cyan-500/40 bg-slate-900/90 px-5 py-2.5 text-xs font-extrabold text-cyan-300 hover:text-white hover:bg-slate-800 hover:border-cyan-400 hover:scale-105 active:scale-95 flex items-center gap-2 shadow-[0_0_15px_rgba(6,182,212,0.2)] transition-all backdrop-blur-md"
+                className="rounded-full border border-cyan-500/40 bg-slate-900/90 px-4 py-2 text-xs font-extrabold text-cyan-300 hover:text-white hover:bg-slate-800 hover:border-cyan-400 hover:scale-105 active:scale-95 flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.2)] transition-all backdrop-blur-md"
               >
                 <FiRepeat className={isFlipped ? "rotate-180 transition-transform text-amber-400" : "transition-transform text-cyan-400"} />
-                {isFlipped ? "🔄 Balik ke Sisi Depan" : "🔄 Balik Kartu (Lihat Sisi Belakang)"}
+                <span>{isFlipped ? "Depan" : "🔄 Balik 3D"}</span>
               </button>
+
+              <div className="flex items-center gap-1.5">
+                <span className="rounded-full border border-slate-700 bg-slate-900/90 px-3 py-1 text-[11px] font-mono font-bold text-slate-300">
+                  Pulls: {totalPulls}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() => setShowResetConfirm(true)}
+                  className="rounded-full border border-slate-700 bg-slate-900/90 p-2 text-xs text-slate-400 hover:text-rose-400 hover:border-rose-500 transition-all"
+                  title="Reset Koleksi Gacha"
+                >
+                  <FiRotateCcw className="text-xs" />
+                </button>
+              </div>
+            </div>
+
+            {/* Reset Confirmation Prompt */}
+            {showResetConfirm && (
+              <div className="w-full rounded-2xl border border-rose-500/60 bg-rose-950/70 p-3 mt-3 text-xs flex items-center justify-between gap-2 shadow-lg">
+                <span className="font-semibold text-rose-300">
+                  Reset semua kartu koleksi?
+                </span>
+                <div className="flex gap-1.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={handleResetCollection}
+                    className="rounded-lg bg-rose-600 text-white px-2.5 py-1 font-bold hover:bg-rose-500 text-[11px]"
+                  >
+                    Ya, Reset
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowResetConfirm(false)}
+                    className="rounded-lg bg-slate-800 text-slate-300 px-2.5 py-1 font-bold hover:bg-slate-700 text-[11px]"
+                  >
+                    Batal
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* ─── PRIMARY GACHA BOOSTER LAUNCHPAD (Immediately visible on mobile!) ─── */}
+            <div className="w-full rounded-3xl border border-slate-800/90 bg-slate-900/90 p-4 sm:p-5 mt-4 shadow-2xl backdrop-blur-xl">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-black text-white flex items-center gap-1.5 uppercase tracking-wider">
+                  <FiStar className="text-amber-400" /> Buka Booster Pack
+                </span>
+                <span className="text-[10px] font-bold text-cyan-400 animate-pulse">
+                  ✂️ Sobek Foil & Dapatkan UR!
+                </span>
+              </div>
+
+              {/* 3 Main Action Buttons */}
+              <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
+                {/* 1x Pack */}
+                <button
+                  type="button"
+                  onClick={() => startPackCeremony(1)}
+                  className="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl border-2 border-blue-500/50 bg-gradient-to-b from-blue-950/80 to-slate-900 text-blue-300 hover:from-blue-600 hover:to-blue-700 hover:text-white hover:border-blue-400 shadow-[0_4px_12px_rgba(37,99,235,0.25)] hover:scale-105 active:scale-95 transition-all group"
+                >
+                  <FiZap className="text-lg text-blue-400 group-hover:text-white group-hover:animate-bounce mb-0.5" />
+                  <span className="text-xs font-black">1x Pack</span>
+                </button>
+
+                {/* 5x Packs */}
+                <button
+                  type="button"
+                  onClick={() => startPackCeremony(5)}
+                  className="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl border-2 border-cyan-500/50 bg-gradient-to-b from-cyan-950/80 to-slate-900 text-cyan-300 hover:from-cyan-600 hover:to-cyan-700 hover:text-white hover:border-cyan-400 shadow-[0_4px_12px_rgba(6,182,212,0.25)] hover:scale-105 active:scale-95 transition-all group"
+                >
+                  <FiGift className="text-lg text-cyan-400 group-hover:text-white group-hover:animate-bounce mb-0.5" />
+                  <span className="text-xs font-black">5x Packs</span>
+                </button>
+
+                {/* 10x Mega */}
+                <button
+                  type="button"
+                  onClick={() => startPackCeremony(10)}
+                  className="flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl border-2 border-amber-500/60 bg-gradient-to-b from-amber-950/80 to-slate-900 text-amber-300 hover:from-amber-500 hover:to-yellow-500 hover:text-slate-950 hover:border-amber-300 shadow-[0_4px_16px_rgba(245,158,11,0.3)] hover:scale-105 active:scale-95 transition-all group"
+                >
+                  <FiStar className="text-lg text-amber-400 group-hover:text-slate-950 group-hover:animate-spin mb-0.5" />
+                  <span className="text-xs font-black">10x Mega 🚀</span>
+                </button>
+              </div>
+
+              {/* Rarity Drop Rates */}
+              <div className="mt-3 flex flex-wrap items-center justify-between text-[10px] font-bold text-slate-400 pt-2.5 border-t border-slate-800">
+                <span className="text-pink-400 font-black">✨ UR: 6%</span>
+                <span className="text-amber-400 font-bold">SSR: 16%</span>
+                <span className="text-purple-400 font-bold">SR: 30%</span>
+                <span className="text-blue-400 font-bold">Rare: 33%</span>
+                <span className="text-slate-400 font-medium">Com: 15%</span>
+              </div>
             </div>
 
             {/* Pulled Queue Pills */}
             {pulledQueue.length > 1 && (
-              <div className="flex flex-wrap gap-2 mt-4 text-xs items-center justify-center max-w-sm">
-                <span className="text-slate-400 font-semibold">Hasil Pull ({pulledQueue.length}):</span>
+              <div className="flex flex-wrap gap-1.5 mt-3 text-xs items-center justify-center w-full">
+                <span className="text-slate-400 text-[11px] font-semibold">Hasil Pull:</span>
                 {pulledQueue.map((c, i) => (
                   <button
                     key={i}
@@ -978,11 +1073,11 @@ const TechmonGacha = () => {
                       setActiveCard(c);
                       setIsFlipped(false);
                     }}
-                    className="rounded-xl border border-slate-700 bg-slate-900/90 px-2.5 py-1 font-bold text-[10px] text-slate-200 hover:border-cyan-400 hover:scale-105 flex items-center gap-1 shadow-sm"
+                    className="rounded-xl border border-slate-700 bg-slate-900/90 px-2 py-0.5 font-bold text-[9px] text-slate-200 hover:border-cyan-400 hover:scale-105 flex items-center gap-1 shadow-sm"
                   >
                     <span>{c.name.split(".")[0]}</span>
                     <span
-                      className="text-[9px] font-black"
+                      className="text-[8px] font-black"
                       style={{ color: c.themeColor }}
                     >
                       ({c.rarity})
@@ -993,164 +1088,119 @@ const TechmonGacha = () => {
             )}
           </div>
 
-          {/* Right: Gacha Booster Pack Controls + 100 PokéDex Album */}
-          <div className="reveal space-y-6" data-delay="200">
-            {/* Gacha Trigger Arena Box */}
-            <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-6 shadow-2xl backdrop-blur-xl">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h4 className="text-lg font-black text-white flex items-center gap-2">
-                    <FiStar className="text-cyan-400" /> Buka Booster Pack TCG
-                  </h4>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    Gratis unli-pull • Buka pack & temukan kartu ✨ <strong className="text-cyan-300">UR EX Foil</strong>!
-                  </p>
-                </div>
+          {/* Right Column: 🧰 CHEERFUL MINECRAFT / TERRARIA LOOT CHEST VAULT BINDER */}
+          <div className="reveal w-full" data-delay="200">
+            {/* Minecraft & Terraria Style Wooden Loot Chest Container */}
+            <div
+              className="relative rounded-3xl p-5 sm:p-7 shadow-2xl overflow-hidden border-4 border-[#5d4037]"
+              style={{
+                background: "linear-gradient(180deg, #3e2723 0%, #2b1b17 60%, #1a110d 100%)",
+                boxShadow: "inset 0 0 40px rgba(0,0,0,0.8), 0 20px 40px rgba(0,0,0,0.6)",
+              }}
+            >
+              {/* Wooden Plank Texture Lines */}
+              <div
+                className="absolute inset-0 pointer-events-none opacity-25"
+                style={{
+                  backgroundImage: "repeating-linear-gradient(0deg, #8d6e63, #8d6e63 2px, transparent 2px, transparent 32px)",
+                }}
+              />
 
-                <div className="flex items-center gap-2">
-                  <span className="rounded-full border border-slate-700 bg-slate-800 px-3.5 py-1 text-xs font-mono font-bold text-slate-300">
-                    Pulls: {totalPulls}
-                  </span>
+              {/* Gold & Iron Riveted Corner Brackets (Terraria Chest Style) */}
+              <div className="absolute top-2 left-2 h-4 w-4 rounded-sm border-2 border-amber-400 bg-amber-600/80 shadow-inner" />
+              <div className="absolute top-2 right-2 h-4 w-4 rounded-sm border-2 border-amber-400 bg-amber-600/80 shadow-inner" />
+              <div className="absolute bottom-2 left-2 h-4 w-4 rounded-sm border-2 border-amber-400 bg-amber-600/80 shadow-inner" />
+              <div className="absolute bottom-2 right-2 h-4 w-4 rounded-sm border-2 border-amber-400 bg-amber-600/80 shadow-inner" />
 
-                  {/* Reset Progress Button */}
-                  <button
-                    type="button"
-                    onClick={() => setShowResetConfirm(true)}
-                    className="rounded-xl border border-slate-700 bg-slate-800 p-2 text-xs text-slate-400 hover:text-rose-400 hover:border-rose-500 transition-all"
-                    title="Reset Koleksi Gacha"
-                  >
-                    <FiRotateCcw className="text-xs" />
-                  </button>
-                </div>
-              </div>
+              {/* Header: Chest Name + Golden Clasp */}
+              <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 border-b-2 border-[#5d4037] pb-4">
+                <div className="flex items-center gap-3">
+                  {/* Glowing 3D Golden Chest Icon */}
+                  <div className="h-12 w-12 rounded-2xl border-2 border-amber-400 bg-gradient-to-b from-amber-500 to-yellow-600 flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(251,191,36,0.5)] shrink-0">
+                    🧰
+                  </div>
 
-              {/* Reset Confirmation Prompt */}
-              {showResetConfirm && (
-                <div className="rounded-2xl border border-rose-500/60 bg-rose-950/50 p-3.5 mb-4 text-xs flex items-center justify-between gap-2">
-                  <span className="font-semibold text-rose-300">
-                    Reset semua kartu koleksi dan mulai dari awal?
-                  </span>
-                  <div className="flex gap-2 shrink-0">
-                    <button
-                      type="button"
-                      onClick={handleResetCollection}
-                      className="rounded-lg bg-rose-600 text-white px-3 py-1 font-bold hover:bg-rose-500"
-                    >
-                      Ya, Reset
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setShowResetConfirm(false)}
-                      className="rounded-lg bg-slate-800 text-slate-300 px-3 py-1 font-bold hover:bg-slate-700"
-                    >
-                      Batal
-                    </button>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3
+                        className="text-lg sm:text-xl font-black text-amber-300 tracking-wide uppercase"
+                        style={{ fontFamily: "'Impact', 'Arial Black', sans-serif" }}
+                      >
+                        TERRA-CHEST VAULT
+                      </h3>
+                      <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-emerald-700/80 text-emerald-200 border border-emerald-500">
+                        INV: {unlockedIds.length}/100
+                      </span>
+                    </div>
+                    <p className="text-xs text-amber-200/70 font-medium">
+                      Peti Koleksi Kartu PokéTech • Minecraft Edition ⛏️💎
+                    </p>
                   </div>
                 </div>
-              )}
 
-              {/* High-Tech Studio Trainer Buttons (Launches Booster Pack Ceremony) */}
-              <div className="grid grid-cols-3 gap-2.5 sm:gap-3.5">
-                {/* 1x Pack */}
-                <button
-                  type="button"
-                  onClick={() => startPackCeremony(1)}
-                  className="flex items-center justify-center gap-1.5 py-3 text-xs sm:text-sm font-black rounded-2xl border border-blue-500/40 bg-slate-800/90 text-blue-300 hover:bg-blue-600 hover:text-white hover:border-blue-500 shadow-sm hover:scale-102 active:scale-98 transition-all"
-                >
-                  <FiZap className="text-blue-400" />
-                  1x Pack
-                </button>
-
-                {/* 5x Packs */}
-                <button
-                  type="button"
-                  onClick={() => startPackCeremony(5)}
-                  className="flex items-center justify-center gap-1.5 py-3 text-xs sm:text-sm font-black rounded-2xl border border-cyan-500/40 bg-slate-800/90 text-cyan-300 hover:bg-cyan-600 hover:text-white hover:border-cyan-500 shadow-sm hover:scale-102 active:scale-98 transition-all"
-                >
-                  <FiGift className="text-cyan-400" />
-                  5x Packs
-                </button>
-
-                {/* 10x Mega */}
-                <button
-                  type="button"
-                  onClick={() => startPackCeremony(10)}
-                  className="flex items-center justify-center gap-1.5 py-3 text-xs sm:text-sm font-black rounded-2xl border border-indigo-500/40 bg-slate-800/90 text-indigo-200 hover:bg-indigo-600 hover:text-white hover:border-indigo-500 shadow-sm hover:scale-102 active:scale-98 transition-all"
-                >
-                  <FiStar className="text-indigo-400" />
-                  10x Mega 🚀
-                </button>
-              </div>
-
-              {/* Rarity Drop Rates */}
-              <div className="mt-4 flex flex-wrap items-center justify-between text-[11px] font-bold text-slate-400 pt-3 border-t border-slate-800">
-                <span>Peluang Gacha:</span>
-                <span className="text-pink-400 font-black">✨ UR EX: 6%</span>
-                <span className="text-amber-400 font-extrabold">SSR: 16%</span>
-                <span className="text-purple-400 font-extrabold">SR: 30%</span>
-                <span className="text-blue-400 font-extrabold">Rare: 33%</span>
-                <span className="text-slate-400 font-bold">Common: 15%</span>
-              </div>
-            </div>
-
-            {/* 100 PokéDex Collection Tracker Binder */}
-            <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-6 shadow-2xl backdrop-blur-xl">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
-                <div>
-                  <h4 className="text-base font-black text-white flex items-center gap-2">
-                    <FiAward className="text-cyan-400" /> PokéDex Binder ({POKETECHS.length} Cards)
-                  </h4>
-                  <p className="text-xs text-slate-400">
-                    Terkumpul: <span className="font-bold text-cyan-300">{unlockedIds.length}</span> / {POKETECHS.length} Kartu
-                  </p>
+                {/* Level / XP Progress Badge */}
+                <div className="flex items-center gap-2 self-start sm:self-auto bg-[#1a110d] px-3.5 py-1.5 rounded-xl border border-amber-500/40">
+                  <span className="text-xs font-black text-emerald-400 font-mono">
+                    LVL {unlockedIds.length}
+                  </span>
+                  <span className="text-[11px] font-bold text-amber-300">
+                    {progressPercent}% Complete
+                  </span>
                 </div>
-
-                <span className="rounded-full border border-cyan-400/30 bg-cyan-950/70 px-3 py-1 text-xs font-bold text-cyan-300 self-start sm:self-auto">
-                  {progressPercent}% Complete
-                </span>
               </div>
 
-              {/* Progress Bar */}
-              <div className="h-2.5 w-full bg-slate-950/80 overflow-hidden rounded-full mb-4 border border-slate-800">
-                <div
-                  className="h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500 transition-all duration-500 rounded-full shadow-[0_0_10px_rgba(6,182,212,0.4)]"
-                  style={{ width: `${progressPercent}%` }}
-                />
+              {/* Minecraft Style Green Pixel XP Progress Bar */}
+              <div className="relative z-10 mb-5">
+                <div className="h-3.5 w-full bg-[#1a110d] rounded-md overflow-hidden border-2 border-[#5d4037] p-0.5 shadow-inner">
+                  <div
+                    className="h-full bg-gradient-to-r from-emerald-500 via-green-400 to-lime-400 transition-all duration-500 rounded-sm shadow-[0_0_10px_#4ade80]"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
               </div>
 
-              {/* Search Bar + Filter Tabs */}
-              <div className="flex flex-col sm:flex-row gap-2 mb-3">
-                <div className="relative flex-1 flex items-center bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-1.5">
-                  <FiSearch className="text-slate-400 text-xs mr-2" />
+              {/* Search Bar + Minecraft Inventory Category Gem Tabs */}
+              <div className="relative z-10 flex flex-col sm:flex-row gap-2.5 mb-4">
+                {/* Search Box */}
+                <div className="relative flex-1 flex items-center bg-[#1a110d]/90 border-2 border-[#5d4037] rounded-xl px-3 py-2 shadow-inner">
+                  <FiSearch className="text-amber-400 text-xs mr-2" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search name, element, attack..."
-                    className="w-full bg-transparent text-xs font-semibold text-white outline-none placeholder:text-slate-500"
+                    placeholder="Cari kartu dalam peti..."
+                    className="w-full bg-transparent text-xs font-bold text-amber-100 outline-none placeholder:text-amber-300/40"
                   />
                 </div>
 
+                {/* RPG Gem Rarity Filter Pills */}
                 <div className="flex flex-wrap gap-1 text-xs">
-                  {["ALL", "UR", "SSR", "SR", "Rare", "Common"].map((tier) => (
+                  {[
+                    { tier: "ALL", label: "💎 Semua" },
+                    { tier: "UR", label: "✨ UR" },
+                    { tier: "SSR", label: "🟡 SSR" },
+                    { tier: "SR", label: "🟣 SR" },
+                    { tier: "Rare", label: "🔵 Rare" },
+                    { tier: "Common", label: "⚪ Com" },
+                  ].map(({ tier, label }) => (
                     <button
                       key={tier}
                       type="button"
                       onClick={() => setFilterRarity(tier)}
-                      className={`rounded-lg px-2.5 py-1 text-[10px] font-bold transition-all ${
+                      className={`rounded-xl px-2.5 py-1 text-[11px] font-black border transition-all ${
                         filterRarity === tier
-                          ? "bg-cyan-500 text-slate-950 font-black shadow-[0_0_10px_rgba(6,182,212,0.4)]"
-                          : "bg-slate-800/80 text-slate-400 hover:text-white"
+                          ? "bg-amber-400 text-[#1a110d] border-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.6)] scale-105"
+                          : "bg-[#1a110d]/80 text-amber-200/70 border-[#5d4037] hover:border-amber-400/60 hover:text-white"
                       }`}
                     >
-                      {tier}
+                      {label}
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* 100 Monster Thumbnail Grid (Scrollable) */}
-              <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 max-h-[340px] overflow-y-auto pr-1">
+              {/* 100-Slot Minecraft Item Inventory Grid */}
+              <div className="relative z-10 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 max-h-[380px] overflow-y-auto pr-1">
                 {filteredPokemons.map((mon) => {
                   const isUnlocked = unlockedIds.includes(mon.id);
                   const isSelected = activeCard.id === mon.id;
@@ -1166,34 +1216,42 @@ const TechmonGacha = () => {
                         }
                       }}
                       disabled={!isUnlocked}
-                      className={`p-1.5 rounded-2xl flex flex-col items-center justify-center transition-all border ${
+                      className={`p-1 rounded-xl flex flex-col items-center justify-center transition-all border-2 relative ${
                         isUnlocked
                           ? isSelected
-                            ? "bg-cyan-950/70 border-cyan-400 scale-105 shadow-[0_0_15px_rgba(6,182,212,0.4)]"
-                            : "bg-slate-800/60 border-slate-700/80 hover:border-slate-500 hover:scale-105 cursor-pointer"
-                          : "opacity-30 cursor-not-allowed bg-slate-950 border-slate-800"
+                            ? "bg-amber-400/20 border-amber-300 scale-105 shadow-[0_0_15px_rgba(251,191,36,0.5)] z-20"
+                            : "bg-[#1a110d]/90 border-[#5d4037] hover:border-amber-400 hover:scale-105 cursor-pointer shadow-md"
+                          : "opacity-35 cursor-not-allowed bg-[#140c09] border-[#3e2723]"
                       }`}
-                      title={isUnlocked ? `#${mon.id} ${mon.name} (${mon.rarity})` : `#${mon.id} Locked - Gacha to unlock!`}
+                      title={
+                        isUnlocked
+                          ? `#${mon.id} ${mon.name} (${mon.rarity})`
+                          : `#${mon.id} Terkunci di dalam peti!`
+                      }
                     >
-                      <div className="relative h-10 w-10 rounded-xl overflow-hidden mb-1 flex items-center justify-center bg-slate-900/80">
+                      {/* Inventory Slot Inset Box */}
+                      <div
+                        className="relative h-11 w-11 rounded-lg overflow-hidden mb-1 flex items-center justify-center bg-[#0d0806] border border-[#3e2723] shadow-inner"
+                      >
                         {isUnlocked ? (
                           <img
                             src={mon.image}
                             alt={mon.name}
-                            className="h-full w-full object-contain p-0.5"
+                            className="h-full w-full object-contain p-0.5 transition-transform hover:scale-110"
                           />
                         ) : (
-                          <span className="text-xs opacity-40">🔒</span>
+                          <span className="text-xs opacity-50">🔒</span>
                         )}
                       </div>
 
-                      <span className="text-[8px] font-extrabold truncate w-full text-center text-slate-200">
+                      <span className="text-[8px] font-black truncate w-full text-center text-amber-100">
                         {isUnlocked ? mon.name.split(".")[0] : `???`}
                       </span>
+
                       <span
                         className="text-[7px] font-black uppercase px-1 rounded mt-0.5"
                         style={{
-                          color: isUnlocked ? mon.themeColor : "#64748b",
+                          color: isUnlocked ? mon.themeColor : "#795548",
                         }}
                       >
                         {isUnlocked ? mon.rarity : `#${mon.id}`}
@@ -1203,9 +1261,11 @@ const TechmonGacha = () => {
                 })}
               </div>
 
+              {/* Master Chest Unlocked Banner */}
               {progressPercent === 100 && (
-                <div className="rounded-2xl border border-cyan-400/50 bg-cyan-950/60 p-3 mt-4 text-center text-xs font-black text-cyan-300 flex items-center justify-center gap-1.5 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
-                  <FiCheckCircle className="text-base text-emerald-400" /> Selamat! Kamu adalah POKÉTECH MASTER! Berhasil mengoleksi seluruh 100 Kartu! 🏆🎉
+                <div className="relative z-10 rounded-2xl border-2 border-amber-400 bg-gradient-to-r from-amber-600/80 to-yellow-600/80 p-3 mt-4 text-center text-xs font-black text-amber-100 flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(251,191,36,0.5)]">
+                  <FiCheckCircle className="text-base text-emerald-300" />
+                  🏆 PETI TERBUKA SEMPURNA! Selamat, kamu telah mengoleksi seluruh 100 Kartu PokéTech!
                 </div>
               )}
             </div>
