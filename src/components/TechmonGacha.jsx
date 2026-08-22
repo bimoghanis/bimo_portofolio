@@ -20,8 +20,8 @@ const getElementEnergy = (element) => {
   if (el.includes("electric")) return { icon: "⚡", bg: "#eab308", color: "#713f12", name: "Lightning" };
   if (el.includes("fire")) return { icon: "🔥", bg: "#f97316", color: "#7c2d12", name: "Fire" };
   if (el.includes("water")) return { icon: "💧", bg: "#0284c7", color: "#082f49", name: "Water" };
-  if (el.includes("grass")) return { icon: "🌿", bg: "#16a34a", color: "#14532d", name: "Grass" };
-  if (el.includes("psychic")) return { icon: "🔮", bg: "#9333ea", color: "#3b0764", name: "Psychic" };
+  if (el.includes("grass") || el.includes("bug")) return { icon: "🌿", bg: "#16a34a", color: "#14532d", name: "Grass" };
+  if (el.includes("psychic") || el.includes("ghost")) return { icon: "🔮", bg: "#9333ea", color: "#3b0764", name: "Psychic" };
   if (el.includes("steel")) return { icon: "⚙️", bg: "#64748b", color: "#0f172a", name: "Metal" };
   if (el.includes("dragon")) return { icon: "🐉", bg: "#4f46e5", color: "#1e1b4b", name: "Dragon" };
   if (el.includes("dark") || el.includes("shadow")) return { icon: "🌑", bg: "#334155", color: "#020617", name: "Darkness" };
@@ -29,6 +29,61 @@ const getElementEnergy = (element) => {
   if (el.includes("ground") || el.includes("rock")) return { icon: "🪨", bg: "#b45309", color: "#451a03", name: "Fighting" };
   if (el.includes("fairy")) return { icon: "✨", bg: "#ec4899", color: "#831843", name: "Fairy" };
   return { icon: "⭐", bg: "#94a3b8", color: "#1e293b", name: "Colorless" };
+};
+
+// Dynamic Weakness, Resistance & Retreat Calculator per Element
+const getElementalBattleStats = (element, rarity) => {
+  const el = element.toLowerCase();
+  let weakness = { icon: "🔥", mult: "x2" };
+  let resistance = { icon: "⚡", val: "-30" };
+  let retreat = "⭐⭐";
+
+  if (el.includes("fire")) {
+    weakness = { icon: "💧", mult: "x2" };
+    resistance = { icon: "🌿", val: "-30" };
+    retreat = "⭐⭐";
+  } else if (el.includes("water")) {
+    weakness = { icon: "⚡", mult: "x2" };
+    resistance = { icon: "🔥", val: "-30" };
+    retreat = "⭐⭐";
+  } else if (el.includes("ice")) {
+    weakness = { icon: "🔥", mult: "x2" };
+    resistance = { icon: "💧", val: "-30" };
+    retreat = "⭐";
+  } else if (el.includes("electric")) {
+    weakness = { icon: "🪨", mult: "x2" };
+    resistance = { icon: "⚙️", val: "-30" };
+    retreat = "⭐";
+  } else if (el.includes("grass") || el.includes("bug")) {
+    weakness = { icon: "🔥", mult: "x2" };
+    resistance = { icon: "💧", val: "-30" };
+    retreat = "⭐";
+  } else if (el.includes("psychic") || el.includes("ghost") || el.includes("fairy")) {
+    weakness = { icon: "🌑", mult: "x2" };
+    resistance = { icon: "🪨", val: "-30" };
+    retreat = "⭐";
+  } else if (el.includes("dragon")) {
+    weakness = { icon: "✨", mult: "x2" };
+    resistance = { icon: "🌿", val: "-30" };
+    retreat = "⭐⭐⭐";
+  } else if (el.includes("steel")) {
+    weakness = { icon: "🔥", mult: "x2" };
+    resistance = { icon: "🔮", val: "-30" };
+    retreat = "⭐⭐⭐";
+  } else if (el.includes("dark")) {
+    weakness = { icon: "🪨", mult: "x2" };
+    resistance = { icon: "🔮", val: "-30" };
+    retreat = "⭐⭐";
+  } else if (el.includes("ground") || el.includes("rock")) {
+    weakness = { icon: "🌿", mult: "x2" };
+    resistance = { icon: "⚡", val: "-30" };
+    retreat = "⭐⭐⭐";
+  }
+
+  if (rarity === "UR") retreat = "⭐⭐⭐";
+  if (rarity === "Common") retreat = "⭐";
+
+  return { weakness, resistance, retreat };
 };
 
 // Authentic Parody Pokémon Card Back Component
@@ -110,7 +165,6 @@ const PokemonCardBack = () => {
               background: "radial-gradient(circle at 35% 35%, #ff6b6b 0%, #dc2626 70%, #991b1b 100%)",
             }}
           >
-            {/* Glossy Curved Highlight */}
             <div className="absolute top-1 left-3 h-4 w-10 rounded-full bg-white/50 blur-[1px] rotate-[-20deg]" />
           </div>
 
@@ -159,8 +213,8 @@ const PokemonCardBack = () => {
 // Authentic Pokémon TCG Card Front Component (EX / Full-Art / Foil style)
 const PokemonCardFront = ({ card, tilt }) => {
   const energy = getElementEnergy(card.element);
+  const battleStats = getElementalBattleStats(card.element, card.rarity);
 
-  // Border theme based on rarity
   const isMythic = card.rarity === "UR";
   const isSSR = card.rarity === "SSR";
 
@@ -232,7 +286,6 @@ const PokemonCardFront = ({ card, tilt }) => {
 
         {/* Artwork Display Box with 3D Shadow & Inner Bevel */}
         <div className="my-1.5 relative rounded-lg overflow-hidden border-2 border-amber-300/80 shadow-md bg-gradient-to-b from-slate-200 via-slate-100 to-slate-300 flex flex-col items-center justify-center h-40 sm:h-44">
-          {/* Subtle Ambient Radial Glow */}
           <div
             className="absolute inset-0 opacity-40 pointer-events-none"
             style={{
@@ -246,16 +299,15 @@ const PokemonCardFront = ({ card, tilt }) => {
             className="relative z-10 h-32 sm:h-36 w-auto object-contain drop-shadow-[0_8px_12px_rgba(0,0,0,0.35)] transition-transform hover:scale-105"
           />
 
-          {/* Bottom Caption Strip: HT / WT / Lore No */}
+          {/* Bottom Caption Strip */}
           <div className="absolute bottom-0 inset-x-0 bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-200 py-0.5 px-2 text-[8px] font-extrabold text-slate-700 flex items-center justify-between border-t border-amber-300/80 z-20">
             <span>NO. {String(card.id).padStart(3, "0")} {card.title}</span>
             <span>ATK: {card.atk}</span>
           </div>
         </div>
 
-        {/* Attacks & Jurus Section (Authentic Pokémon TCG Layout) */}
+        {/* Attacks & Jurus Section */}
         <div className="space-y-1.5 bg-slate-50/90 rounded-lg p-2 border border-slate-200 shadow-sm">
-          {/* Main Special Move */}
           <div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1">
@@ -285,7 +337,6 @@ const PokemonCardFront = ({ card, tilt }) => {
             </p>
           </div>
 
-          {/* Sound / Battle Cry Pill */}
           <div className="flex items-center justify-between pt-1 border-t border-slate-200/80 text-[9px]">
             <span className="font-bold text-slate-400">Battle Cry:</span>
             <span className="font-extrabold text-indigo-600 italic">
@@ -294,29 +345,35 @@ const PokemonCardFront = ({ card, tilt }) => {
           </div>
         </div>
 
-        {/* Bottom Bar: Weakness, Resistance, Retreat Cost */}
+        {/* Dynamic Weakness, Resistance & Retreat Cost */}
         <div className="grid grid-cols-3 gap-1 pt-1.5 border-t border-slate-300 text-[8px] font-bold text-slate-600 text-center">
           <div>
             <span className="block text-[7px] text-slate-400 uppercase">Weakness</span>
-            <span className="font-black text-rose-600">🔥 x2</span>
+            <span className="font-black text-rose-600">
+              {battleStats.weakness.icon} {battleStats.weakness.mult}
+            </span>
           </div>
           <div>
             <span className="block text-[7px] text-slate-400 uppercase">Resistance</span>
-            <span className="font-black text-emerald-600">⚡ -30</span>
+            <span className="font-black text-emerald-600">
+              {battleStats.resistance.icon} {battleStats.resistance.val}
+            </span>
           </div>
           <div>
             <span className="block text-[7px] text-slate-400 uppercase">Retreat</span>
-            <span className="font-black text-slate-700">⭐⭐</span>
+            <span className="font-black text-slate-700">
+              {battleStats.retreat}
+            </span>
           </div>
         </div>
 
-        {/* TCG Copyright & Artist Footer */}
+        {/* Clean Footer (No Copyright Name / No Illustrator Name) */}
         <div className="flex items-center justify-between text-[7px] font-semibold text-slate-400 pt-1 border-t border-slate-200">
-          <span>Illus. Bimo Ghanis</span>
-          <span className="font-bold text-slate-600">
+          <span className="font-bold text-slate-500">1st Edition • PROMO</span>
+          <span className="font-black text-slate-700">
             {String(card.id).padStart(3, "0")}/100 {card.stars}
           </span>
-          <span>© 2026 PokéTech TCG</span>
+          <span className="font-bold text-slate-500">VER: 2026.1</span>
         </div>
       </div>
     </div>
@@ -343,6 +400,7 @@ const TechmonGacha = () => {
   // 3D Card Interactive Tilt Physics
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const cardRef = useRef(null);
+  const touchStartRef = useRef({ x: 0, y: 0, time: 0 });
   const revealRef = useScrollReveal();
 
   const handleCardMouseMove = (e) => {
@@ -357,6 +415,37 @@ const TechmonGacha = () => {
   };
 
   const handleCardMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
+
+  // Touch Screen Handler for Mobile
+  const handleTouchStart = (e) => {
+    if (e.touches && e.touches[0]) {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+        time: Date.now(),
+      };
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (!cardRef.current || !e.touches || !e.touches[0]) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left - rect.width / 2;
+    const y = e.touches[0].clientY - rect.top - rect.height / 2;
+    setTilt({
+      x: -(y / (rect.height / 2)) * 12,
+      y: (x / (rect.width / 2)) * 12,
+    });
+  };
+
+  const handleTouchEnd = (e) => {
+    const elapsed = Date.now() - touchStartRef.current.time;
+    if (elapsed < 300) {
+      // Tap detected -> Toggle 3D Flip immediately
+      setIsFlipped((prev) => !prev);
+    }
     setTilt({ x: 0, y: 0 });
   };
 
@@ -444,14 +533,13 @@ const TechmonGacha = () => {
       newPulls.push(pullRandomCard());
     }
 
-    // Determine highest rarity in this pull
     const tierPriority = { UR: 5, SSR: 4, SR: 3, Rare: 2, Common: 1 };
     newPulls.sort((a, b) => tierPriority[b.rarity] - tierPriority[a.rarity]);
     const topCard = newPulls[0];
 
     setTimeout(() => {
       setActiveCard(topCard);
-      setIsFlipped(false); // Reset to front side on new pull
+      setIsFlipped(false);
       setPulledQueue(newPulls);
 
       setUnlockedIds((prev) => {
@@ -476,7 +564,7 @@ const TechmonGacha = () => {
   const handleResetCollection = () => {
     localStorage.removeItem("bimo_poketech_unlocked");
     localStorage.removeItem("bimo_poketech_pulls");
-    setUnlockedIds([11]); // Back to default Bitkachu starter
+    setUnlockedIds([11]);
     setActiveCard(POKETECHS[10]);
     setIsFlipped(false);
     setPulledQueue([]);
@@ -518,7 +606,7 @@ const TechmonGacha = () => {
         }}
       />
 
-      {/* Dynamic Element Radial Aura Glow (Synchronized with Active Card) */}
+      {/* Dynamic Element Radial Aura Glow */}
       <div
         className="absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full pointer-events-none blur-[140px] opacity-25 transition-all duration-700"
         style={{
@@ -543,7 +631,7 @@ const TechmonGacha = () => {
           </h2>
 
           <p className="mt-3 text-sm leading-relaxed text-slate-300 font-medium">
-            Gacha kartu resmi <strong>PokéTech EX & UR</strong>! Klik kartu untuk membalik sisi depan & belakang (<strong>3D Card Flip</strong>), dan kumpulkan seluruh 100 kartu di PokéDex Binder!
+            Gacha kartu resmi <strong>PokéTech EX & UR</strong>! Ketuk kartu untuk membalik sisi depan & belakang (<strong>3D Card Flip</strong>), dan kumpulkan seluruh 100 kartu di PokéDex Binder!
           </p>
         </div>
 
@@ -553,12 +641,15 @@ const TechmonGacha = () => {
           <div className="reveal flex flex-col items-center" data-delay="100">
             {/* Hologram Pedestal Stage Ring */}
             <div className="relative w-full max-w-[340px] flex flex-col items-center">
-              {/* 3D Perspective Card Box */}
+              {/* 3D Perspective Card Box with Touch Support */}
               <div
                 style={{ perspective: "1200px" }}
-                className="w-full max-w-[320px] sm:max-w-[340px] aspect-[2.5/3.5] relative z-20"
+                className="w-full max-w-[320px] sm:max-w-[340px] aspect-[2.5/3.5] relative z-20 touch-manipulation"
                 onMouseMove={handleCardMouseMove}
                 onMouseLeave={handleCardMouseLeave}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
               >
                 {/* 3D Flipping Container */}
                 <div
@@ -571,7 +662,7 @@ const TechmonGacha = () => {
                     transformStyle: "preserve-3d",
                     transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y + (isFlipped ? 180 : 0)}deg)`,
                   }}
-                  title="Klik untuk membalik kartu (3D Flip)"
+                  title="Ketuk atau klik untuk membalik kartu (3D Flip)"
                 >
                   {/* CARD FRONT */}
                   <div
@@ -613,9 +704,9 @@ const TechmonGacha = () => {
               <button
                 type="button"
                 onClick={() => setIsFlipped(!isFlipped)}
-                className="rounded-full border border-cyan-400/40 bg-slate-900/80 px-5 py-2.5 text-xs font-extrabold text-cyan-300 hover:text-white hover:bg-cyan-950/80 hover:border-cyan-400 hover:scale-105 active:scale-95 flex items-center gap-2 shadow-[0_0_15px_rgba(6,182,212,0.25)] transition-all backdrop-blur-md"
+                className="rounded-full border border-cyan-500/30 bg-slate-900/90 px-5 py-2.5 text-xs font-extrabold text-cyan-300 hover:text-white hover:bg-slate-800 hover:border-cyan-400 hover:scale-105 active:scale-95 flex items-center gap-2 shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all backdrop-blur-md"
               >
-                <FiRepeat className={isFlipped ? "rotate-180 transition-transform text-amber-400" : "transition-transform text-cyan-400"} />
+                <FiRepeat className={isFlipped ? "rotate-180 transition-transform text-cyan-400" : "transition-transform text-cyan-400"} />
                 {isFlipped ? "Lihat Sisi Depan Kartu" : "🔄 Balik Kartu (Lihat Sisi Belakang)"}
               </button>
             </div>
@@ -650,19 +741,19 @@ const TechmonGacha = () => {
           {/* Right: Gacha Booster Pack Controls + 100 PokéDex Album */}
           <div className="reveal space-y-6" data-delay="200">
             {/* Gacha Trigger Arena Box */}
-            <div className="rounded-3xl border border-slate-700/80 bg-slate-900/80 p-6 shadow-2xl backdrop-blur-xl">
+            <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-6 shadow-2xl backdrop-blur-xl">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h4 className="text-lg font-black text-white flex items-center gap-2">
-                    <FiStar className="text-amber-400" /> Buka Booster Pack TCG
+                    <FiStar className="text-cyan-400" /> Buka Booster Pack TCG
                   </h4>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    Gratis unli-pull • Buka pack & temukan kartu ✨ <strong className="text-amber-300">UR EX Foil</strong>!
+                    Gratis unli-pull • Buka pack & temukan kartu ✨ <strong className="text-cyan-300">UR EX Foil</strong>!
                   </p>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="rounded-full border border-cyan-500/30 bg-cyan-950/60 px-3.5 py-1 text-xs font-mono font-black text-cyan-300">
+                  <span className="rounded-full border border-slate-700 bg-slate-800 px-3.5 py-1 text-xs font-mono font-bold text-slate-300">
                     Pulls: {totalPulls}
                   </span>
 
@@ -703,35 +794,38 @@ const TechmonGacha = () => {
                 </div>
               )}
 
-              {/* Action Pull Buttons */}
+              {/* High-Tech Studio Trainer Buttons (Clean & Professional Gaming Theme) */}
               <div className="grid grid-cols-3 gap-2.5 sm:gap-3.5">
+                {/* 1x Pack */}
                 <button
                   type="button"
                   onClick={() => handleGacha(1)}
                   disabled={isOpening}
-                  className="flex items-center justify-center gap-1.5 py-3 text-xs sm:text-sm font-black rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:scale-102 active:scale-98 transition-all"
+                  className="flex items-center justify-center gap-1.5 py-3 text-xs sm:text-sm font-black rounded-2xl border border-blue-500/40 bg-slate-800/90 text-blue-300 hover:bg-blue-600 hover:text-white hover:border-blue-500 shadow-sm hover:scale-102 active:scale-98 transition-all"
                 >
-                  <FiZap className="text-yellow-300" />
+                  <FiZap className="text-blue-400" />
                   {isOpening ? "..." : "1x Pack"}
                 </button>
 
+                {/* 5x Packs */}
                 <button
                   type="button"
                   onClick={() => handleGacha(5)}
                   disabled={isOpening}
-                  className="flex items-center justify-center gap-1.5 py-3 text-xs sm:text-sm font-black rounded-2xl border border-amber-500/40 bg-slate-800/90 text-amber-300 hover:bg-slate-800 hover:border-amber-400 hover:scale-102 active:scale-98 transition-all"
+                  className="flex items-center justify-center gap-1.5 py-3 text-xs sm:text-sm font-black rounded-2xl border border-cyan-500/40 bg-slate-800/90 text-cyan-300 hover:bg-cyan-600 hover:text-white hover:border-cyan-500 shadow-sm hover:scale-102 active:scale-98 transition-all"
                 >
-                  <FiGift className="text-amber-400" />
-                  {isOpening ? "..." : "5x Packs 🎁"}
+                  <FiGift className="text-cyan-400" />
+                  {isOpening ? "..." : "5x Packs"}
                 </button>
 
+                {/* 10x Mega */}
                 <button
                   type="button"
                   onClick={() => handleGacha(10)}
                   disabled={isOpening}
-                  className="flex items-center justify-center gap-1.5 py-3 text-xs sm:text-sm font-black rounded-2xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-slate-950 shadow-[0_0_25px_rgba(245,158,11,0.5)] hover:scale-102 active:scale-98 transition-all"
+                  className="flex items-center justify-center gap-1.5 py-3 text-xs sm:text-sm font-black rounded-2xl border border-indigo-500/40 bg-slate-800/90 text-indigo-200 hover:bg-indigo-600 hover:text-white hover:border-indigo-500 shadow-sm hover:scale-102 active:scale-98 transition-all"
                 >
-                  <FiStar className="text-slate-950" />
+                  <FiStar className="text-indigo-400" />
                   {isOpening ? "..." : "10x Mega 🚀"}
                 </button>
               </div>
@@ -748,18 +842,18 @@ const TechmonGacha = () => {
             </div>
 
             {/* 100 PokéDex Collection Tracker Binder */}
-            <div className="rounded-3xl border border-slate-700/80 bg-slate-900/80 p-6 shadow-2xl backdrop-blur-xl">
+            <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-6 shadow-2xl backdrop-blur-xl">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
                 <div>
                   <h4 className="text-base font-black text-white flex items-center gap-2">
-                    <FiAward className="text-amber-400" /> PokéDex Binder ({POKETECHS.length} Cards)
+                    <FiAward className="text-cyan-400" /> PokéDex Binder ({POKETECHS.length} Cards)
                   </h4>
                   <p className="text-xs text-slate-400">
                     Terkumpul: <span className="font-bold text-cyan-300">{unlockedIds.length}</span> / {POKETECHS.length} Kartu
                   </p>
                 </div>
 
-                <span className="rounded-full border border-cyan-400/40 bg-cyan-950/70 px-3 py-1 text-xs font-bold text-cyan-300 self-start sm:self-auto">
+                <span className="rounded-full border border-cyan-400/30 bg-cyan-950/70 px-3 py-1 text-xs font-bold text-cyan-300 self-start sm:self-auto">
                   {progressPercent}% Complete
                 </span>
               </div>
@@ -767,7 +861,7 @@ const TechmonGacha = () => {
               {/* Progress Bar */}
               <div className="h-2.5 w-full bg-slate-950/80 overflow-hidden rounded-full mb-4 border border-slate-800">
                 <div
-                  className="h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 transition-all duration-500 rounded-full shadow-[0_0_10px_rgba(6,182,212,0.6)]"
+                  className="h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500 transition-all duration-500 rounded-full shadow-[0_0_10px_rgba(6,182,212,0.4)]"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
@@ -793,7 +887,7 @@ const TechmonGacha = () => {
                       onClick={() => setFilterRarity(tier)}
                       className={`rounded-lg px-2.5 py-1 text-[10px] font-bold transition-all ${
                         filterRarity === tier
-                          ? "bg-cyan-500 text-slate-950 font-black shadow-[0_0_10px_rgba(6,182,212,0.5)]"
+                          ? "bg-cyan-500 text-slate-950 font-black shadow-[0_0_10px_rgba(6,182,212,0.4)]"
                           : "bg-slate-800/80 text-slate-400 hover:text-white"
                       }`}
                     >
@@ -858,7 +952,7 @@ const TechmonGacha = () => {
               </div>
 
               {progressPercent === 100 && (
-                <div className="rounded-2xl border border-amber-400/50 bg-amber-950/60 p-3 mt-4 text-center text-xs font-black text-amber-300 flex items-center justify-center gap-1.5 shadow-[0_0_20px_rgba(245,158,11,0.4)]">
+                <div className="rounded-2xl border border-cyan-400/50 bg-cyan-950/60 p-3 mt-4 text-center text-xs font-black text-cyan-300 flex items-center justify-center gap-1.5 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
                   <FiCheckCircle className="text-base text-emerald-400" /> Selamat! Kamu adalah POKÉTECH MASTER! Berhasil mengoleksi seluruh 100 Kartu! 🏆🎉
                 </div>
               )}

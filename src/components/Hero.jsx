@@ -66,24 +66,39 @@ const Hero = () => {
   };
 
   // Direct Mouse / Touch Drag Handlers
+  const touchStartDataRef = useRef({ x: 0, y: 0, time: 0, moved: false });
+
   const handlePointerDown = (e) => {
     setAutoSpin(false);
     setIsDragging(true);
-    startXRef.current = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+    const clientX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+    const clientY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+    startXRef.current = clientX;
     currentRotRef.current = rotationY;
+    touchStartDataRef.current = { x: clientX, y: clientY, time: Date.now(), moved: false };
   };
 
   const handlePointerMove = (e) => {
     if (!isDragging) return;
-    const clientX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+    const clientX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
     const deltaX = clientX - startXRef.current;
-    let newRot = currentRotRef.current + deltaX * 0.7;
+    if (Math.abs(deltaX) > 5) {
+      touchStartDataRef.current.moved = true;
+    }
+    let newRot = currentRotRef.current + deltaX * 0.8;
     while (newRot > 180) newRot -= 360;
     while (newRot < -180) newRot += 360;
     setRotationY(newRot);
   };
 
   const handlePointerUp = () => {
+    if (isDragging) {
+      const elapsed = Date.now() - touchStartDataRef.current.time;
+      if (!touchStartDataRef.current.moved && elapsed < 300) {
+        // Quick tap on card -> toggle 3D Flip
+        setRotationY((prev) => (Math.abs(prev) > 90 ? 0 : 180));
+      }
+    }
     setIsDragging(false);
   };
 
@@ -234,7 +249,8 @@ const Hero = () => {
           <div className="reveal-right flex flex-col items-center lg:items-end select-none" data-delay="250">
             {/* 3D Perspective Scene */}
             <div
-              className="card-3d-scene w-full max-w-md cursor-grab active:cursor-grabbing"
+              className="card-3d-scene w-full max-w-md cursor-grab active:cursor-grabbing touch-pan-y select-none"
+              style={{ touchAction: "pan-y" }}
               onMouseDown={handlePointerDown}
               onMouseMove={handlePointerMove}
               onMouseUp={handlePointerUp}
@@ -242,7 +258,7 @@ const Hero = () => {
               onTouchStart={handlePointerDown}
               onTouchMove={handlePointerMove}
               onTouchEnd={handlePointerUp}
-              title="Drag directly on the card to rotate in 3D!"
+              title="Ketuk atau geser kartu untuk memutar secara 3D!"
             >
               <div
                 className="card-3d-wrapper"
