@@ -418,20 +418,22 @@ const TechmonGacha = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
-  // 3D Card Interactive Tilt Physics
+  // 3D Card Interactive Tilt Physics (Pokémon TCG Pocket Style Inspector)
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [isInteracting, setIsInteracting] = useState(false);
   const cardRef = useRef(null);
-  const touchStartRef = useRef({ x: 0, y: 0, time: 0 });
+  const touchStartRef = useRef({ x: 0, y: 0 });
   const revealRef = useScrollReveal();
 
+  // Desktop Mouse Move (Smooth Tilt Inspection)
   const handleCardMouseMove = (e) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
     setTilt({
-      x: -(y / (rect.height / 2)) * 14,
-      y: (x / (rect.width / 2)) * 14,
+      x: -(y / (rect.height / 2)) * 22,
+      y: (x / (rect.width / 2)) * 22,
     });
   };
 
@@ -439,13 +441,14 @@ const TechmonGacha = () => {
     setTilt({ x: 0, y: 0 });
   };
 
-  // Touch Screen Handler for Mobile
+  // Mobile Touch Drag Inspection (Smooth 1:1 TCG Pocket Feel)
   const handleTouchStart = (e) => {
-    if (e.touches && e.touches[0]) {
+    setIsInteracting(true);
+    if (e.touches && e.touches[0] && cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
       touchStartRef.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY,
-        time: Date.now(),
+        x: e.touches[0].clientX - rect.left - rect.width / 2,
+        y: e.touches[0].clientY - rect.top - rect.height / 2,
       };
     }
   };
@@ -455,18 +458,17 @@ const TechmonGacha = () => {
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.touches[0].clientX - rect.left - rect.width / 2;
     const y = e.touches[0].clientY - rect.top - rect.height / 2;
+    // Limit tilt angle up to ±22 degrees for comfy inspection
+    const clampedX = Math.max(-rect.height / 2, Math.min(rect.height / 2, y));
+    const clampedY = Math.max(-rect.width / 2, Math.min(rect.width / 2, x));
     setTilt({
-      x: -(y / (rect.height / 2)) * 12,
-      y: (x / (rect.width / 2)) * 12,
+      x: -(clampedX / (rect.height / 2)) * 22,
+      y: (clampedY / (rect.width / 2)) * 22,
     });
   };
 
-  const handleTouchEnd = (e) => {
-    const elapsed = Date.now() - touchStartRef.current.time;
-    if (elapsed < 300) {
-      // Tap detected -> Toggle 3D Flip immediately
-      setIsFlipped((prev) => !prev);
-    }
+  const handleTouchEnd = () => {
+    setIsInteracting(false);
     setTilt({ x: 0, y: 0 });
   };
 
@@ -672,18 +674,20 @@ const TechmonGacha = () => {
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
               >
-                {/* 3D Flipping Container */}
+                {/* 3D Flipping Container (Inspected in 3D, Flipped strictly by Button) */}
                 <div
                   ref={cardRef}
-                  onClick={() => setIsFlipped(!isFlipped)}
-                  className={`relative w-full h-full cursor-pointer transition-transform duration-500 ease-out select-none ${
+                  className={`relative w-full h-full cursor-grab active:cursor-grabbing select-none ${
                     isOpening ? "animate-pulse scale-95 blur-[2px]" : ""
                   }`}
                   style={{
                     transformStyle: "preserve-3d",
                     transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y + (isFlipped ? 180 : 0)}deg)`,
+                    transition: isInteracting
+                      ? "none"
+                      : "transform 0.45s cubic-bezier(0.34, 1.25, 0.64, 1)",
                   }}
-                  title="Ketuk atau klik untuk membalik kartu (3D Flip)"
+                  title="Geser atau arahkan kursor untuk memiringkan kartu 3D!"
                 >
                   {/* CARD FRONT */}
                   <div
@@ -720,15 +724,18 @@ const TechmonGacha = () => {
               />
             </div>
 
-            {/* Flip Card Action Button */}
+            {/* Flip Card Action Button (Dedicated Trigger) */}
             <div className="mt-4 flex items-center gap-3">
               <button
                 type="button"
-                onClick={() => setIsFlipped(!isFlipped)}
-                className="rounded-full border border-cyan-500/30 bg-slate-900/90 px-5 py-2.5 text-xs font-extrabold text-cyan-300 hover:text-white hover:bg-slate-800 hover:border-cyan-400 hover:scale-105 active:scale-95 flex items-center gap-2 shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all backdrop-blur-md"
+                onClick={() => {
+                  setIsFlipped(!isFlipped);
+                  setTilt({ x: 0, y: 0 });
+                }}
+                className="rounded-full border border-cyan-500/40 bg-slate-900/90 px-5 py-2.5 text-xs font-extrabold text-cyan-300 hover:text-white hover:bg-slate-800 hover:border-cyan-400 hover:scale-105 active:scale-95 flex items-center gap-2 shadow-[0_0_15px_rgba(6,182,212,0.2)] transition-all backdrop-blur-md"
               >
-                <FiRepeat className={isFlipped ? "rotate-180 transition-transform text-cyan-400" : "transition-transform text-cyan-400"} />
-                {isFlipped ? "Lihat Sisi Depan Kartu" : "🔄 Balik Kartu (Lihat Sisi Belakang)"}
+                <FiRepeat className={isFlipped ? "rotate-180 transition-transform text-amber-400" : "transition-transform text-cyan-400"} />
+                {isFlipped ? "🔄 Balik ke Sisi Depan" : "🔄 Balik Kartu (Lihat Sisi Belakang)"}
               </button>
             </div>
 
