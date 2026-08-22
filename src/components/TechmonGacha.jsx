@@ -1451,7 +1451,7 @@ const TechmonGacha = () => {
           <div className="reveal w-full" data-delay="200">
             {activeGameTab === "battle" && (
               <GymBattleArena
-                playerCard={activeCard}
+                unlockedIds={unlockedIds}
                 onWinReward={handleGymWin}
                 playSound={playArcadeSound}
               />
