@@ -3,6 +3,9 @@ import confetti from "canvas-confetti";
 import useScrollReveal from "../hooks/useScrollReveal";
 import { POKETECHS } from "../data/poketechs";
 import BitkachuImg from "../assets/pokemon/bitkachu.jpg";
+import GymBattleArena from "./GymBattleArena";
+import FusionLab from "./FusionLab";
+import AchievementBoard from "./AchievementBoard";
 import {
   FiZap,
   FiGift,
@@ -16,6 +19,8 @@ import {
   FiScissors,
   FiX,
   FiArrowRight,
+  FiShield,
+  FiSparkles,
 } from "react-icons/fi";
 
 // Element to Energy Icon mapping
@@ -259,15 +264,20 @@ const PokemonCardBack = () => {
   );
 };
 
-// Authentic Pokémon TCG Card Front Component
-const PokemonCardFront = ({ card, tilt = { x: 0, y: 0 } }) => {
+// Dynamic Pokémon Card Front Face (Ultra Holographic Foil System)
+const PokemonCardFront = ({ card, tilt = { x: 0, y: 0 }, isShiny = false }) => {
   const energy = getElementEnergy(card.element);
   const battleStats = getElementalBattleStats(card.element, card.rarity);
 
   const isMythic = card.rarity === "UR";
   const isSSR = card.rarity === "SSR";
 
-  const cardBorderGradient = isMythic
+  const effectiveHp = card.hp + (isShiny ? 40 : 0);
+  const effectiveAtk = card.atk + (isShiny ? 20 : 0);
+
+  const cardBorderGradient = isShiny
+    ? "linear-gradient(135deg, #ffd700 0%, #ff007f 25%, #8b5cf6 50%, #00ffff 75%, #ffd700 100%)"
+    : isMythic
     ? "linear-gradient(135deg, #ffd700 0%, #ec4899 25%, #8b5cf6 50%, #00ffff 75%, #ffd700 100%)"
     : isSSR
     ? "linear-gradient(135deg, #fef08a 0%, #f59e0b 35%, #fbbf24 70%, #d97706 100%)"
@@ -280,7 +290,9 @@ const PokemonCardFront = ({ card, tilt = { x: 0, y: 0 } }) => {
       className="relative w-full h-full rounded-2xl overflow-hidden p-2.5 sm:p-3 text-slate-900 select-none flex flex-col justify-between transition-all"
       style={{
         background: cardBorderGradient,
-        boxShadow: isMythic
+        boxShadow: isShiny
+          ? "0 0 60px rgba(251,191,36,0.9), 0 0 35px rgba(236,72,153,0.8), 0 25px 50px rgba(0,0,0,0.8)"
+          : isMythic
           ? "0 0 50px rgba(236,72,153,0.7), 0 0 30px rgba(6,182,212,0.6), 0 0 15px rgba(251,191,36,0.8), 0 25px 50px rgba(0,0,0,0.7)"
           : isSSR
           ? "0 0 45px rgba(245,158,11,0.65), 0 0 20px rgba(251,191,36,0.6), 0 25px 50px rgba(0,0,0,0.6)"
@@ -291,7 +303,7 @@ const PokemonCardFront = ({ card, tilt = { x: 0, y: 0 } }) => {
       <div
         className="absolute inset-0 pointer-events-none z-30 mix-blend-color-dodge transition-transform duration-75 ease-out"
         style={{
-          opacity: isMythic ? 0.7 : isSSR ? 0.55 : 0.4,
+          opacity: isShiny ? 0.85 : isMythic ? 0.7 : isSSR ? 0.55 : 0.4,
           background: `radial-gradient(circle at ${50 + (tilt.y || 0) * 3.5}% ${
             50 - (tilt.x || 0) * 3.5
           }%, rgba(255,255,255,0.95) 0%, rgba(255,215,0,0.6) 20%, rgba(236,72,153,0.45) 40%, rgba(6,182,212,0.35) 60%, transparent 80%)`,
@@ -323,13 +335,13 @@ const PokemonCardFront = ({ card, tilt = { x: 0, y: 0 } }) => {
           <div className="flex items-center gap-1.5">
             <span
               className="px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider text-white shadow-md"
-              style={{ background: card.badgeBg }}
+              style={{ background: isShiny ? "linear-gradient(90deg, #f59e0b, #ec4899)" : card.badgeBg }}
             >
-              {isMythic ? "✨ UR EX" : isSSR ? "🌟 SSR EX" : "BASIC"}
+              {isShiny ? "✨ SHINY EX" : isMythic ? "✨ UR EX" : isSSR ? "🌟 SSR EX" : "BASIC"}
             </span>
             <h3
               className="text-base sm:text-lg font-black tracking-tight text-slate-900 leading-none truncate max-w-[130px] sm:max-w-[170px]"
-              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+              style={{ fontFamily: "'Fredoka', sans-serif" }}
             >
               {card.name}
             </h3>
@@ -338,12 +350,11 @@ const PokemonCardFront = ({ card, tilt = { x: 0, y: 0 } }) => {
           <div className="flex items-center gap-1">
             <span className="text-[10px] font-bold text-slate-500">HP</span>
             <span className="text-sm sm:text-base font-black text-rose-600 font-mono leading-none">
-              {card.hp}
+              {effectiveHp}
             </span>
             <span
               className="h-5 w-5 rounded-full flex items-center justify-center text-[10px] text-white shadow-sm shrink-0"
               style={{ background: energy.bg }}
-              title={energy.name}
             >
               {energy.icon}
             </span>
@@ -807,6 +818,20 @@ const TechmonGacha = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
+  // 🎮 Game Features & Sub-Modes State
+  const [activeGameTab, setActiveGameTab] = useState("vault"); // 'vault' | 'battle' | 'fusion' | 'achievements'
+  const [stardust, setStardust] = useState(() => {
+    return parseInt(localStorage.getItem("bimo_poketech_stardust") || "35", 10);
+  });
+  const [shinyIds, setShinyIds] = useState(() => {
+    const saved = localStorage.getItem("bimo_poketech_shiny");
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [bossesDefeated, setBossesDefeated] = useState(() => {
+    const saved = localStorage.getItem("bimo_poketech_bosses");
+    return saved ? JSON.parse(saved) : [];
+  });
+
   // 🌟 Booster Pack Ceremony States
   const [packModalOpen, setPackModalOpen] = useState(false);
   const [packStage, setPackStage] = useState("sealed"); // 'sealed' | 'ripping' | 'revealed'
@@ -982,23 +1007,85 @@ const TechmonGacha = () => {
         return updated;
       });
 
+      // Award +5 Stardust per card pull!
+      setStardust((prev) => {
+        const updated = prev + currentPackPulls.length * 5;
+        localStorage.setItem("bimo_poketech_stardust", updated.toString());
+        return updated;
+      });
+
       triggerTierCelebration(topCard.rarity);
     }, 700);
+  };
+
+  // ⚔️ Gym Win Handler
+  const handleGymWin = (bossId) => {
+    setBossesDefeated((prev) => {
+      const updated = Array.from(new Set([...prev, bossId]));
+      localStorage.setItem("bimo_poketech_bosses", JSON.stringify(updated));
+      return updated;
+    });
+    setStardust((prev) => {
+      const updated = prev + 30;
+      localStorage.setItem("bimo_poketech_stardust", updated.toString());
+      return updated;
+    });
+
+    // Award 1x Free Gold Booster Pack!
+    setTimeout(() => {
+      startPackCeremony(1);
+    }, 1200);
+  };
+
+  // ✨ Shiny Fusion Handler
+  const handleShinyUpgrade = (cardId, cost) => {
+    setShinyIds((prev) => {
+      const updated = Array.from(new Set([...prev, cardId]));
+      localStorage.setItem("bimo_poketech_shiny", JSON.stringify(updated));
+      return updated;
+    });
+    setStardust((prev) => {
+      const updated = Math.max(0, prev - cost);
+      localStorage.setItem("bimo_poketech_stardust", updated.toString());
+      return updated;
+    });
   };
 
   // Reset Collection System
   const handleResetCollection = () => {
     localStorage.removeItem("bimo_poketech_unlocked");
     localStorage.removeItem("bimo_poketech_pulls");
+    localStorage.removeItem("bimo_poketech_stardust");
+    localStorage.removeItem("bimo_poketech_shiny");
+    localStorage.removeItem("bimo_poketech_bosses");
     setUnlockedIds([11]);
     setActiveCard(POKETECHS[10]);
     setIsFlipped(false);
     setPulledQueue([]);
     setTotalPulls(0);
+    setStardust(35);
+    setShinyIds([]);
+    setBossesDefeated([]);
     setShowResetConfirm(false);
   };
 
   const progressPercent = Math.round((unlockedIds.length / POKETECHS.length) * 100);
+
+  // Stats for Trainer Achievements
+  const achievementStats = useMemo(() => {
+    const hasUR = unlockedIds.some((id) => {
+      const c = POKETECHS.find((m) => m.id === id);
+      return c && c.rarity === "UR";
+    });
+
+    return {
+      totalPulls,
+      unlockedCount: unlockedIds.length,
+      hasUR,
+      bossesDefeated,
+      shinyCount: shinyIds.length,
+    };
+  }, [totalPulls, unlockedIds, bossesDefeated, shinyIds]);
 
   // Filter and Search Logic
   const filteredPokemons = useMemo(() => {
@@ -1073,7 +1160,80 @@ const TechmonGacha = () => {
           </p>
         </div>
 
-        {/* Main Gacha Battle Stage & Chest Vault */}
+        {/* 🎮 Arcade Game Mode Navigation Pill Bar */}
+        <div className="reveal flex flex-wrap items-center justify-center gap-2.5 mb-8" data-delay="50">
+          <button
+            type="button"
+            onClick={() => {
+              playArcadeSound("click");
+              setActiveGameTab("vault");
+            }}
+            className={`px-4 py-2.5 rounded-2xl font-black text-xs sm:text-sm flex items-center gap-2 border-2 transition-all shadow-md ${
+              activeGameTab === "vault"
+                ? "bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 border-amber-300 shadow-[0_0_20px_rgba(251,191,36,0.6)] scale-105"
+                : "bg-slate-900/90 text-slate-300 border-slate-800 hover:border-amber-400/50 hover:text-white"
+            }`}
+          >
+            <span>🧰</span>
+            <span>POKÉ-VAULT & GACHA</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              playArcadeSound("click");
+              setActiveGameTab("battle");
+            }}
+            className={`px-4 py-2.5 rounded-2xl font-black text-xs sm:text-sm flex items-center gap-2 border-2 transition-all shadow-md ${
+              activeGameTab === "battle"
+                ? "bg-gradient-to-r from-rose-500 to-orange-500 text-white border-rose-300 shadow-[0_0_20px_rgba(244,63,94,0.6)] scale-105 animate-pulse"
+                : "bg-slate-900/90 text-slate-300 border-slate-800 hover:border-rose-400/50 hover:text-white"
+            }`}
+          >
+            <span>⚔️</span>
+            <span>GYM BATTLE ARENA</span>
+            <span className="text-[9px] bg-rose-950 text-rose-300 px-1.5 py-0.5 rounded-full border border-rose-500/50 font-bold">
+              VS BOSS
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              playArcadeSound("click");
+              setActiveGameTab("fusion");
+            }}
+            className={`px-4 py-2.5 rounded-2xl font-black text-xs sm:text-sm flex items-center gap-2 border-2 transition-all shadow-md ${
+              activeGameTab === "fusion"
+                ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-indigo-300 shadow-[0_0_20px_rgba(99,102,241,0.6)] scale-105"
+                : "bg-slate-900/90 text-slate-300 border-slate-800 hover:border-indigo-400/50 hover:text-white"
+            }`}
+          >
+            <span>✨</span>
+            <span>SHINY FUSION LAB</span>
+            <span className="text-[9px] bg-amber-400 text-slate-950 px-1.5 py-0.5 rounded-full font-black">
+              ⭐ {stardust}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              playArcadeSound("click");
+              setActiveGameTab("achievements");
+            }}
+            className={`px-4 py-2.5 rounded-2xl font-black text-xs sm:text-sm flex items-center gap-2 border-2 transition-all shadow-md ${
+              activeGameTab === "achievements"
+                ? "bg-gradient-to-r from-sky-400 to-cyan-500 text-slate-950 border-sky-300 shadow-[0_0_20px_rgba(56,189,248,0.6)] scale-105"
+                : "bg-slate-900/90 text-slate-300 border-slate-800 hover:border-sky-400/50 hover:text-white"
+            }`}
+          >
+            <span>🏆</span>
+            <span>ACHIEVEMENTS</span>
+          </button>
+        </div>
+
+        {/* Main Gacha Battle Stage & Dynamic Arcade View */}
         <div className="grid gap-8 lg:grid-cols-[1fr_1.35fr] items-start max-w-6xl mx-auto">
           {/* Left Column: Active 3D Card Stage + Ergonomic Gacha Launchpad */}
           <div className="reveal flex flex-col items-center w-full max-w-[360px] sm:max-w-[400px] mx-auto" data-delay="100">
@@ -1110,7 +1270,11 @@ const TechmonGacha = () => {
                       WebkitBackfaceVisibility: "hidden",
                     }}
                   >
-                    <PokemonCardFront card={activeCard} tilt={tilt} />
+                    <PokemonCardFront
+                      card={activeCard}
+                      tilt={tilt}
+                      isShiny={shinyIds.includes(activeCard.id)}
+                    />
                   </div>
 
                   {/* CARD BACK */}
@@ -1284,188 +1448,216 @@ const TechmonGacha = () => {
             )}
           </div>
 
-          {/* Right Column: 🧰 CHEERFUL LOOT CHEST VAULT BINDER */}
+          {/* Right Column: Dynamic Arcade Screen (Vault / Battle / Fusion / Achievements) */}
           <div className="reveal w-full" data-delay="200">
-            {/* Playful Wooden Loot Chest Container */}
-            <div
-              className="relative rounded-3xl p-5 sm:p-7 shadow-2xl overflow-hidden border-4 border-[#5d4037]"
-              style={{
-                background: "linear-gradient(180deg, #3e2723 0%, #2b1b17 60%, #1a110d 100%)",
-                boxShadow: "inset 0 0 40px rgba(0,0,0,0.8), 0 20px 40px rgba(0,0,0,0.6)",
-              }}
-            >
-              {/* Wooden Plank Texture Lines */}
-              <div
-                className="absolute inset-0 pointer-events-none opacity-25"
-                style={{
-                  backgroundImage: "repeating-linear-gradient(0deg, #8d6e63, #8d6e63 2px, transparent 2px, transparent 32px)",
-                }}
+            {activeGameTab === "battle" && (
+              <GymBattleArena
+                playerCard={activeCard}
+                onWinReward={handleGymWin}
+                playSound={playArcadeSound}
               />
+            )}
 
-              {/* Gold & Iron Riveted Corner Brackets */}
-              <div className="absolute top-2 left-2 h-4 w-4 rounded-sm border-2 border-amber-400 bg-amber-600/80 shadow-inner" />
-              <div className="absolute top-2 right-2 h-4 w-4 rounded-sm border-2 border-amber-400 bg-amber-600/80 shadow-inner" />
-              <div className="absolute bottom-2 left-2 h-4 w-4 rounded-sm border-2 border-amber-400 bg-amber-600/80 shadow-inner" />
-              <div className="absolute bottom-2 right-2 h-4 w-4 rounded-sm border-2 border-amber-400 bg-amber-600/80 shadow-inner" />
+            {activeGameTab === "fusion" && (
+              <FusionLab
+                unlockedIds={unlockedIds}
+                shinyIds={shinyIds}
+                onUpgradeToShiny={handleShinyUpgrade}
+                stardust={stardust}
+                playSound={playArcadeSound}
+              />
+            )}
 
-              {/* Header: Chest Name + Golden Clasp */}
-              <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 border-b-2 border-[#5d4037] pb-4">
-                <div className="flex items-center gap-3">
-                  {/* Glowing 3D Golden Chest Icon */}
-                  <div className="h-12 w-12 rounded-2xl border-2 border-amber-400 bg-gradient-to-b from-amber-500 to-yellow-600 flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(251,191,36,0.5)] shrink-0">
-                    🧰
-                  </div>
+            {activeGameTab === "achievements" && (
+              <AchievementBoard stats={achievementStats} />
+            )}
 
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3
-                        className="text-lg sm:text-xl font-black text-amber-300 tracking-wide uppercase"
-                        style={{ fontFamily: "'Fredoka', sans-serif" }}
-                      >
-                        POKÉ-VAULT CHEST
-                      </h3>
-                      <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-emerald-700/90 text-emerald-200 border border-emerald-400 shadow-sm">
-                        INV: {unlockedIds.length}/100
-                      </span>
+            {activeGameTab === "vault" && (
+              /* Playful Wooden Loot Chest Container */
+              <div
+                className="relative rounded-3xl p-5 sm:p-7 shadow-2xl overflow-hidden border-4 border-[#5d4037]"
+                style={{
+                  background: "linear-gradient(180deg, #3e2723 0%, #2b1b17 60%, #1a110d 100%)",
+                  boxShadow: "inset 0 0 40px rgba(0,0,0,0.8), 0 20px 40px rgba(0,0,0,0.6)",
+                }}
+              >
+                {/* Wooden Plank Texture Lines */}
+                <div
+                  className="absolute inset-0 pointer-events-none opacity-25"
+                  style={{
+                    backgroundImage: "repeating-linear-gradient(0deg, #8d6e63, #8d6e63 2px, transparent 2px, transparent 32px)",
+                  }}
+                />
+
+                {/* Gold & Iron Riveted Corner Brackets */}
+                <div className="absolute top-2 left-2 h-4 w-4 rounded-sm border-2 border-amber-400 bg-amber-600/80 shadow-inner" />
+                <div className="absolute top-2 right-2 h-4 w-4 rounded-sm border-2 border-amber-400 bg-amber-600/80 shadow-inner" />
+                <div className="absolute bottom-2 left-2 h-4 w-4 rounded-sm border-2 border-amber-400 bg-amber-600/80 shadow-inner" />
+                <div className="absolute bottom-2 right-2 h-4 w-4 rounded-sm border-2 border-amber-400 bg-amber-600/80 shadow-inner" />
+
+                {/* Header: Chest Name + Golden Clasp */}
+                <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 border-b-2 border-[#5d4037] pb-4">
+                  <div className="flex items-center gap-3">
+                    {/* Glowing 3D Golden Chest Icon */}
+                    <div className="h-12 w-12 rounded-2xl border-2 border-amber-400 bg-gradient-to-b from-amber-500 to-yellow-600 flex items-center justify-center text-2xl shadow-[0_0_15px_rgba(251,191,36,0.5)] shrink-0">
+                      🧰
                     </div>
-                    <p className="text-xs text-amber-200/80 font-semibold mt-0.5">
-                      Peti Album Koleksi Kartu PokéTech 🎴✨
-                    </p>
+
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3
+                          className="text-lg sm:text-xl font-black text-amber-300 tracking-wide uppercase"
+                          style={{ fontFamily: "'Fredoka', sans-serif" }}
+                        >
+                          POKÉ-VAULT CHEST
+                        </h3>
+                        <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-emerald-700/90 text-emerald-200 border border-emerald-400 shadow-sm">
+                          INV: {unlockedIds.length}/100
+                        </span>
+                      </div>
+                      <p className="text-xs text-amber-200/80 font-semibold mt-0.5">
+                        Peti Album Koleksi Kartu PokéTech 🎴✨
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Level / XP Progress Badge */}
+                  <div className="flex items-center gap-2 self-start sm:self-auto bg-[#1a110d] px-3.5 py-1.5 rounded-xl border border-amber-500/40 shadow-inner">
+                    <span className="text-xs font-black text-emerald-400 font-mono">
+                      LVL {unlockedIds.length}
+                    </span>
+                    <span className="text-[11px] font-bold text-amber-300">
+                      {progressPercent}% Complete
+                    </span>
                   </div>
                 </div>
 
-                {/* Level / XP Progress Badge */}
-                <div className="flex items-center gap-2 self-start sm:self-auto bg-[#1a110d] px-3.5 py-1.5 rounded-xl border border-amber-500/40 shadow-inner">
-                  <span className="text-xs font-black text-emerald-400 font-mono">
-                    LVL {unlockedIds.length}
-                  </span>
-                  <span className="text-[11px] font-bold text-amber-300">
-                    {progressPercent}% Complete
-                  </span>
-                </div>
-              </div>
-
-              {/* Minecraft Style Green Pixel XP Progress Bar */}
-              <div className="relative z-10 mb-5">
-                <div className="h-3.5 w-full bg-[#1a110d] rounded-md overflow-hidden border-2 border-[#5d4037] p-0.5 shadow-inner">
-                  <div
-                    className="h-full bg-gradient-to-r from-emerald-500 via-green-400 to-lime-400 transition-all duration-500 rounded-sm shadow-[0_0_10px_#4ade80]"
-                    style={{ width: `${progressPercent}%` }}
-                  />
-                </div>
-              </div>
-
-              {/* Search Bar + Minecraft Inventory Category Gem Tabs */}
-              <div className="relative z-10 flex flex-col sm:flex-row gap-2.5 mb-4">
-                {/* Search Box */}
-                <div className="relative flex-1 flex items-center bg-[#1a110d]/90 border-2 border-[#5d4037] rounded-xl px-3 py-2 shadow-inner">
-                  <FiSearch className="text-amber-400 text-xs mr-2" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Cari kartu dalam peti..."
-                    className="w-full bg-transparent text-xs font-bold text-amber-100 outline-none placeholder:text-amber-300/40"
-                  />
+                {/* Green Pixel XP Progress Bar */}
+                <div className="relative z-10 mb-5">
+                  <div className="h-3.5 w-full bg-[#1a110d] rounded-md overflow-hidden border-2 border-[#5d4037] p-0.5 shadow-inner">
+                    <div
+                      className="h-full bg-gradient-to-r from-emerald-500 via-green-400 to-lime-400 transition-all duration-500 rounded-sm shadow-[0_0_10px_#4ade80]"
+                      style={{ width: `${progressPercent}%` }}
+                    />
+                  </div>
                 </div>
 
-                {/* RPG Gem Rarity Filter Pills */}
-                <div className="flex flex-wrap gap-1 text-xs">
-                  {[
-                    { tier: "ALL", label: "💎 Semua" },
-                    { tier: "UR", label: "✨ UR" },
-                    { tier: "SSR", label: "🟡 SSR" },
-                    { tier: "SR", label: "🟣 SR" },
-                    { tier: "Rare", label: "🔵 Rare" },
-                    { tier: "Common", label: "⚪ Com" },
-                  ].map(({ tier, label }) => (
-                    <button
-                      key={tier}
-                      type="button"
-                      onClick={() => setFilterRarity(tier)}
-                      className={`rounded-xl px-2.5 py-1 text-[11px] font-black border transition-all ${
-                        filterRarity === tier
-                          ? "bg-amber-400 text-[#1a110d] border-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.6)] scale-105"
-                          : "bg-[#1a110d]/80 text-amber-200/70 border-[#5d4037] hover:border-amber-400/60 hover:text-white"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+                {/* Search Bar + RPG Gem Rarity Filter Pills */}
+                <div className="relative z-10 flex flex-col sm:flex-row gap-2.5 mb-4">
+                  {/* Search Box */}
+                  <div className="relative flex-1 flex items-center bg-[#1a110d]/90 border-2 border-[#5d4037] rounded-xl px-3 py-2 shadow-inner">
+                    <FiSearch className="text-amber-400 text-xs mr-2" />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Cari kartu dalam peti..."
+                      className="w-full bg-transparent text-xs font-bold text-amber-100 outline-none placeholder:text-amber-300/40"
+                    />
+                  </div>
 
-              {/* 100-Slot Minecraft Item Inventory Grid */}
-              <div className="relative z-10 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 max-h-[380px] overflow-y-auto pr-1">
-                {filteredPokemons.map((mon) => {
-                  const isUnlocked = unlockedIds.includes(mon.id);
-                  const isSelected = activeCard.id === mon.id;
-
-                  return (
-                    <button
-                      key={mon.id}
-                      type="button"
-                      onClick={() => {
-                        if (isUnlocked) {
-                          setActiveCard(mon);
-                          setIsFlipped(false);
-                        }
-                      }}
-                      disabled={!isUnlocked}
-                      className={`p-1 rounded-xl flex flex-col items-center justify-center transition-all border-2 relative ${
-                        isUnlocked
-                          ? isSelected
-                            ? "bg-amber-400/20 border-amber-300 scale-105 shadow-[0_0_15px_rgba(251,191,36,0.5)] z-20"
-                            : "bg-[#1a110d]/90 border-[#5d4037] hover:border-amber-400 hover:scale-105 cursor-pointer shadow-md"
-                          : "opacity-35 cursor-not-allowed bg-[#140c09] border-[#3e2723]"
-                      }`}
-                      title={
-                        isUnlocked
-                          ? `#${mon.id} ${mon.name} (${mon.rarity})`
-                          : `#${mon.id} Terkunci di dalam peti!`
-                      }
-                    >
-                      {/* Inventory Slot Inset Box */}
-                      <div
-                        className="relative h-11 w-11 rounded-lg overflow-hidden mb-1 flex items-center justify-center bg-[#0d0806] border border-[#3e2723] shadow-inner"
+                  {/* RPG Gem Rarity Filter Pills */}
+                  <div className="flex flex-wrap gap-1 text-xs">
+                    {[
+                      { tier: "ALL", label: "💎 Semua" },
+                      { tier: "UR", label: "✨ UR" },
+                      { tier: "SSR", label: "🟡 SSR" },
+                      { tier: "SR", label: "🟣 SR" },
+                      { tier: "Rare", label: "🔵 Rare" },
+                      { tier: "Common", label: "⚪ Com" },
+                    ].map(({ tier, label }) => (
+                      <button
+                        key={tier}
+                        type="button"
+                        onClick={() => setFilterRarity(tier)}
+                        className={`rounded-xl px-2.5 py-1 text-[11px] font-black border transition-all ${
+                          filterRarity === tier
+                            ? "bg-amber-400 text-[#1a110d] border-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.6)] scale-105"
+                            : "bg-[#1a110d]/80 text-amber-200/70 border-[#5d4037] hover:border-amber-400/60 hover:text-white"
+                        }`}
                       >
-                        {isUnlocked ? (
-                          <img
-                            src={mon.image}
-                            alt={mon.name}
-                            className="h-full w-full object-contain p-0.5 transition-transform hover:scale-110"
-                          />
-                        ) : (
-                          <span className="text-xs opacity-50">🔒</span>
-                        )}
-                      </div>
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-                      <span className="text-[8px] font-black truncate w-full text-center text-amber-100">
-                        {isUnlocked ? mon.name.split(".")[0] : `???`}
-                      </span>
+                {/* 100-Slot Item Inventory Grid */}
+                <div className="relative z-10 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 max-h-[380px] overflow-y-auto pr-1">
+                  {filteredPokemons.map((mon) => {
+                    const isUnlocked = unlockedIds.includes(mon.id);
+                    const isSelected = activeCard.id === mon.id;
+                    const isShiny = shinyIds.includes(mon.id);
 
-                      <span
-                        className="text-[7px] font-black uppercase px-1 rounded mt-0.5"
-                        style={{
-                          color: isUnlocked ? mon.themeColor : "#795548",
+                    return (
+                      <button
+                        key={mon.id}
+                        type="button"
+                        onClick={() => {
+                          if (isUnlocked) {
+                            setActiveCard(mon);
+                            setIsFlipped(false);
+                          }
                         }}
+                        disabled={!isUnlocked}
+                        className={`p-1 rounded-xl flex flex-col items-center justify-center transition-all border-2 relative ${
+                          isUnlocked
+                            ? isSelected
+                              ? "bg-amber-400/20 border-amber-300 scale-105 shadow-[0_0_15px_rgba(251,191,36,0.5)] z-20"
+                              : "bg-[#1a110d]/90 border-[#5d4037] hover:border-amber-400 hover:scale-105 cursor-pointer shadow-md"
+                            : "opacity-35 cursor-not-allowed bg-[#140c09] border-[#3e2723]"
+                        }`}
+                        title={
+                          isUnlocked
+                            ? `#${mon.id} ${mon.name} (${mon.rarity})${isShiny ? " ✨ SHINY" : ""}`
+                            : `#${mon.id} Terkunci di dalam peti!`
+                        }
                       >
-                        {isUnlocked ? mon.rarity : `#${mon.id}`}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
+                        {/* Inventory Slot Inset Box */}
+                        <div
+                          className="relative h-11 w-11 rounded-lg overflow-hidden mb-1 flex items-center justify-center bg-[#0d0806] border border-[#3e2723] shadow-inner"
+                        >
+                          {isUnlocked ? (
+                            <img
+                              src={mon.image}
+                              alt={mon.name}
+                              className="h-full w-full object-contain p-0.5 transition-transform hover:scale-110"
+                            />
+                          ) : (
+                            <span className="text-xs opacity-50">🔒</span>
+                          )}
 
-              {/* Master Chest Unlocked Banner */}
-              {progressPercent === 100 && (
-                <div className="relative z-10 rounded-2xl border-2 border-amber-400 bg-gradient-to-r from-amber-600/80 to-yellow-600/80 p-3 mt-4 text-center text-xs font-black text-amber-100 flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(251,191,36,0.5)]">
-                  <FiCheckCircle className="text-base text-emerald-300" />
-                  🏆 PETI TERBUKA SEMPURNA! Selamat, kamu telah mengoleksi seluruh 100 Kartu PokéTech!
+                          {isShiny && (
+                            <span className="absolute top-0 right-0 text-[9px] animate-pulse">✨</span>
+                          )}
+                        </div>
+
+                        <span className="text-[8px] font-black truncate w-full text-center text-amber-100">
+                          {isUnlocked ? (isShiny ? "✨" : "") + mon.name.split(".")[0] : `???`}
+                        </span>
+
+                        <span
+                          className="text-[7px] font-black uppercase px-1 rounded mt-0.5"
+                          style={{
+                            color: isUnlocked ? mon.themeColor : "#795548",
+                          }}
+                        >
+                          {isUnlocked ? (isShiny ? "SHINY" : mon.rarity) : `#${mon.id}`}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
-              )}
-            </div>
-          </div>
+
+                {/* Master Chest Unlocked Banner */}
+                {progressPercent === 100 && (
+                  <div className="relative z-10 rounded-2xl border-2 border-amber-400 bg-gradient-to-r from-amber-600/80 to-yellow-600/80 p-3 mt-4 text-center text-xs font-black text-amber-100 flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(251,191,36,0.5)]">
+                    <FiCheckCircle className="text-base text-emerald-300" />
+                    🏆 PETI TERBUKA SEMPURNA! Selamat, kamu telah mengoleksi seluruh 100 Kartu PokéTech!
+                  </div>
+                )}
+              </div>
+            )}
         </div>
       </div>
     </section>
