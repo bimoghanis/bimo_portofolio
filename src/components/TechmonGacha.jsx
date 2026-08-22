@@ -402,49 +402,102 @@ const BoosterPackModal = ({
   onClose,
   onSelectCard,
 }) => {
+  const [modalCard, setModalCard] = useState(null);
+  const [isModalFlipped, setIsModalFlipped] = useState(false);
+  const [modalTilt, setModalTilt] = useState({ x: 0, y: 0 });
+  const [isModalInteracting, setIsModalInteracting] = useState(false);
+  const modalSceneRef = useRef(null);
+
+  // Sync active card with first pull whenever new pulls arrive
+  React.useEffect(() => {
+    if (pulls && pulls.length > 0) {
+      setModalCard(pulls[0]);
+      setIsModalFlipped(false);
+      setModalTilt({ x: 0, y: 0 });
+    }
+  }, [pulls]);
+
   if (!isOpen) return null;
 
-  const topCard = pulls[0] || POKETECHS[10];
+  const currentCard = modalCard || pulls[0] || POKETECHS[10];
+
+  // 3D Card Interactive Tilt in Modal
+  const handleModalMouseMove = (e) => {
+    if (!modalSceneRef.current) return;
+    const rect = modalSceneRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    setModalTilt({
+      x: -(y / (rect.height / 2)) * 22,
+      y: (x / (rect.width / 2)) * 22,
+    });
+  };
+
+  const handleModalMouseLeave = () => setModalTilt({ x: 0, y: 0 });
+
+  const handleModalTouchStart = () => setIsModalInteracting(true);
+
+  const handleModalTouchMove = (e) => {
+    if (!modalSceneRef.current || !e.touches || !e.touches[0]) return;
+    const rect = modalSceneRef.current.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left - rect.width / 2;
+    const y = e.touches[0].clientY - rect.top - rect.height / 2;
+    const clampedX = Math.max(-rect.height / 2, Math.min(rect.height / 2, y));
+    const clampedY = Math.max(-rect.width / 2, Math.min(rect.width / 2, x));
+    setModalTilt({
+      x: -(clampedX / (rect.height / 2)) * 22,
+      y: (clampedY / (rect.width / 2)) * 22,
+    });
+  };
+
+  const handleModalTouchEnd = () => {
+    setIsModalInteracting(false);
+    setModalTilt({ x: 0, y: 0 });
+  };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-xl animate-fade-in select-none">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl animate-fade-in select-none">
       {/* Stadium Cosmic Background Lights */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[500px] rounded-full bg-cyan-500/20 blur-[130px]" />
-        <div className="absolute -bottom-32 left-1/2 -translate-x-1/2 w-[600px] h-[500px] rounded-full bg-amber-500/20 blur-[130px]" />
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[500px] rounded-full bg-cyan-500/25 blur-[140px]" />
+        <div className="absolute -bottom-32 left-1/2 -translate-x-1/2 w-[600px] h-[500px] rounded-full bg-amber-500/25 blur-[140px]" />
       </div>
 
       {/* Close / Skip Button */}
       <button
         type="button"
         onClick={onClose}
-        className="absolute top-6 right-6 z-50 h-10 w-10 rounded-full border border-slate-700 bg-slate-900/90 text-slate-300 hover:text-white hover:border-slate-500 flex items-center justify-center transition-all"
-        title="Tutup / Lewati"
+        className="absolute top-6 right-6 z-50 h-11 w-11 rounded-full border border-slate-700 bg-slate-900/90 text-slate-300 hover:text-white hover:border-slate-500 flex items-center justify-center transition-all shadow-xl hover:scale-105"
+        title="Tutup / Simpan ke Binder"
       >
-        <FiX className="text-lg" />
+        <FiX className="text-xl" />
       </button>
 
       {/* Main Ceremony Container */}
       <div className="relative z-10 flex flex-col items-center max-w-lg w-full">
         {stage !== "revealed" ? (
-          /* ─── STAGE 1: FOIL BOOSTER PACK WITH RIP ANIMATION ─── */
+          /* ─── STAGE 1: FOIL BOOSTER PACK WITH THRILLING RIP ANIMATION ─── */
           <div className="flex flex-col items-center">
-            <p className="text-xs uppercase tracking-[0.3em] font-black text-cyan-400 mb-4 animate-pulse">
-              {stage === "sealed" ? "✨ SENTUH / KLIK UNTUK SOBEK PACK! ✨" : "⚡ MEMBUKA BOOSTER PACK..."}
-            </p>
+            {/* Header Call to Action */}
+            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-400/40 text-xs font-black text-cyan-300 mb-5 shadow-[0_0_20px_rgba(6,182,212,0.4)] animate-bounce">
+              <FiScissors className="text-amber-400 text-sm" />
+              <span>{stage === "sealed" ? "SENTUH / KLIK UNTUK BREWEK PACK! ✂️" : "⚡ MEMBUKA FOIL BOOSTER..."}</span>
+            </div>
 
             {/* 3D Foil Booster Pack */}
             <div
               onClick={stage === "sealed" ? onRip : undefined}
               className={`relative w-72 h-[420px] rounded-2xl cursor-pointer transition-all duration-300 group ${
-                stage === "sealed" ? "hover:scale-105 active:scale-95 shadow-[0_0_50px_rgba(6,182,212,0.4)]" : ""
+                stage === "sealed"
+                  ? "hover:scale-105 active:scale-95 shadow-[0_0_60px_rgba(6,182,212,0.5)]"
+                  : "animate-pulse"
               }`}
             >
-              {/* TOP FOIL STRIP (Brewek / Rips off) */}
+              {/* TOP FOIL STRIP (Brewek / Rips off diagonally) */}
               <div
                 className={`relative w-full h-16 rounded-t-2xl z-30 overflow-hidden border-t-2 border-x-2 border-amber-300/80 transition-all duration-700 ${
                   stage === "ripping"
-                    ? "-translate-y-24 -rotate-12 opacity-0 pointer-events-none"
+                    ? "-translate-y-28 -rotate-15 opacity-0 pointer-events-none"
                     : "shadow-md"
                 }`}
                 style={{
@@ -470,10 +523,10 @@ const BoosterPackModal = ({
                 </div>
               </div>
 
-              {/* Laser Cut Glow Line */}
+              {/* Laser Cut Glow Line with Sparkles */}
               <div
-                className={`w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent transition-opacity duration-300 ${
-                  stage === "ripping" ? "opacity-100 shadow-[0_0_20px_#22d3ee]" : "opacity-40"
+                className={`w-full h-1.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent transition-opacity duration-300 ${
+                  stage === "ripping" ? "opacity-100 shadow-[0_0_25px_#22d3ee]" : "opacity-50"
                 }`}
               />
 
@@ -487,10 +540,10 @@ const BoosterPackModal = ({
               >
                 {/* Prismatic Sheen on Foil */}
                 <div
-                  className="absolute inset-0 opacity-30 mix-blend-color-dodge pointer-events-none"
+                  className="absolute inset-0 opacity-35 mix-blend-color-dodge pointer-events-none"
                   style={{
                     background:
-                      "linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.8) 40%, rgba(236,72,153,0.5) 50%, rgba(6,182,212,0.5) 60%, transparent 80%)",
+                      "linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.85) 40%, rgba(236,72,153,0.6) 50%, rgba(6,182,212,0.6) 60%, transparent 80%)",
                   }}
                 />
 
@@ -540,7 +593,10 @@ const BoosterPackModal = ({
               {/* Radiant Light Beam Burst when Ripping */}
               {stage === "ripping" && (
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40">
-                  <div className="w-40 h-[600px] bg-gradient-to-t from-transparent via-cyan-300 to-transparent blur-md animate-ping opacity-80" />
+                  <div className="w-48 h-[600px] bg-gradient-to-t from-transparent via-cyan-300 to-transparent blur-md animate-ping opacity-90" />
+                  <div className="absolute top-1/4 px-4 py-2 rounded-2xl bg-amber-400 text-slate-950 font-black text-lg shadow-[0_0_30px_#fbbf24] animate-bounce">
+                    ⚡ BREWEEKKK!! ✂️✨
+                  </div>
                 </div>
               )}
             </div>
@@ -550,44 +606,116 @@ const BoosterPackModal = ({
               <button
                 type="button"
                 onClick={onRip}
-                className="mt-6 flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-sm shadow-[0_0_25px_rgba(251,191,36,0.6)] hover:scale-105 active:scale-95 transition-all"
+                className="mt-6 flex items-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 font-black text-sm shadow-[0_0_30px_rgba(251,191,36,0.7)] hover:scale-105 active:scale-95 transition-all"
               >
-                <FiScissors className="text-base" /> SOBEK PACK SEKARANG!
+                <FiScissors className="text-lg" /> SOBEK PACK SEKARANG! ✂️
               </button>
             )}
           </div>
         ) : (
-          /* ─── STAGE 2: CARD REVEAL IN ALL GLORY ─── */
+          /* ─── STAGE 2: 3D INTERACTIVE CARD REVEAL IN ALL GLORY ─── */
           <div className="flex flex-col items-center animate-scale-up w-full">
-            <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-cyan-950/80 border border-cyan-400/40 text-xs font-black text-cyan-300 mb-4 shadow-lg">
-              🎉 PULL BERHASIL! DITEMUKAN: {topCard.name} ({topCard.rarity})
+            {/* Rarity Ribbon */}
+            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-cyan-950/90 border border-cyan-400/50 text-xs font-black text-cyan-300 mb-3 shadow-[0_0_20px_rgba(6,182,212,0.4)]">
+              🎉 PULL BERHASIL: {currentCard.name} ({currentCard.rarity})
             </div>
 
-            {/* Spotlight 3D Revealed Card */}
-            <div className="w-[300px] sm:w-[320px] aspect-[2.5/3.5] relative mb-6">
-              <PokemonCardFront card={topCard} />
+            {/* 3D Perspective Card Stage (Touch / Tilt interactive like main section) */}
+            <div
+              style={{ perspective: "1200px" }}
+              className="w-[290px] sm:w-[320px] aspect-[2.5/3.5] relative z-20 touch-manipulation mb-3"
+              onMouseMove={handleModalMouseMove}
+              onMouseLeave={handleModalMouseLeave}
+              onTouchStart={handleModalTouchStart}
+              onTouchMove={handleModalTouchMove}
+              onTouchEnd={handleModalTouchEnd}
+            >
+              <div
+                ref={modalSceneRef}
+                className="relative w-full h-full cursor-grab active:cursor-grabbing select-none"
+                style={{
+                  transformStyle: "preserve-3d",
+                  transform: `rotateX(${modalTilt.x}deg) rotateY(${modalTilt.y + (isModalFlipped ? 180 : 0)}deg)`,
+                  transition: isModalInteracting
+                    ? "none"
+                    : "transform 0.45s cubic-bezier(0.34, 1.25, 0.64, 1)",
+                }}
+                title="Geser atau sentuh kartu untuk memiringkan 3D!"
+              >
+                {/* CARD FRONT */}
+                <div
+                  className="absolute inset-0 w-full h-full"
+                  style={{
+                    backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
+                  }}
+                >
+                  <PokemonCardFront card={currentCard} tilt={modalTilt} />
+                </div>
+
+                {/* CARD BACK */}
+                <div
+                  className="absolute inset-0 w-full h-full"
+                  style={{
+                    backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
+                    transform: "rotateY(180deg)",
+                  }}
+                >
+                  <PokemonCardBack />
+                </div>
+              </div>
             </div>
 
-            {/* If Multi-Pull (5x / 10x), Show Mini Carousel Cards */}
+            {/* 3D Flip & Status Action Controls */}
+            <div className="flex items-center gap-2 mb-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsModalFlipped(!isModalFlipped);
+                  setModalTilt({ x: 0, y: 0 });
+                }}
+                className="rounded-full border border-cyan-500/50 bg-slate-900/90 px-4 py-1.5 text-xs font-black text-cyan-300 hover:text-white hover:bg-slate-800 flex items-center gap-1.5 shadow-md transition-all"
+              >
+                <FiRepeat className={isModalFlipped ? "rotate-180 text-amber-400" : "text-cyan-400"} />
+                <span>{isModalFlipped ? "Lihat Depan" : "🔄 Balik 3D"}</span>
+              </button>
+
+              <span className="text-[10px] font-semibold text-slate-400">
+                Geser jari untuk tilt 3D
+              </span>
+            </div>
+
+            {/* Working Multi-Pull Selection Carousel (Clickable to switch preview card!) */}
             {pulls.length > 1 && (
-              <div className="w-full mb-6">
-                <p className="text-xs text-center text-slate-400 font-semibold mb-2">
-                  Seluruh Hasil Pull ({pulls.length} Kartu):
+              <div className="w-full mb-4">
+                <p className="text-[11px] text-center text-amber-300 font-bold mb-2">
+                  Pilih kartu untuk di-preview ({pulls.length} Kartu):
                 </p>
-                <div className="flex gap-2 overflow-x-auto pb-2 justify-center max-w-md mx-auto">
+                <div className="flex gap-2 overflow-x-auto pb-2 px-1 justify-center max-w-md mx-auto">
                   {pulls.map((c, idx) => (
                     <button
                       key={idx}
                       type="button"
-                      onClick={() => onSelectCard(c)}
-                      className={`h-12 w-10 rounded-lg p-0.5 border flex items-center justify-center bg-slate-900 shrink-0 transition-all ${
-                        c.id === topCard.id
-                          ? "border-cyan-400 ring-2 ring-cyan-400 scale-110 shadow-[0_0_10px_#22d3ee]"
-                          : "border-slate-700 opacity-70 hover:opacity-100"
+                      onClick={() => {
+                        setModalCard(c);
+                        setIsModalFlipped(false);
+                        if (onSelectCard) onSelectCard(c);
+                      }}
+                      className={`h-14 w-11 rounded-xl p-1 border-2 flex flex-col items-center justify-between bg-slate-900 shrink-0 transition-all cursor-pointer ${
+                        c.id === currentCard.id
+                          ? "border-cyan-400 ring-2 ring-cyan-400/80 scale-110 shadow-[0_0_15px_#22d3ee] bg-cyan-950/60"
+                          : "border-slate-700 opacity-70 hover:opacity-100 hover:scale-105 hover:border-slate-500"
                       }`}
-                      title={c.name}
+                      title={`Klik untuk lihat ${c.name} (${c.rarity})`}
                     >
-                      <img src={c.image} alt={c.name} className="h-full w-full object-contain" />
+                      <img src={c.image} alt={c.name} className="h-8 w-8 object-contain" />
+                      <span
+                        className="text-[7px] font-black uppercase"
+                        style={{ color: c.themeColor }}
+                      >
+                        {c.rarity}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -598,7 +726,7 @@ const BoosterPackModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-sm shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:scale-105 active:scale-95 transition-all"
+              className="flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-sm shadow-[0_0_30px_rgba(6,182,212,0.6)] hover:scale-105 active:scale-95 transition-all"
             >
               Simpan ke Album Binder <FiArrowRight />
             </button>
