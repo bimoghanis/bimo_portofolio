@@ -428,6 +428,7 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
   const [isAttacking, setIsAttacking] = useState(false);
   const [bossAttacking, setBossAttacking] = useState(false);
   const [damageEffect, setDamageEffect] = useState(null);
+  const [activeVfx, setActiveVfx] = useState(null);
   const [battleState, setBattleState] = useState("in_progress");
 
   // Reset when stage or team changes
@@ -450,6 +451,7 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
     setBattleState("in_progress");
     setMenuMode("main");
     setDamageEffect(null);
+    setActiveVfx(null);
   };
 
   const currentActiveHp = teamHp[activeTeamIndex] || 0;
@@ -459,8 +461,13 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
     if (isAttacking || bossAttacking || battleState !== "in_progress" || currentActiveHp <= 0) return;
     setIsAttacking(true);
 
+    const pEl = (activePlayerCard.element || "").toLowerCase();
+    const vfxType = pEl.includes("electric") ? "thunder" : pEl.includes("fire") ? "fire" : pEl.includes("water") ? "water" : pEl.includes("grass") || pEl.includes("bug") ? "grass" : "cosmic";
+    setActiveVfx({ type: vfxType, target: "boss" });
+    setTimeout(() => setActiveVfx(null), 650);
+
     if (playSound) {
-      if (activePlayerCard.element.toLowerCase().includes("electric")) {
+      if (pEl.includes("electric")) {
         playSound("zap");
       } else {
         playSound("attack");
@@ -542,6 +549,11 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
       setIsAttacking(false);
       setDamageEffect(null);
       setBossAttacking(true);
+
+      const bEl = (currentStage.element || "").toLowerCase();
+      const bVfxType = bEl.includes("electric") ? "thunder" : bEl.includes("fire") ? "fire" : bEl.includes("water") ? "water" : bEl.includes("grass") || bEl.includes("bug") ? "grass" : "cosmic";
+      setActiveVfx({ type: bVfxType, target: "player" });
+      setTimeout(() => setActiveVfx(null), 650);
 
       const isSpecial = Math.random() > 0.5;
       const bossMove = isSpecial ? currentStage.moves[1] : currentStage.moves[0];
@@ -866,6 +878,64 @@ const GymBattleArena = ({ unlockedIds = [11], shinyIds = [], onWinReward, playSo
             boxShadow: "0 0 30px rgba(6,182,212,0.3)",
           }}
         />
+
+        {/* 💥 DYNAMIC ELEMENTAL ATTACK VFX OVERLAY */}
+        {activeVfx && (
+          <div className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center overflow-hidden">
+            {/* Screen Flash */}
+            <div className="absolute inset-0 bg-white/40 animate-screen-flash" />
+
+            {activeVfx.type === "thunder" && (
+              <div
+                className={`absolute ${
+                  activeVfx.target === "boss" ? "top-8 right-14" : "bottom-8 left-14"
+                } animate-thunderbolt flex items-center justify-center`}
+              >
+                <span className="text-6xl sm:text-7xl filter drop-shadow-[0_0_30px_#fde047]">⚡</span>
+              </div>
+            )}
+
+            {activeVfx.type === "fire" && (
+              <div
+                className={`absolute ${
+                  activeVfx.target === "boss" ? "top-8 right-14" : "bottom-8 left-14"
+                } animate-fireblast flex items-center justify-center`}
+              >
+                <span className="text-6xl sm:text-7xl filter drop-shadow-[0_0_30px_#f97316]">🔥</span>
+              </div>
+            )}
+
+            {activeVfx.type === "water" && (
+              <div
+                className={`absolute ${
+                  activeVfx.target === "boss" ? "top-8 right-14" : "bottom-8 left-14"
+                } animate-hydrowave flex items-center justify-center`}
+              >
+                <span className="text-6xl sm:text-7xl filter drop-shadow-[0_0_30px_#06b6d4]">🌊</span>
+              </div>
+            )}
+
+            {activeVfx.type === "grass" && (
+              <div
+                className={`absolute ${
+                  activeVfx.target === "boss" ? "top-8 right-14" : "bottom-8 left-14"
+                } animate-razorleaf flex items-center justify-center`}
+              >
+                <span className="text-6xl sm:text-7xl filter drop-shadow-[0_0_30px_#22c55e]">🍃</span>
+              </div>
+            )}
+
+            {activeVfx.type === "cosmic" && (
+              <div
+                className={`absolute ${
+                  activeVfx.target === "boss" ? "top-6 right-12" : "bottom-6 left-12"
+                } animate-cosmicbeam flex items-center justify-center`}
+              >
+                <span className="text-6xl sm:text-7xl filter drop-shadow-[0_0_40px_#ec4899]">🔮✨</span>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* ─── TOP LEFT: OPPONENT STATUS BANNER ─── */}
         <div className="absolute top-3 left-3 z-20 w-44 sm:w-56 bg-slate-950/90 border-2 border-slate-400/80 rounded-2xl p-2 shadow-2xl backdrop-blur-md">

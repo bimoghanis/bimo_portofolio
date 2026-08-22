@@ -1212,6 +1212,177 @@ const TechmonGacha = () => {
     });
   };
 
+  // 📸 Download High-Definition Pokémon Card as Image Poster
+  const downloadCardHD = async (card, isShiny = false) => {
+    if (!card) return;
+    playSound("shiny");
+
+    const canvas = document.createElement("canvas");
+    canvas.width = 800;
+    canvas.height = 1120;
+    const ctx = canvas.getContext("2d");
+
+    const stats = calculateCardStats(card, isShiny);
+
+    // 1. Draw outer Card Border Gradient
+    const borderGrad = ctx.createLinearGradient(0, 0, 800, 1120);
+    if (isShiny) {
+      borderGrad.addColorStop(0, "#ffd700");
+      borderGrad.addColorStop(0.25, "#ff007f");
+      borderGrad.addColorStop(0.5, "#8b5cf6");
+      borderGrad.addColorStop(0.75, "#00ffff");
+      borderGrad.addColorStop(1, "#ffd700");
+    } else if (card.rarity === "UR") {
+      borderGrad.addColorStop(0, "#ffd700");
+      borderGrad.addColorStop(0.3, "#ec4899");
+      borderGrad.addColorStop(0.7, "#8b5cf6");
+      borderGrad.addColorStop(1, "#00ffff");
+    } else if (card.rarity === "SSR") {
+      borderGrad.addColorStop(0, "#fef08a");
+      borderGrad.addColorStop(0.5, "#f59e0b");
+      borderGrad.addColorStop(1, "#d97706");
+    } else if (card.rarity === "SR") {
+      borderGrad.addColorStop(0, "#e9d5ff");
+      borderGrad.addColorStop(0.5, "#a855f7");
+      borderGrad.addColorStop(1, "#7e22ce");
+    } else {
+      borderGrad.addColorStop(0, "#f8fafc");
+      borderGrad.addColorStop(1, "#64748b");
+    }
+
+    const r = 36;
+    ctx.fillStyle = borderGrad;
+    ctx.beginPath();
+    ctx.roundRect(0, 0, 800, 1120, r);
+    ctx.fill();
+
+    // 2. Inner Card Surface
+    const pad = 24;
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.roundRect(pad, pad, 800 - pad * 2, 1120 - pad * 2, r - 8);
+    ctx.fill();
+
+    const innerGrad = ctx.createLinearGradient(0, pad, 0, 1120 - pad);
+    innerGrad.addColorStop(0, "#f8fafc");
+    innerGrad.addColorStop(0.5, "#ffffff");
+    innerGrad.addColorStop(1, "#f1f5f9");
+    ctx.fillStyle = innerGrad;
+    ctx.fill();
+
+    // 3. Top Header: Tag, Name & HP
+    ctx.font = "900 24px sans-serif";
+    ctx.fillStyle = isShiny ? "#ec4899" : card.badgeBg || "#eab308";
+    ctx.fillText(isShiny ? "✨ SHINY EX" : `${card.rarity} EX`, pad + 20, pad + 48);
+
+    ctx.font = "900 36px sans-serif";
+    ctx.fillStyle = "#0f172a";
+    ctx.fillText(card.name, pad + 20, pad + 92);
+
+    // HP
+    ctx.font = "900 24px sans-serif";
+    ctx.fillStyle = "#64748b";
+    ctx.fillText("HP", 800 - pad - 160, pad + 88);
+
+    ctx.font = "900 42px monospace";
+    ctx.fillStyle = "#e11d48";
+    ctx.fillText(`${stats.hp}`, 800 - pad - 120, pad + 92);
+
+    // 4. Center Artwork Window Frame
+    const artX = pad + 20;
+    const artY = pad + 115;
+    const artW = 800 - (pad + 20) * 2;
+    const artH = 460;
+
+    const frameGrad = ctx.createLinearGradient(artX, artY, artX + artW, artY + artH);
+    frameGrad.addColorStop(0, "#cbd5e1");
+    frameGrad.addColorStop(0.5, card.themeColor || "#e2e8f0");
+    frameGrad.addColorStop(1, "#94a3b8");
+    ctx.fillStyle = frameGrad;
+    ctx.beginPath();
+    ctx.roundRect(artX, artY, artW, artH, 20);
+    ctx.fill();
+
+    // Load image into canvas
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = card.image;
+    await new Promise((resolve) => {
+      img.onload = () => {
+        const aspect = img.width / img.height;
+        const drawH = artH - 40;
+        const drawW = drawH * aspect;
+        const drawX = artX + (artW - drawW) / 2;
+        const drawY = artY + (artH - drawH) / 2;
+        ctx.drawImage(img, drawX, drawY, drawW, drawH);
+        resolve();
+      };
+      img.onerror = () => resolve();
+    });
+
+    // Art Sub-banner
+    ctx.fillStyle = "#fef08a";
+    ctx.fillRect(artX, artY + artH - 32, artW, 32);
+    ctx.fillStyle = "#1e293b";
+    ctx.font = "800 16px sans-serif";
+    ctx.fillText(`NO. ${String(card.id).padStart(3, "0")} • ${card.title}`, artX + 16, artY + artH - 10);
+    ctx.fillText(`ATK: ${stats.atk}`, artX + artW - 110, artY + artH - 10);
+
+    // 5. Attacks & Description Box
+    const boxY = artY + artH + 25;
+    ctx.fillStyle = "#f8fafc";
+    ctx.strokeStyle = "#e2e8f0";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.roundRect(artX, boxY, artW, 280, 16);
+    ctx.fill();
+    ctx.stroke();
+
+    // Ability Title
+    ctx.fillStyle = "#0f172a";
+    ctx.font = "900 28px sans-serif";
+    ctx.fillText(`⚡ ${card.ability}`, artX + 24, boxY + 50);
+
+    ctx.font = "900 32px monospace";
+    ctx.fillText(`${stats.atk * 2}+`, artX + artW - 100, boxY + 50);
+
+    // Ability Description
+    ctx.fillStyle = "#475569";
+    ctx.font = "500 20px sans-serif";
+    const words = card.description.split(" ");
+    let line = "";
+    let lineY = boxY + 100;
+    for (let n = 0; n < words.length; n++) {
+      const testLine = line + words[n] + " ";
+      const metrics = ctx.measureText(testLine);
+      if (metrics.width > artW - 48 && n > 0) {
+        ctx.fillText(line, artX + 24, lineY);
+        line = words[n] + " ";
+        lineY += 30;
+      } else {
+        line = testLine;
+      }
+    }
+    ctx.fillText(line, artX + 24, lineY);
+
+    // Sound Cry
+    ctx.font = "italic 700 18px sans-serif";
+    ctx.fillStyle = "#6366f1";
+    ctx.fillText(`"${card.soundEffect}"`, artX + 24, boxY + 240);
+
+    // 6. Watermark Footer
+    ctx.font = "800 15px sans-serif";
+    ctx.fillStyle = "#94a3b8";
+    ctx.textAlign = "center";
+    ctx.fillText("⚔️ POKÉTECH TCG • BIMO'S SPECIAL COLLECTOR EDITION • 100 CARDS 🎮", 400, 1120 - pad - 12);
+
+    // Trigger Download
+    const link = document.createElement("a");
+    link.download = `poketech-${card.name.toLowerCase().replace(/[^a-z0-9]/g, "_")}${isShiny ? "-shiny" : ""}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  };
+
   // Reset Collection System
   const handleResetCollection = () => {
     localStorage.removeItem("bimo_poketech_unlocked");
@@ -1498,18 +1669,29 @@ const TechmonGacha = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    playArcadeSound("click");
+                    playSound("click");
                     setIsFlipped(!isFlipped);
                     setTilt({ x: 0, y: 0 });
                   }}
-                  className="rounded-full border-2 border-cyan-400 bg-slate-900/90 px-4 py-2 text-xs font-black text-cyan-300 hover:text-white hover:bg-cyan-600 hover:border-cyan-300 hover:scale-105 active:scale-95 flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all backdrop-blur-md"
+                  className="rounded-full border-2 border-cyan-400 bg-slate-900/90 px-3.5 py-2 text-xs font-black text-cyan-300 hover:text-white hover:bg-cyan-600 hover:border-cyan-300 hover:scale-105 active:scale-95 flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all backdrop-blur-md"
                 >
                   <FiRepeat className={isFlipped ? "rotate-180 transition-transform text-amber-400" : "transition-transform text-cyan-300"} />
-                  <span>{isFlipped ? "Lihat Depan" : "Balik 3D"}</span>
+                  <span>{isFlipped ? "Depan" : "Balik 3D"}</span>
+                </button>
+
+                {/* 📸 Download HD Card Button */}
+                <button
+                  type="button"
+                  onClick={() => downloadCardHD(activeCard, shinyIds.includes(activeCard.id))}
+                  className="rounded-full border-2 border-amber-400 bg-gradient-to-r from-amber-500 to-yellow-500 px-3.5 py-2 text-xs font-black text-slate-950 hover:scale-105 active:scale-95 flex items-center gap-1.5 shadow-[0_0_15px_rgba(251,191,36,0.4)] transition-all"
+                  title="Download Kartu Ini Sebagai Gambar HD!"
+                >
+                  <span>📸</span>
+                  <span>Download HD</span>
                 </button>
 
                 <div className="flex items-center gap-1.5">
-                  <span className="rounded-full border border-slate-700 bg-slate-900/90 px-3.5 py-1 text-[11px] font-mono font-black text-amber-300 shadow-inner">
+                  <span className="rounded-full border border-slate-700 bg-slate-900/90 px-3 py-1 text-[11px] font-mono font-black text-amber-300 shadow-inner">
                     Pulls: {totalPulls}
                   </span>
 
