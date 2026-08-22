@@ -23,82 +23,63 @@ const Hero = () => {
   const { count: yearsCount, countRef: yearsRef } = useCountUp(1, 1200);
   const { count: projectsCount, countRef: projectsRef } = useCountUp(12, 1400);
 
-  // 3D Card Interactive Display States
+  // 3D Card Interactive Display States (Controlled 100% by user motion)
   const [rotationY, setRotationY] = useState(0);
-  const [autoSpin, setAutoSpin] = useState(false);
+  const [tiltX, setTiltX] = useState(0);
+  const [tiltY, setTiltY] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const startXRef = useRef(0);
   const currentRotRef = useRef(0);
-  const animFrameRef = useRef(null);
-
-  // Auto-spin animation loop
-  useEffect(() => {
-    if (!autoSpin) {
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-      return;
-    }
-
-    const spin = () => {
-      setRotationY((prev) => (prev >= 180 ? -180 : prev + 0.75));
-      animFrameRef.current = requestAnimationFrame(spin);
-    };
-
-    animFrameRef.current = requestAnimationFrame(spin);
-
-    return () => {
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-    };
-  }, [autoSpin]);
-
-  const handleSliderChange = (e) => {
-    setAutoSpin(false);
-    setRotationY(parseFloat(e.target.value));
-  };
+  const cardSceneRef = useRef(null);
 
   const handleToggleFlip = () => {
-    setAutoSpin(false);
     setRotationY((prev) => (Math.abs(prev) > 90 ? 0 : 180));
+    setTiltX(0);
+    setTiltY(0);
   };
 
-  const handleReset = () => {
-    setAutoSpin(false);
+  const handleResetCenter = () => {
     setRotationY(0);
+    setTiltX(0);
+    setTiltY(0);
   };
 
-  // Direct Mouse / Touch Drag Handlers
-  const touchStartDataRef = useRef({ x: 0, y: 0, time: 0, moved: false });
+  // Subtle Mouse Hover Tilt
+  const handleMouseMove = (e) => {
+    if (isDragging || !cardSceneRef.current) return;
+    const rect = cardSceneRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    setTiltX(-(y / (rect.height / 2)) * 8);
+    setTiltY((x / (rect.width / 2)) * 8);
+  };
 
+  const handleMouseLeave = () => {
+    if (!isDragging) {
+      setTiltX(0);
+      setTiltY(0);
+    }
+  };
+
+  // Direct Mouse / Touch Drag Handlers (Natural 1:1 user motion)
   const handlePointerDown = (e) => {
-    setAutoSpin(false);
     setIsDragging(true);
     const clientX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-    const clientY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
     startXRef.current = clientX;
     currentRotRef.current = rotationY;
-    touchStartDataRef.current = { x: clientX, y: clientY, time: Date.now(), moved: false };
   };
 
   const handlePointerMove = (e) => {
     if (!isDragging) return;
     const clientX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
     const deltaX = clientX - startXRef.current;
-    if (Math.abs(deltaX) > 5) {
-      touchStartDataRef.current.moved = true;
-    }
-    let newRot = currentRotRef.current + deltaX * 0.8;
+    let newRot = currentRotRef.current + deltaX * 0.65;
     while (newRot > 180) newRot -= 360;
     while (newRot < -180) newRot += 360;
     setRotationY(newRot);
   };
 
   const handlePointerUp = () => {
-    if (isDragging) {
-      const elapsed = Date.now() - touchStartDataRef.current.time;
-      if (!touchStartDataRef.current.moved && elapsed < 300) {
-        // Quick tap on card -> toggle 3D Flip
-        setRotationY((prev) => (Math.abs(prev) > 90 ? 0 : 180));
-      }
-    }
     setIsDragging(false);
   };
 
@@ -249,22 +230,29 @@ const Hero = () => {
           <div className="reveal-right flex flex-col items-center lg:items-end select-none" data-delay="250">
             {/* 3D Perspective Scene */}
             <div
-              className="card-3d-scene w-full max-w-md cursor-grab active:cursor-grabbing touch-pan-y select-none"
+              ref={cardSceneRef}
+              className="card-3d-scene w-full max-w-md cursor-grab active:cursor-grabbing select-none"
               style={{ touchAction: "pan-y" }}
               onMouseDown={handlePointerDown}
-              onMouseMove={handlePointerMove}
+              onMouseMove={(e) => {
+                if (isDragging) handlePointerMove(e);
+                else handleMouseMove(e);
+              }}
               onMouseUp={handlePointerUp}
-              onMouseLeave={handlePointerUp}
+              onMouseLeave={() => {
+                handlePointerUp();
+                handleMouseLeave();
+              }}
               onTouchStart={handlePointerDown}
               onTouchMove={handlePointerMove}
               onTouchEnd={handlePointerUp}
-              title="Ketuk atau geser kartu untuk memutar secara 3D!"
+              title="Geser langsung kartu untuk memutar secara 3D!"
             >
               <div
                 className="card-3d-wrapper"
                 style={{
-                  transform: `rotateY(${rotationY}deg)`,
-                  transition: isDragging ? "none" : "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                  transform: `rotateX(${tiltX}deg) rotateY(${rotationY + tiltY}deg)`,
+                  transition: isDragging ? "none" : "transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)",
                 }}
               >
                 {/* ─── FRONT FACE: Profile Info Card ─── */}
@@ -384,56 +372,32 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* ─── MINIMAL FLOATING CAPSULE CONTROLLER (Friendly & Soft) ─── */}
-            <div className="clay-pill mt-4 flex w-full max-w-md items-center gap-2 bg-[var(--bg-card)] p-2.5 shadow-md">
+            {/* ─── MINIMAL FLOATING CONTROLLER (Flip & Reset Sentris) ─── */}
+            <div className="clay-pill mt-4 flex w-full max-w-md items-center justify-between bg-[var(--bg-card)] px-4 py-2.5 shadow-md">
               {/* Flip Button */}
               <button
                 type="button"
                 onClick={handleToggleFlip}
-                className="clay-button inline-flex shrink-0 items-center gap-1.5 bg-[var(--bg-card)] px-3.5 py-1.5 text-xs font-bold text-[var(--accent-main)] hover:bg-[var(--accent-main)] hover:text-white"
+                className="clay-button inline-flex items-center gap-2 bg-[var(--bg-card)] px-3.5 py-1.5 text-xs font-bold text-[var(--accent-main)] hover:bg-[var(--accent-main)] hover:text-white transition-all"
                 title="Flip between Front & Back"
               >
                 <FiRepeat className="text-xs" />
-                <span>{Math.abs(rotationY) > 90 ? "Front" : "Flip 3D"}</span>
+                <span>{Math.abs(rotationY) > 90 ? "Lihat Depan" : "🔄 Flip 3D"}</span>
               </button>
 
-              {/* Slider Track with Integrated Dot */}
-              <div className="relative flex-1 flex items-center px-1">
-                <input
-                  type="range"
-                  min="-180"
-                  max="180"
-                  step="1"
-                  value={rotationY}
-                  onChange={handleSliderChange}
-                  className="clay-slider w-full"
-                  aria-label="3D Card Rotation Slider"
-                />
-              </div>
+              <span className="text-[11px] font-semibold text-[var(--text-muted)] hidden sm:inline">
+                Geser kartu untuk memutar
+              </span>
 
-              {/* Auto Spin Toggle Pill */}
+              {/* Reset Sentris Button */}
               <button
                 type="button"
-                onClick={() => setAutoSpin(!autoSpin)}
-                className={`clay-button inline-flex shrink-0 items-center gap-1 px-3 py-1.5 text-xs font-bold transition-all ${
-                  autoSpin
-                    ? "bg-[var(--accent-secondary)] text-white shadow-sm"
-                    : "bg-[var(--bg-soft)] text-[var(--text-soft)] hover:text-[var(--accent-secondary)]"
-                }`}
-                title="Toggle continuous 360 auto spin"
+                onClick={handleResetCenter}
+                className="clay-button inline-flex items-center gap-1.5 bg-[var(--bg-soft)] px-3.5 py-1.5 text-xs font-bold text-[var(--text-soft)] hover:text-[var(--accent-main)] hover:bg-[var(--accent-soft)] transition-all"
+                title="Kembalikan kartu ke posisi sentris tengah (0°)"
               >
-                <FiRotateCw className={`text-xs ${autoSpin ? "animate-spin" : ""}`} />
-                <span className="hidden sm:inline">{autoSpin ? "Spinning" : "Auto"}</span>
-              </button>
-
-              {/* Reset Button */}
-              <button
-                type="button"
-                onClick={handleReset}
-                className="clay-button flex h-7 w-7 shrink-0 items-center justify-center bg-[var(--bg-soft)] text-xs text-[var(--text-muted)] hover:text-[var(--danger-main)]"
-                title="Reset to 0 deg"
-              >
-                <FiRefreshCw className="text-xs" />
+                <FiRefreshCw className="text-xs text-[var(--accent-main)]" />
+                <span>Reset Sentris</span>
               </button>
             </div>
           </div>
