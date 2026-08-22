@@ -1018,6 +1018,7 @@ const TechmonGacha = () => {
       className="relative overflow-hidden py-24 text-white transition-colors duration-300"
       style={{
         background: "linear-gradient(180deg, #070d1e 0%, #0d1b3e 40%, #0b1531 80%, #060b18 100%)",
+        fontFamily: "'Fredoka', 'Plus Jakarta Sans', sans-serif",
       }}
     >
       {/* 🌟 RIPPING PACK CEREMONY MODAL OVERLAY */}
@@ -1283,9 +1284,9 @@ const TechmonGacha = () => {
             )}
           </div>
 
-          {/* Right Column: 🧰 CHEERFUL MINECRAFT / TERRARIA LOOT CHEST VAULT BINDER */}
+          {/* Right Column: 🧰 CHEERFUL LOOT CHEST VAULT BINDER */}
           <div className="reveal w-full" data-delay="200">
-            {/* Minecraft & Terraria Style Wooden Loot Chest Container */}
+            {/* Playful Wooden Loot Chest Container */}
             <div
               className="relative rounded-3xl p-5 sm:p-7 shadow-2xl overflow-hidden border-4 border-[#5d4037]"
               style={{
@@ -1301,7 +1302,7 @@ const TechmonGacha = () => {
                 }}
               />
 
-              {/* Gold & Iron Riveted Corner Brackets (Terraria Chest Style) */}
+              {/* Gold & Iron Riveted Corner Brackets */}
               <div className="absolute top-2 left-2 h-4 w-4 rounded-sm border-2 border-amber-400 bg-amber-600/80 shadow-inner" />
               <div className="absolute top-2 right-2 h-4 w-4 rounded-sm border-2 border-amber-400 bg-amber-600/80 shadow-inner" />
               <div className="absolute bottom-2 left-2 h-4 w-4 rounded-sm border-2 border-amber-400 bg-amber-600/80 shadow-inner" />
@@ -1319,22 +1320,22 @@ const TechmonGacha = () => {
                     <div className="flex items-center gap-2">
                       <h3
                         className="text-lg sm:text-xl font-black text-amber-300 tracking-wide uppercase"
-                        style={{ fontFamily: "'Impact', 'Arial Black', sans-serif" }}
+                        style={{ fontFamily: "'Fredoka', sans-serif" }}
                       >
-                        TERRA-CHEST VAULT
+                        POKÉ-VAULT CHEST
                       </h3>
-                      <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-emerald-700/80 text-emerald-200 border border-emerald-500">
+                      <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-emerald-700/90 text-emerald-200 border border-emerald-400 shadow-sm">
                         INV: {unlockedIds.length}/100
                       </span>
                     </div>
-                    <p className="text-xs text-amber-200/70 font-medium">
-                      Peti Koleksi Kartu PokéTech • Minecraft Edition ⛏️💎
+                    <p className="text-xs text-amber-200/80 font-semibold mt-0.5">
+                      Peti Album Koleksi Kartu PokéTech 🎴✨
                     </p>
                   </div>
                 </div>
 
                 {/* Level / XP Progress Badge */}
-                <div className="flex items-center gap-2 self-start sm:self-auto bg-[#1a110d] px-3.5 py-1.5 rounded-xl border border-amber-500/40">
+                <div className="flex items-center gap-2 self-start sm:self-auto bg-[#1a110d] px-3.5 py-1.5 rounded-xl border border-amber-500/40 shadow-inner">
                   <span className="text-xs font-black text-emerald-400 font-mono">
                     LVL {unlockedIds.length}
                   </span>
