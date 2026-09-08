@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { FiMenu, FiX, FiDownload, FiSun, FiMoon, FiBriefcase } from "react-icons/fi";
+import { FiMenu, FiX, FiDownload, FiSun, FiMoon, FiBriefcase, FiChevronDown } from "react-icons/fi";
 import PropTypes from "prop-types";
-import cvFile from "../assets/CV_Bimo Ghanis.pdf";
+import cvEnglish from "../assets/CV_Bimo Ghanis ENG August.pdf";
+import cvIndonesian from "../assets/CV_Bimo Ghanis INDO August.pdf";
 
 import useTheme from "../hooks/useTheme";
 
@@ -14,14 +15,48 @@ const navItems = [
   { label: "Contact", href: "#contact" },
 ];
 
+const cvOptions = [
+  { label: "English CV", file: cvEnglish, download: "CV-Bimo-Ghanis-EN.pdf" },
+  { label: "CV Indonesia", file: cvIndonesian, download: "CV-Bimo-Ghanis-ID.pdf" },
+];
+
+const ResumeMenu = ({ compact = false }) => (
+  <details className={`relative ${compact ? "flex-1" : ""}`}>
+    <summary
+      className={`${compact ? "flex w-full" : "inline-flex"} clay-button-primary cursor-pointer list-none items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold`}
+      style={{ borderRadius: "14px" }}
+      aria-label="Choose CV language"
+    >
+      <FiDownload />
+      Resume
+      <FiChevronDown className="text-xs" />
+    </summary>
+    <div className={`${compact ? "mt-2 w-full" : "absolute right-0 top-full z-50 min-w-[180px]"} rounded-2xl border border-[var(--border-soft)] bg-[var(--nav-bg)] p-2 shadow-xl`}>
+      {cvOptions.map(option => (
+        <a
+          key={option.label}
+          href={option.file}
+          download={option.download}
+          className="flex items-center justify-between gap-4 rounded-xl px-3 py-2.5 text-xs font-bold text-[var(--text-soft)] transition-colors hover:bg-[var(--accent-soft)] hover:text-[var(--accent-main)]"
+        >
+          {option.label}
+          <FiDownload aria-hidden="true" />
+        </a>
+      ))}
+    </div>
+  </details>
+);
+
+ResumeMenu.propTypes = {
+  compact: PropTypes.bool,
+};
+
 const Navbar = ({ recruiterMode, onToggleRecruiter }) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
   const { theme, toggleTheme } = useTheme();
-
-  const cvPath = cvFile;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -113,15 +148,7 @@ const Navbar = ({ recruiterMode, onToggleRecruiter }) => {
               )}
             </button>
 
-            <a
-              href={cvPath}
-              download="CV-Bimo-Ghanis.pdf"
-              className="clay-button-primary inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold"
-              style={{ borderRadius: "14px" }}
-            >
-              <FiDownload />
-              Resume
-            </a>
+            <ResumeMenu />
           </div>
 
           {/* Mobile Menu Button */}
@@ -142,7 +169,7 @@ const Navbar = ({ recruiterMode, onToggleRecruiter }) => {
           id="mobile-navigation"
           className={`overflow-hidden bg-[var(--nav-mobile-bg)] transition-all duration-500 ease-in-out lg:hidden ${
             menuOpen
-              ? "mt-3 max-h-[480px] border-t border-[var(--border-soft)] opacity-100"
+              ? "mt-3 max-h-[680px] border-t border-[var(--border-soft)] opacity-100"
               : "max-h-0 border-t-0 opacity-0"
           }`}
         >
@@ -182,15 +209,7 @@ const Navbar = ({ recruiterMode, onToggleRecruiter }) => {
                 {theme === "dark" ? "Light Mode" : "Dark Mode"}
               </button>
 
-              <a
-                href={cvPath}
-                download="CV-Bimo-Ghanis.pdf"
-                className="clay-button-primary flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold"
-                style={{ borderRadius: "14px" }}
-              >
-                <FiDownload />
-                Resume
-              </a>
+              <ResumeMenu compact />
             </div>
           </div>
         </div>
