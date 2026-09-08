@@ -1,4 +1,3 @@
-import React from "react";
 import {
   FiMail,
   FiMapPin,
@@ -39,13 +38,13 @@ const Footer = () => {
           </p>
 
           <h2 className="mx-auto max-w-4xl text-3xl font-extrabold leading-tight text-[var(--text-main)] md:text-5xl">
-            Interested in working together?
+            Open to junior data and software engineering roles.
             <br />
-            Let&apos;s <span className="text-[var(--accent-main)]">build something impactful.</span>
+            Let&apos;s <span className="text-[var(--accent-main)]">talk about your next project.</span>
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-[var(--text-muted)]">
-            I am actively open to full-time engineering roles, contracts, and collaborative projects in software development, data engineering, and applied machine learning.
+            I’m open to Junior Data Analyst, Data Engineer, BI, and software engineering opportunities. If you have a role or data problem in mind, I’d be happy to talk.
           </p>
 
           {/* Main Contact Buttons */}
@@ -142,7 +141,7 @@ const Footer = () => {
           </p>
 
           <p className="font-semibold text-[var(--text-muted)]">
-            Fresh Informatics Graduate • Telkom University
+            Informatics • Data & Software • Telkom University
           </p>
         </div>
       </div>

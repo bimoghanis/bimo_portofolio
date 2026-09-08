@@ -1,27 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
+import PropTypes from "prop-types";
 import Fotodiri from "../assets/fotodiri.jpg";
 import useScrollReveal from "../hooks/useScrollReveal";
-import useCountUp from "../hooks/useCountUp";
 import {
   FiMail,
   FiGithub,
   FiLinkedin,
   FiArrowUpRight,
-  FiRotateCw,
   FiRepeat,
   FiRefreshCw,
   FiCheckCircle,
 } from "react-icons/fi";
 
-const Hero = () => {
+const Hero = ({ recruiterMode = true }) => {
   const githubPath = "https://github.com/bimoghanis";
   const linkedinPath =
     "https://www.linkedin.com/in/bimo-ghanis-surya-putra-wibowo-967667217";
 
   const revealRef = useScrollReveal();
-
-  const { count: yearsCount, countRef: yearsRef } = useCountUp(1, 1200);
-  const { count: projectsCount, countRef: projectsRef } = useCountUp(12, 1400);
 
   // 3D Card Interactive Display States (Controlled 100% by user motion)
   const [rotationY, setRotationY] = useState(0);
@@ -85,25 +81,25 @@ const Hero = () => {
 
   const stats = [
     {
-      number: yearsCount,
+      number: "1",
       suffix: "+",
       title: "Years of Experience",
       desc: "Hands-on in software & data migration",
       icon: "▣",
       color: "var(--clay-sky)",
-      ref: yearsRef,
+      ref: null,
     },
     {
-      number: projectsCount,
+      number: "12",
       suffix: "+",
       title: "Completed Projects",
       desc: "Web applications, analytics & ML models",
       icon: "▤",
       color: "var(--clay-mint)",
-      ref: projectsRef,
+      ref: null,
     },
     {
-      number: "Graduated",
+      number: "Passed",
       suffix: " 🎓",
       title: "S.Kom. (Informatics)",
       desc: "Yudisium Passed • Telkom University",
@@ -165,23 +161,22 @@ const Hero = () => {
               className="reveal clay-pill mb-4 inline-block bg-[var(--accent-soft)] px-4 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--accent-main)]"
               data-delay="100"
             >
-              Fresh Informatics Graduate • S.Kom.
+              Data, software & analytics
             </p>
 
             <h1
               className="reveal max-w-4xl text-4xl font-extrabold tracking-tight leading-[1.18] text-[var(--text-main)] md:text-5xl lg:text-6xl"
               data-delay="180"
             >
-              Data-Driven Builder for{" "}
-              <span className="text-[var(--accent-main)]">Modern Web</span> &{" "}
-              <span className="text-[var(--accent-secondary)]">Analytics.</span>
+              Junior <span className="text-[var(--accent-main)]">Data</span> &{" "}
+              <span className="text-[var(--accent-secondary)]">Software Engineer.</span>
             </h1>
 
             <p
               className="reveal mt-6 max-w-2xl text-base leading-relaxed text-[var(--text-muted)] md:text-lg"
               data-delay="300"
             >
-              Informatics Graduate (S.Kom.) from <span className="font-semibold text-[var(--text-main)]">Telkom University</span>. Experienced in enterprise data migration, fullstack web applications, and applied machine learning systems.
+              Informatics graduate candidate from <span className="font-semibold text-[var(--text-main)]">Telkom University</span> with hands-on experience in multi-campus data migration, ETL documentation, Python analysis, and React applications.
             </p>
 
             {/* CTAs */}
@@ -196,11 +191,20 @@ const Hero = () => {
               </a>
 
               <a
-                href="#dev-gacha"
+                href="#projects"
                 className="clay-button inline-flex items-center gap-2 bg-[var(--bg-card)] px-5 py-3 text-sm font-bold text-[var(--accent-main)] transition-all duration-200 hover:scale-105"
               >
-                <span>🎴</span> Dev-Mon Gacha
+                View Case Studies <FiArrowUpRight className="text-xs opacity-70" />
               </a>
+
+              {!recruiterMode && (
+                <a
+                  href="#dev-gacha"
+                  className="clay-button inline-flex items-center gap-2 bg-[var(--bg-card)] px-5 py-3 text-sm font-bold text-[var(--accent-main)] transition-all duration-200 hover:scale-105"
+                >
+                  <span>🎴</span> Explore Dev-Mon
+                </a>
+              )}
 
               <a
                 href={githubPath}
@@ -291,7 +295,7 @@ const Hero = () => {
 
                   <div className="mt-6 space-y-2.5">
                     {[
-                      { label: "Status", value: "Fresh Graduate (S.Kom.)", highlight: true },
+                      { label: "Status", value: "Yudisium Passed (S.Kom.)", highlight: true },
                       { label: "Location", value: "Depok / Jakarta, Indonesia" },
                       { label: "Degree", value: "Bachelor of Computer Science" },
                       { label: "Specialization", value: "Data Engineering • ML • Web Dev" },
@@ -362,7 +366,7 @@ const Hero = () => {
                   {/* Footer Badge Status */}
                   <div className="mt-4 flex items-center justify-between border-t border-[var(--border-soft)] pt-3 text-[11px]">
                     <span className="flex items-center gap-1.5 font-bold text-[var(--success-main)]">
-                      <FiCheckCircle /> Verified Graduate
+                      <FiCheckCircle /> Yudisium Passed
                     </span>
                     <span className="font-mono text-xs text-[var(--text-muted)]">
                       ID: #967667217
@@ -445,3 +449,7 @@ const Hero = () => {
 };
 
 export default Hero;
+
+Hero.propTypes = {
+  recruiterMode: PropTypes.bool,
+};

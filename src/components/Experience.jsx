@@ -1,4 +1,3 @@
-import React from "react";
 import useScrollReveal from "../hooks/useScrollReveal";
 
 const experiences = [
@@ -55,9 +54,9 @@ const Experience = () => {
   return (
     <section
       id="experience"
-      className="wave-divider relative overflow-hidden bg-[var(--bg-main)] py-20 text-[var(--text-main)] transition-colors duration-200"
+      className="wave-divider relative overflow-hidden bg-[var(--bg-main)] py-14 md:py-16 text-[var(--text-main)] transition-colors duration-200"
     >
-      <div ref={revealRef} className="container relative z-10 mx-auto px-6 pt-10 md:px-12 lg:px-24">
+      <div ref={revealRef} className="container relative z-10 mx-auto px-6 pt-2 md:px-12 lg:px-24">
         <div className="reveal mb-10">
           <p className="clay-pill mb-3 inline-block bg-[var(--accent-soft)] px-4 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--accent-main)]">
             Experience
@@ -104,7 +103,7 @@ const Experience = () => {
 
                 <div className="my-6 h-px w-full bg-[var(--border-soft)]" />
 
-                <ul className="space-y-3 text-xs leading-relaxed text-[var(--text-soft)]">
+                <ul className="space-y-3 text-sm leading-relaxed text-[var(--text-soft)]">
                   {exp.description.map((item, idx) => (
                     <li key={idx} className="flex gap-2.5">
                       <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${style.bullet}`} />

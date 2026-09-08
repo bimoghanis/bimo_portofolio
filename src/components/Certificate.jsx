@@ -413,9 +413,9 @@ const Certificate = () => {
   return (
     <section
       id="certificates"
-      className="wave-divider relative overflow-hidden bg-[var(--bg-main)] py-20 text-[var(--text-main)] transition-colors duration-200"
+      className="wave-divider relative overflow-hidden bg-[var(--bg-main)] py-14 md:py-16 text-[var(--text-main)] transition-colors duration-200"
     >
-      <div ref={revealRef} className="container relative z-10 mx-auto px-6 pt-10 md:px-12 lg:px-24">
+      <div ref={revealRef} className="container relative z-10 mx-auto px-6 pt-2 md:px-12 lg:px-24">
         {/* Header */}
         <div className="reveal mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>

@@ -1,26 +1,27 @@
 import { useState, useEffect } from "react";
-import { FiMenu, FiX, FiDownload, FiSun, FiMoon } from "react-icons/fi";
+import { FiMenu, FiX, FiDownload, FiSun, FiMoon, FiBriefcase } from "react-icons/fi";
+import PropTypes from "prop-types";
+import cvFile from "../assets/CV_Bimo Ghanis.pdf";
+
+import useTheme from "../hooks/useTheme";
 
 const navItems = [
   { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
+  { label: "About", href: "#about" },
   { label: "Certificates", href: "#certificates" },
   { label: "Contact", href: "#contact" },
 ];
 
-const Navbar = () => {
+const Navbar = ({ recruiterMode, onToggleRecruiter }) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("theme") || "dark";
-  });
+  const { theme, toggleTheme } = useTheme();
 
-  const cvPath =
-    "https://drive.google.com/file/d/1EnHlzYVj56m8yxe0_H3X0zy5YzqItBZQ/view?usp=sharing";
+  const cvPath = cvFile;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,20 +38,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    const root = window.document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
-
   return (
     <>
       {/* Scroll Progress Bar */}
@@ -60,6 +47,7 @@ const Navbar = () => {
       />
 
       <nav
+        aria-label="Primary navigation"
         className={`fixed left-0 top-0 z-50 w-full transition-all duration-300 ${
           scrolled
             ? "clay-nav border-b border-[var(--border-soft)] bg-[var(--nav-bg)] py-3"
@@ -99,6 +87,21 @@ const Navbar = () => {
           <div className="hidden items-center gap-3 lg:flex">
             <button
               type="button"
+              onClick={onToggleRecruiter}
+              aria-pressed={recruiterMode}
+              className={`clay-button inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-colors duration-200 ${
+                recruiterMode
+                  ? "bg-[var(--accent-soft)] text-[var(--accent-main)]"
+                  : "bg-[var(--bg-card)] text-[var(--text-soft)]"
+              }`}
+              style={{ borderRadius: "14px" }}
+              title="Toggle recruiter-focused portfolio view"
+            >
+              <FiBriefcase />
+              {recruiterMode ? "Recruiter View" : "Full Portfolio"}
+            </button>
+            <button
+              type="button"
               onClick={toggleTheme}
               aria-label="Toggle theme"
               className="clay-button flex h-10 w-10 items-center justify-center bg-[var(--bg-card)] text-[var(--text-soft)] transition-colors duration-300 hover:text-[var(--accent-main)]"
@@ -112,8 +115,7 @@ const Navbar = () => {
 
             <a
               href={cvPath}
-              target="_blank"
-              rel="noopener noreferrer"
+              download="CV-Bimo-Ghanis.pdf"
               className="clay-button-primary inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold"
               style={{ borderRadius: "14px" }}
             >
@@ -125,7 +127,9 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <button
             type="button"
-            aria-label="Open menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
             className="clay-button flex h-10 w-10 items-center justify-center bg-[var(--bg-card)] text-xl text-[var(--accent-main)] lg:hidden"
             onClick={() => setMenuOpen(!menuOpen)}
           >
@@ -135,6 +139,7 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         <div
+          id="mobile-navigation"
           className={`overflow-hidden bg-[var(--nav-mobile-bg)] transition-all duration-500 ease-in-out lg:hidden ${
             menuOpen
               ? "mt-3 max-h-[480px] border-t border-[var(--border-soft)] opacity-100"
@@ -158,6 +163,18 @@ const Navbar = () => {
             <div className="mt-4 flex items-center gap-3 border-t border-[var(--border-soft)] pt-4">
               <button
                 type="button"
+                onClick={() => {
+                  onToggleRecruiter();
+                  setMenuOpen(false);
+                }}
+                aria-pressed={recruiterMode}
+                className="clay-button flex-1 inline-flex items-center justify-center gap-2 bg-[var(--bg-card)] px-4 py-2.5 text-xs font-bold text-[var(--text-soft)] transition-colors duration-300 hover:text-[var(--accent-main)]"
+              >
+                <FiBriefcase />
+                {recruiterMode ? "Recruiter" : "Full View"}
+              </button>
+              <button
+                type="button"
                 onClick={toggleTheme}
                 className="clay-button flex-1 inline-flex items-center justify-center gap-2 bg-[var(--bg-card)] px-4 py-2.5 font-bold text-xs text-[var(--text-soft)] transition-colors duration-300 hover:text-[var(--accent-main)]"
               >
@@ -167,8 +184,7 @@ const Navbar = () => {
 
               <a
                 href={cvPath}
-                target="_blank"
-                rel="noopener noreferrer"
+                download="CV-Bimo-Ghanis.pdf"
                 className="clay-button-primary flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold"
                 style={{ borderRadius: "14px" }}
               >
@@ -184,3 +200,8 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+Navbar.propTypes = {
+  recruiterMode: PropTypes.bool.isRequired,
+  onToggleRecruiter: PropTypes.func.isRequired,
+};

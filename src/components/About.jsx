@@ -1,4 +1,3 @@
-import React from "react";
 import useScrollReveal from "../hooks/useScrollReveal";
 
 const About = () => {
@@ -62,13 +61,13 @@ const About = () => {
   return (
     <section
       id="about"
-      className="wave-divider relative overflow-hidden bg-[var(--bg-main)] py-20 text-[var(--text-main)] transition-colors duration-300"
+      className="wave-divider relative overflow-hidden bg-[var(--bg-main)] py-14 md:py-16 text-[var(--text-main)] transition-colors duration-300"
     >
       {/* Background blobs */}
       <div className="floating-shape morph-blob" style={{ width: 240, height: 240, top: "5%", left: "-4%", background: "var(--accent-main)", opacity: 0.06, animationDelay: "-3s" }} />
       <div className="floating-shape" style={{ width: 180, height: 180, bottom: "10%", right: "-2%", background: "var(--accent-secondary)", opacity: 0.05, animationDelay: "-6s" }} />
 
-      <div ref={revealRef} className="container relative z-10 mx-auto px-6 pt-10 md:px-12 lg:px-24">
+      <div ref={revealRef} className="container relative z-10 mx-auto px-6 pt-2 md:px-12 lg:px-24">
         {/* Section Header */}
         <div className="reveal mb-12 max-w-4xl">
           <p className="clay-pill mb-3 inline-block bg-[var(--accent-soft)] px-4 py-1.5 text-sm font-bold uppercase tracking-[0.25em] text-[var(--accent-main)]">
@@ -76,27 +75,26 @@ const About = () => {
           </p>
 
           <h2 className="text-3xl font-extrabold leading-tight text-[var(--text-main)] md:text-5xl">
-            Passionate software & data specialist with a strong foundation in{" "}
-            <span className="text-[var(--accent-main)]">web systems, data pipelines, and applied AI.</span>
+            I build practical data workflows and web products.
           </h2>
 
           <p className="mt-5 max-w-3xl text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
-            I am a Fresh Informatics Graduate (S.Kom.) from Telkom University who thrives at the intersection of data engineering, software development, and machine learning. Having passed yudisium and currently awaiting graduation, I am eager to apply my technical foundation to solve real-world challenges.
+            I’m an Informatics graduate candidate from Telkom University with hands-on experience in multi-campus data migration, ETL documentation, Python analysis, and React applications. I’m targeting junior Data Analyst, Data Engineer, BI, and software roles where I can turn messy technical problems into reliable, usable systems.
           </p>
         </div>
 
         {/* Bento Grid Layout */}
         <div className="grid gap-6 lg:grid-cols-3 lg:grid-rows-2">
           {/* About Card — spans 1 col, 2 rows */}
-          <div className="reveal clay-card-static p-8 transition-colors duration-300 lg:row-span-2" data-delay="100">
+          <div className="reveal clay-card-static p-6 transition-colors duration-300 lg:row-span-2" data-delay="100">
             <h3 className="text-2xl font-bold text-[var(--text-main)]">Background & Focus</h3>
 
             <p className="mt-4 text-base leading-relaxed text-[var(--text-muted)]">
-              My technical journey spans enterprise data migration (TUNC Telkom University project), web development with modern React/Next.js stacks, and natural language processing models using PyTorch & Hugging Face.
+              My strongest experience is in data management: mapping branch-campus database structures, documenting migration flows, and working with DBeaver and Pentaho PDI. Outside that work, I build React interfaces and Python/ML projects to keep my engineering range practical.
             </p>
 
             <p className="mt-5 text-base leading-relaxed text-[var(--text-muted)]">
-              I love building scalable pipelines, optimizing database workflows, and designing sleek user interfaces that offer high usability and reliable performance.
+              I care about clear handoffs, reproducible analysis, and interfaces people can actually use.
             </p>
 
             <div className="mt-8 grid gap-4 border-t border-[var(--border-soft)] pt-6">
@@ -115,7 +113,7 @@ const About = () => {
           </div>
 
           {/* Skills Card — spans 2 cols, 1 row */}
-          <div className="reveal clay-card-static bg-[var(--bg-card-soft)] p-8 transition-colors duration-300 lg:col-span-2" data-delay="200">
+          <div className="reveal clay-card-static bg-[var(--bg-card-soft)] p-6 transition-colors duration-300 lg:col-span-2" data-delay="200">
             <h3 className="mb-6 text-2xl font-bold text-[var(--text-main)]">Skills & Tools</h3>
 
             <div className="space-y-7">
@@ -157,7 +155,7 @@ const About = () => {
         </div>
 
         {/* Soft Skills */}
-        <div className="mt-14">
+        <div className="mt-10">
           <div className="reveal mb-6 flex items-center gap-4">
             <span className="h-2 w-10 rounded-full" style={{ background: "var(--accent-main)" }} />
             <h3 className="text-2xl font-bold text-[var(--text-main)]">Soft Skills & Methodologies</h3>
@@ -175,7 +173,7 @@ const About = () => {
         </div>
 
         {/* Education */}
-        <div className="mt-14">
+        <div className="mt-10">
           <div className="reveal mb-6 flex items-center gap-4">
             <span className="h-2 w-10 rounded-full" style={{ background: "var(--accent-secondary)" }} />
             <h3 className="text-2xl font-bold text-[var(--text-main)]">Education & Degrees</h3>
